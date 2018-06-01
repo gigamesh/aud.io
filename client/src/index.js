@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
+import './styles_main/global.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -23,7 +23,7 @@ const app = (
   </JssProvider>
 )
 
-const root: ?Element = document.getElementById('root');
+const root = document.getElementById('root');
 if(root != null){
   ReactDOM.render(app, root);
   registerServiceWorker();

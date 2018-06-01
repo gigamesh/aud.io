@@ -1,0 +1,25 @@
+.paper.form {
+  padding: 80px 50px 50px 50px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.paper.paper--xs {
+  max-width: 250px
+}
+
+.paper.paper--s {
+  max-width: 450px
+}
+
+.paper.paper--m {
+  max-width: 600px
+}
+
+.paper.paper--l {
+  max-width: 900px
+}
+
+.paper.paper--xl {
+  max-width: 1200px
+}

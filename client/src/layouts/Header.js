@@ -22,7 +22,6 @@ const styles = theme => ({
 const AppBarStyled = styled(AppBar)`
   font-weight: 300;
   box-shadow: none;
-  justify-content: flex-end;
   svg {
     transform: scale(1.4);
   }
@@ -30,7 +29,6 @@ const AppBarStyled = styled(AppBar)`
 
 const TextFieldStyled = styled.div`
   position: relative;
-  /* top: -5px; */
   margin-right: 16px;
   input {
     width: 260px;

@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
     type: String,
     enum: ['Musician','Studio'],
   },
-  title: {
+  username: {
     type: String,  // musician's stage name or recording studio's business name
     maxlength: 50,
     unique: true
