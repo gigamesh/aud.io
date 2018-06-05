@@ -1,22 +1,14 @@
 import React from 'react'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-// import styled from 'styled-components';
+
 import './MyPaper.css'
 
-const theme = createMuiTheme({
+const styles = theme => ({
   palette: {
     type: 'dark'
-  },
-  overrides: {
-    MuiPaper: {
-      root: {
-        backgroundColor: '#1a1f22',
-        border: '1px solid white'
-      }
-    }
   }
-})
+});
 
 const MyPaper = (props)=>{
   let className = `paper${
@@ -29,11 +21,9 @@ const MyPaper = (props)=>{
   className += props.form ? ' form' : '';
 
   return(
-    <MuiThemeProvider theme={theme}>
-      <Paper {...props} className={className}>
+      <Paper className={className}>
         {props.children}
       </Paper >
-    </MuiThemeProvider> 
   )
 }
-export default MyPaper
+export default withStyles(styles)(MyPaper)

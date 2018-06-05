@@ -1,5 +1,3 @@
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red';
 
 const MuiTheme = {
       breakpoints: {
@@ -39,18 +37,14 @@ const MuiTheme = {
             margin: '0px'
           }
         },
-        MuiInput: {
-          root: {
-            color: 'inherit'
-          }
-        },
-        MuiRadio: {
-          colorSecondary: {
-            '&$checked': {
-              color: 'lightgreen'
-        }
-      }
-    }
+        
+    //     MuiRadio: {
+    //       colorSecondary: {
+    //         '&$checked': {
+    //           color: 'lightgreen'
+    //     }
+    //   }
+    // }
     }
   }
   export default MuiTheme

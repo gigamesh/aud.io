@@ -2,6 +2,7 @@
   padding: 80px 50px 50px 50px;
   width: 95%;
   margin: 0 auto;
+  border: 1px solid white;
 }
 
 .paper.paper--xs {
@@ -17,9 +18,9 @@
 }
 
 .paper.paper--l {
-  max-width: 900px
+  max-width: 750px
 }
 
 .paper.paper--xl {
-  max-width: 1200px
+  max-width: 950px
 }

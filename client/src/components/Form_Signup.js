@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
+import axios from 'axios';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import FormControl from '@material-ui/core/FormControl';
+import MyFormControl from './mui/MyFormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button';
 import MyPaper from './mui/MyPaper';
 import Grid from '@material-ui/core/Grid';
-import { withFormik, Form, Field } from 'formik'
+import { withFormik, Form } from 'formik'
 import * as yup from 'yup'
 
 const styles = theme => ({
@@ -32,50 +32,76 @@ const ButtonWrap = styled.div`
 `
 class Signup extends Component {
 
-  state = {
-    value: '',
-  };
+  // state = {
+  //   value: '',
+  // };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.email !== this.props.email) {
-      this.props.resetForm(nextProps);
-    }
+  // handleChange = event => {
+  //   console.log(event.target.value );
+  //   this.setState({ value: event.target.value });
+  // };
+
+  handleCategorySelect = event => {
+    // this.setState({})
   }
 
-  handleChange = event => {
-    this.setState({ value: event.target.value });
-  };
-
   render(){
-  let { touched, errors, values, handleChange, handleBlur, isValid, classes } 
-    = this.props;
+  let { 
+    touched, 
+    errors, 
+    values, 
+    handleChange, 
+    handleBlur, 
+    isValid, 
+    classes
+    } = this.props;
 
     return(
 	<MyPaper form size_m>
 		<Form>
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={5}
-          //  style={{background: 'pink'}}
-           >
-          <FormControl component="fieldset" required className={classes.formControl}>
-            {/* <FormLabel component="legend">Category</FormLabel> */}
+      <Grid container spacing={8}>
+        <Grid item xs={12} sm={5}>
+          <MyFormControl
+            component="fieldset" 
+            required 
+            className={classes.formControl}
+            error={touched.password && errors.category}
+            >
             <RadioGroup
               aria-label="category"
               name="category"
-              value={this.state.value}
-              onChange={this.handleChange}
+              value={values.category}
+              onChange={handleChange}
               className={classes.group}
+              // inputComponent={Field}
             >
               <FormControlLabel value="Musician" control={<Radio />} label="Musician" />
               <FormControlLabel value="Recording Studio" control={<Radio />} label="Recording Studio" />
             </RadioGroup>
-            <FormHelperText>^Please select a category</FormHelperText>
-          </FormControl>
+            <FormHelperText id="name-error-text">
+              {touched.email && touched.profilename && !values.category &&
+              <span>^Required</span>}
+            </FormHelperText>  
+          </MyFormControl>
         </Grid>
-        <Grid item xs={12} sm={7} 
-          // style={{background: 'yellow'}}
-          >
-        <FormControl fullWidth
+        <Grid item xs={12} sm={7} >
+        <MyFormControl fullWidth
+          error={touched.profilename && errors.profilename}>
+          <Input 
+            id='profilename'
+            type="profilename" 
+            name="profilename"
+            value={values.profilename}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder='Profile Name'
+            />
+            <FormHelperText id="name-error-text">
+              {touched.profilename && errors.profilename && 
+              <span>{errors.profilename || '&nbsp'}</span>}
+            </FormHelperText>    
+        </MyFormControl>
+        <MyFormControl fullWidth
           error={touched.email && errors.email}>
           <Input 
             id='email'
@@ -84,16 +110,15 @@ class Signup extends Component {
             value={values.email}
             onChange={handleChange}
             onBlur={handleBlur}
-            inputComponent={Field}
             placeholder='Email'
             />
             <FormHelperText id="name-error-text">
               {touched.email && errors.email && 
               <span>{errors.email || '&nbsp'}</span>}
             </FormHelperText>    
-        </FormControl>
-        <FormControl fullWidth
-          error={errors.password}>
+        </MyFormControl>
+        <MyFormControl fullWidth
+          error={touched.password && errors.password}>
           <Input 
             id='password'
             type="password" 
@@ -101,14 +126,13 @@ class Signup extends Component {
             value={values.password}
             onBlur={handleBlur}
             onChange={handleChange} 
-            inputComponent={Field}
             placeholder='Password'
             />
             <FormHelperText id="name-error-text">
               {touched.password && errors.password && 
               <span>{errors.password || '&nbsp'}</span>}
             </FormHelperText>  
-        </FormControl>
+        </MyFormControl>
         </Grid>
         <Grid item xs={12} >
           <ButtonWrap>
@@ -133,30 +157,29 @@ const FormikForm = withFormik({
   isInitialValid : false,
 	mapPropsToValues(props){
 		return {
+      profilename: props.profilename || '',
 			email: props.email || '',
-			password: props.password || ''
+			password: props.password || '',
+      category: props.category || '',
 		}
 	},
   validationSchema: yup.object().shape({
-    email: yup.string().email("Please enter a valid email adddress")
+    profilename: yup.string().max(50, params => `Name may not exceed ${params.max} characters`)
+      .required('Profile name required'),
+    email: yup.string().email("Invalid email address")
       .required("Email address required"),
-    password: yup.string().min(6, 'Must be at least ${min} characters long')
-      .max(50,'Password may not exceed ${max} characters')
+    password: yup.string().min(6, params => `Must be at least ${params.min} characters long`)
+      .max(50, params => `Password may not exceed ${params.max} characters`)
       .matches(/[0-9]/,'Password must contain at least one number')
-      .required('Password required')
+      .required('Password required'),
+    category: yup.string().required("^Required")
   }),
-  handleSubmit(values){
-    console.log(values);
+  handleSubmit({profilename, email, password, category},{resetForm}){
+    const request = axios.post('/api/signup',
+      { profilename, email, password, category })
+      .then(response => console.log(response.data));
+      resetForm();
   }
 })(withStyles(styles)(Signup));
 
-export default class Form_Login extends Component {
-
-	render() {
-		return (
-      <div>
-			  <FormikForm />
-      </div>
-		)
-	}
-}
+export default FormikForm

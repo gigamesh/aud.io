@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose} from 'redux';
+import promiseMiddleware from 'redux-promise';
 import './styles_main/global.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
+import rootReducer from './store/reducers'
+// import createSagaMiddleware from 'redux-saga';
+// import { watchLogin } from './store/sagas';
 
 const styleNode = document.createComment("insertion-point-jss");
 document.head.insertBefore(styleNode, document.head.firstChild);
@@ -15,12 +21,26 @@ const generateClassName = createGenerateClassName();
 const jss = create(jssPreset());
 jss.options.insertionPoint = "insertion-point-jss";
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// const sagaMiddleware = createSagaMiddleware();
+
+// const store = createStore(rootReducer, 
+//   composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware)));
+
+// sagaMiddleware.run(watchLogin);
+
+const store = createStore(rootReducer, 
+  composeEnhancers(applyMiddleware(promiseMiddleware)));
+
 const app = (
-  <JssProvider jss={jss} generateClassName={generateClassName}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </JssProvider>
+  <Provider store={store}>
+    <JssProvider jss={jss} generateClassName={generateClassName}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </JssProvider>
+  </Provider>
 )
 
 const root = document.getElementById('root');

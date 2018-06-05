@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     // required: true,
-    minlength: 8,
+    minlength: 6,
     maxlength: 100
   },
   token: {
@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema({
     type: String,
     enum: ['Musician','Studio'],
   },
-  username: {
+  profilename: {
     type: String,  // musician's stage name or recording studio's business name
     maxlength: 50,
     unique: true
