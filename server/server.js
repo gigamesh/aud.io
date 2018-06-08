@@ -25,10 +25,7 @@ app.use(cookieParser());
 app.get('/api/auth', auth,(req,res)=>{
   res.json({
     isAuth: true,
-    id:req.user._id,
-    email:req.user.email,
-    firstName: req.user.firstName,
-    lastName:req.user.lastName
+    userData: req.user
   })
 })
 
@@ -50,9 +47,10 @@ app.get('/api/usergearitem',(req,res)=>{
 
 app.get('/api/gearlist',(req,res)=>{
   // localhost:3001/api/gearList?skip=3&limit=2&order=asc
-  let skip = parseInt(req.query.skip);
-  let limit = parseInt(req.query.limit);
-  let order = req.query.order;
+
+  let skip = req.query.skip ? parseInt(req.query.skip) : 0;
+  let limit = req.query.limit ? parseInt(req.query.limit) : 0;
+  let order = req.query.order ? req.query.order : 'asc';
 
   // ORDER = asc || desc
   UserGearItem.find().skip(skip).sort({_id:order}).limit(limit).exec((err,doc)=> {
@@ -62,10 +60,23 @@ app.get('/api/gearlist',(req,res)=>{
 })
 
 app.get('/api/users',(req,res)=>{
-  User.find({},(err, users)=>{
-    if(err) return res.status(400).send(err);
-    res.status(200).send(users)
-  })
+  let _id = req.query._id ? req.query._id : null;
+
+  if(_id){
+    User.findById(_id, (err, user) => {
+      if(err) return res.status(400).send(err);
+      res.send(user);      
+    })
+  } else {
+    let skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    let order = req.query.order ? req.query.order : 'asc';
+
+    User.find().skip(skip).sort({_id:order}).limit(limit).exec((err, users)=>{
+      if(err) return res.status(400).send(err);
+      res.status(200).send(users)
+    })
+  }
 })
 
 // // POST //
@@ -148,7 +159,7 @@ app.post('/api/login',(req,res)=> {
   User.findOne({'email': req.body.email})
     // .populate('gearList')
     .exec((err,user)=>{
-      if(!user) return res.json({isAuth:false, message: 'Auth failed - email not found'});
+      if(!user) return res.json({isAuth:false, message: 'Email not found'});
 
       user.comparePassword(req.body.password,(err, isMatch)=>{
         if(!isMatch) return res.json({
@@ -162,7 +173,7 @@ app.post('/api/login',(req,res)=> {
         if(err) return res.status(400).send(err);
         res.cookie('auth',user.token).json({
           isAuth: true,
-          user
+          userData: user
         })
       })
     })

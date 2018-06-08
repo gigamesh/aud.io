@@ -11,6 +11,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-anime": "^2.1.0",
+    "react-css-transition-replace": "^3.0.3",
     "react-dom": "^16.3.2",
     "react-fontawesome": "^1.6.1",
     "react-redux": "^5.0.6",
@@ -22,7 +23,6 @@
     "redux-promise": "^0.5.3",
     "redux-saga": "^0.16.0",
     "styled-components": "^3.2.6",
-    "typeface-roboto": "0.0.54",
     "yup": "^0.25.1"
   },
   "scripts": {

@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
-import axios from 'axios';
 import styled from 'styled-components';
+import Spinner from './UI/Spinner';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import MyPaper from './mui/MyPaper';
 import MyFormControl from './mui/MyFormControl';
+import MyFormHelperTextBig from './mui/MyFormHelperText_Big';
 import { withFormik, Form } from 'formik'
 import * as yup from 'yup'
 import { loginUser } from '../store/actions';
@@ -14,15 +16,19 @@ import { loginUser } from '../store/actions';
 const ButtonWrap = styled.div`
   margin-top: 15px;
   display: flex;
+  position: relative;
   justify-content: flex-end;
   font-weight: 300;
 `
 
 class Login extends Component{
-  // submitForm(e){
-  //   e.preventDefault();
-  // }
-  
+
+  submitHandler = (e) =>{
+    e.preventDefault();
+    this.props.onLoginSubmit(this.props.values.email,this.props.values.password);
+    this.props.resetForm();
+  }
+
   render() {
     let {
       touched,
@@ -31,18 +37,18 @@ class Login extends Component{
       handleChange,
       handleBlur,
       isValid,
-      // handleSubmit
-      onLoginSubmit
+      onLoginSubmit,
+      errorMsg,
+      resetForm,
+      loading,
+      userId
     } = this.props;
-    return (
-      <MyPaper size_s form>
-        <Form onSubmit={(e) => {
-          e.preventDefault();
-          onLoginSubmit(values.email,values.password)
-        }
 
-          }>
+    const form = (
+      <MyPaper size_s form>
+        <Form onSubmit={this.submitHandler}>
           <MyFormControl fullWidth
+            aria-describedby='email-error-text'
             error={touched.email && errors.email}>
             <Input 
               id='email'
@@ -54,12 +60,13 @@ class Login extends Component{
               // inputComponent={Field}
               placeholder='Email'
               />
-              <FormHelperText id="name-error-text">
+              <FormHelperText id="email-error-text">
                 {touched.email && errors.email && 
                 <span>{errors.email || '&nbsp'}</span>}
               </FormHelperText>    
           </MyFormControl>
           <MyFormControl fullWidth
+            aria-describedby='password-error-text'
             error={touched.password && errors.password}>
             <Input 
               id='password'
@@ -71,12 +78,15 @@ class Login extends Component{
               // inputComponent={Field}
               placeholder='Password'
               />
-              <FormHelperText id="name-error-text">
+              <FormHelperText id="password-error-text">
                 {touched.password && errors.password && 
                 <span>{errors.password || '&nbsp'}</span>}
               </FormHelperText>  
           </MyFormControl>
           <ButtonWrap>
+            <MyFormHelperTextBig error>
+                {!touched.email && !touched.password ? errorMsg : ''}
+            </MyFormHelperTextBig> 
             <Button 
               disabled={!isValid}
               variant="raised" 
@@ -89,6 +99,9 @@ class Login extends Component{
         </Form>
       </MyPaper>
     )
+    return loading ? <Spinner/> 
+      : userId ? <Redirect to={`/user/${userId}`} />
+      : form;
   }
 }
 
@@ -97,7 +110,7 @@ const FormikForm = withFormik({
 	mapPropsToValues(props){
 		return {
 			email: props.email || '',
-			password: props.password || ''
+			password: props.password || '',
 		}
 	},
   validationSchema: yup.object().shape({
@@ -108,16 +121,18 @@ const FormikForm = withFormik({
       .matches(/[0-9]/,'Password must contain at least one number')
       .required('Password required')
   }),
-  // handleSubmit({email,password},{resetForm}){
-    // this.props.dispatch(loginUser(values))
-    // const request = axios.post('/api/login',{email,password})
-    //       .then(response => console.log(response.data));
-    
-    
-
-          // resetForm();
-  // }
 })(Login);
+
+const mapStateToProps = state => {
+  let _id = state.user.userData ? 
+    state.user.userData._id : null;
+
+  return {
+    loading: state.user.loading,
+    errorMsg: state.user.errorMsg,
+    userId: _id
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -125,5 +140,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-// export default FormikForm
-export default connect(null, mapDispatchToProps)(FormikForm)
+export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)

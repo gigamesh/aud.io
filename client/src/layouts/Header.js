@@ -15,14 +15,16 @@ const styles = theme => ({
     flex: 1
   },
   toolbar: {
-    padding: '14px'
+    padding: '0 14px'
   }
 });
 
 const AppBarStyled = styled(AppBar)`
-  font-weight: 300;
+  /* font-weight: 300; */
+  background: inherit;
   box-shadow: none;
   svg {
+    fill: white;
     transform: scale(1.4);
   }
 `
@@ -39,7 +41,7 @@ const Header = (props) => {
   const { classes } = props;
 
   return(
-    <AppBarStyled position="absolute">
+    <AppBarStyled position="fixed">
       <Toolbar className={classes.toolbar}>
         <Hidden mdUp>
           <IconButton 

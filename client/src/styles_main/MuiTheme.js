@@ -1,15 +1,15 @@
 
 const MuiTheme = {
-      breakpoints: {
-        values: {
-          sm: 730
-        }
-      },
+      // breakpoints: {
+      //   values: {
+      //     sm: 730
+      //   }
+      // },
       typography: {
         fontWeightLight: 100,
         fontWeightRegular: 300,
         fontWeightMedium: 500,
-        fontFamily: "Lato",
+        fontFamily: 'Nunito Sans',
         button: {
           fontWeight: 300
         }
@@ -36,15 +36,14 @@ const MuiTheme = {
           root: {
             margin: '0px'
           }
-        },
-        
-    //     MuiRadio: {
-    //       colorSecondary: {
-    //         '&$checked': {
-    //           color: 'lightgreen'
-    //     }
-    //   }
-    // }
+        }, 
+        MuiToolbar: {
+          root: {
+            maxWidth: '1400px',
+            margin: '0 auto',
+            width: '100%'
+          }
+        }
+      }
     }
-  }
   export default MuiTheme

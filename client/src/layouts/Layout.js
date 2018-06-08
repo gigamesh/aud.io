@@ -2,7 +2,19 @@ import React, {Component} from 'react';
 // import { connect } from 'react-redux';
 import SideDrawer from './../components/navigation/SideDrawer';
 import Header from './Header'
+import styled from 'styled-components'
 
+const MainWrap = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 64px);
+  width: calc(100% - 40px);
+  max-width: 1400px;
+  /* background: lightgreen; */
+  margin: 64px auto;
+`
 
 class Layout extends Component {
   state = {
@@ -20,7 +32,6 @@ class Layout extends Component {
     return (
     <React.Fragment>
       <Header
-        isAuth={this.props.isAuthenticated}
         drawerToggleClicked={()=> this.toggleDrawer()}/>
 
       <SideDrawer 
@@ -34,20 +45,12 @@ class Layout extends Component {
         >
         </div>
       </SideDrawer>
-      <main>
-        {this.props.children}
-      </main>
+        <MainWrap>
+          {this.props.children}
+        </MainWrap>
     </React.Fragment>
     );
   }
 };
 
-// const mapStateToProps = state => {
-//   return {
-//     isAuthenticated: state.auth.token !== null
-//   }
-// }
-
-// export default connect(mapStateToProps)(Layout);
-// export default withStyles(styles)(Layout);
 export default Layout;

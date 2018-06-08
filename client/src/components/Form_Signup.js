@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import MyFormControl from './mui/MyFormControl';
+import MyFormHelperTextBig from './mui/MyFormHelperText_Big';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Radio from '@material-ui/core/Radio';
@@ -53,7 +54,8 @@ class Signup extends Component {
     handleChange, 
     handleBlur, 
     isValid, 
-    classes
+    classes,
+    errorMsg
     } = this.props;
 
     return(
@@ -136,6 +138,9 @@ class Signup extends Component {
         </Grid>
         <Grid item xs={12} >
           <ButtonWrap>
+            <MyFormHelperTextBig error>
+              {!touched.email && !touched.password ? errorMsg : ''}
+            </MyFormHelperTextBig> 
             <Button 
               disabled={!isValid}
               variant="raised" 

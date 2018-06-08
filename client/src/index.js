@@ -11,8 +11,9 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import rootReducer from './store/reducers'
-// import createSagaMiddleware from 'redux-saga';
-// import { watchLogin } from './store/sagas';
+import createSagaMiddleware from 'redux-saga';
+import { watchLogin } from './store/sagas';
+import { saveToLocalStorage, loadState } from './util';
 
 const styleNode = document.createComment("insertion-point-jss");
 document.head.insertBefore(styleNode, document.head.firstChild);
@@ -23,15 +24,24 @@ jss.options.insertionPoint = "insertion-point-jss";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-// const sagaMiddleware = createSagaMiddleware();
+/* SAGA STUFF */
+const sagaMiddleware = createSagaMiddleware();
 
-// const store = createStore(rootReducer, 
-//   composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware)));
+// REDUX STUFF
+let persistedState = loadState(); // retreives local storage
 
-// sagaMiddleware.run(watchLogin);
+const store = createStore(rootReducer, persistedState,
+  composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware)));
 
-const store = createStore(rootReducer, 
-  composeEnhancers(applyMiddleware(promiseMiddleware)));
+// store.subscribe(() => {
+//   saveToLocalStorage(store.getState()); // save current state to localstorage.
+// });
+
+window.onbeforeunload = () => {
+  saveToLocalStorage(store.getState()); // save current state to localstorage.
+};
+
+sagaMiddleware.run(watchLogin);
 
 const app = (
   <Provider store={store}>
