@@ -33,9 +33,9 @@ let persistedState = loadState(); // retreives local storage
 const store = createStore(rootReducer, persistedState,
   composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware)));
 
-// store.subscribe(() => {
-//   saveToLocalStorage(store.getState()); // save current state to localstorage.
-// });
+store.subscribe(() => {
+  saveToLocalStorage(store.getState()); // save current state to localstorage.
+});
 
 window.onbeforeunload = () => {
   saveToLocalStorage(store.getState()); // save current state to localstorage.

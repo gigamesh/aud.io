@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,500,500i');
+/* @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,300,400,700'); */
 @import url('./animations.css');
 
 ::selection {
   color:white;
-  background: #bbdefb;
+  background: #42A5F5;
 }
 
 html {
@@ -11,6 +12,7 @@ html {
 }
 
 body {
+  font-family: 'Montserrat', sans-serif;
   position: absolute;
   top: 0;
   left: 0;
@@ -18,8 +20,6 @@ body {
   bottom: 0;
   margin: 0;
   padding: 0;
-  font-family: 'Nunito Sans', sans-serif;
-  font-weight: 300;
 }
 
 ul {
@@ -34,3 +34,4 @@ a {
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
 }
+

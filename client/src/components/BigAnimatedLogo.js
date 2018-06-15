@@ -5,6 +5,7 @@ const LogoWrap = styled.div`
     user-select: none;
     margin: 0;
     position: relative;
+    top: -32px;
     width: 100%;
     /* transform: scale(.2); */
 
@@ -20,7 +21,7 @@ const LogoWrap = styled.div`
       font-size: 140px;
       text-transform: lowercase;
       letter-spacing: -10px;
-      filter: brightness(160%);
+      filter: brightness(120%);
 
     > .img-layer {
         fill: url(#p-img);

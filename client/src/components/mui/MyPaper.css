@@ -24,3 +24,8 @@
 .paper.paper--xl {
   max-width: 950px
 }
+
+.paper--vertical-fix {
+  position: relative;
+  top: -32px;
+}

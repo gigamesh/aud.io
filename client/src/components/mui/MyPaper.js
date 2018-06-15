@@ -1,14 +1,7 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import './MyPaper.css'
-
-const styles = theme => ({
-  palette: {
-    type: 'dark'
-  }
-});
 
 const MyPaper = (props)=>{
   let className = `paper${
@@ -20,10 +13,13 @@ const MyPaper = (props)=>{
 
   className += props.form ? ' form' : '';
 
+  className += props.verticalfix ? ' paper--vertical-fix' : '';
+
   return(
-      <Paper className={className}>
+      <Paper {...props} className={className}>
         {props.children}
       </Paper >
   )
 }
-export default withStyles(styles)(MyPaper)
+
+export default MyPaper

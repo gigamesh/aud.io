@@ -11,14 +11,13 @@ import MyFormControl from './mui/MyFormControl';
 import MyFormHelperTextBig from './mui/MyFormHelperText_Big';
 import { withFormik, Form } from 'formik'
 import * as yup from 'yup'
-import { loginUser } from '../store/actions';
+import { loginUser, clearErrorMsg } from '../store/actions';
 
 const ButtonWrap = styled.div`
   margin-top: 15px;
   display: flex;
   position: relative;
   justify-content: flex-end;
-  font-weight: 300;
 `
 
 class Login extends Component{
@@ -29,6 +28,10 @@ class Login extends Component{
     this.props.resetForm();
   }
 
+  componentDidMount(){
+    this.props.onMounted();
+  }
+
   render() {
     let {
       touched,
@@ -37,15 +40,14 @@ class Login extends Component{
       handleChange,
       handleBlur,
       isValid,
-      onLoginSubmit,
       errorMsg,
-      resetForm,
       loading,
-      userId
+      userId,
+      isAuth
     } = this.props;
 
     const form = (
-      <MyPaper size_s form>
+      <MyPaper size_s='true' form='true' verticalfix='true' elevation={10}>
         <Form onSubmit={this.submitHandler}>
           <MyFormControl fullWidth
             aria-describedby='email-error-text'
@@ -89,9 +91,8 @@ class Login extends Component{
             </MyFormHelperTextBig> 
             <Button 
               disabled={!isValid}
-              variant="raised" 
+              variant="outlined" 
               color="primary" 
-              style={{fontWeight: 'inherit'}}
               type="submit" >
               Submit
             </Button>
@@ -100,7 +101,7 @@ class Login extends Component{
       </MyPaper>
     )
     return loading ? <Spinner/> 
-      : userId ? <Redirect to={`/user/${userId}`} />
+      : userId && isAuth ? <Redirect to={`/user/${userId}`} />
       : form;
   }
 }
@@ -124,19 +125,18 @@ const FormikForm = withFormik({
 })(Login);
 
 const mapStateToProps = state => {
-  let _id = state.user.userData ? 
-    state.user.userData._id : null;
-
   return {
     loading: state.user.loading,
     errorMsg: state.user.errorMsg,
-    userId: _id
+    userId: state.user._id,
+    isAuth: state.user.isAuth
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLoginSubmit: (email, password) => dispatch(loginUser({email,password}))
+    onLoginSubmit: (email, password) => dispatch(loginUser({email,password})),
+    onMounted: () => dispatch(clearErrorMsg())
   }
 }
 

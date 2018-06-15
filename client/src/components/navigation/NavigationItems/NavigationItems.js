@@ -1,63 +1,61 @@
 import React from 'react';
-import NavigationItem from './NavigationItem/NavigationItem'
+import NavigationItem from './NavigationItem'
+import ExploreNavButton from './ExploreNavButton_OLD'
 import { connect } from 'react-redux';
+// import { withRouter } from 'react-router-dom';
 
 const navigationItems = (props) =>{
-  let _id = props.user.userData ? props.user.userData._id : '';
-
   const navItems = [
     {
       type: 'navItem',
       text: 'Login',
       link: '/login',
       restricted: false,
-      excluded: true
+      excluded: true,
     },
     {
       type: 'navItem',
       text: 'Logout',
       link: '/logout',
-      restricted: true
+      restricted: true,
     },
     {
       type: 'navItem',
       text: 'Signup',
       link: '/signup',
       restricted: false,
-      excluded: true
+      excluded: true,
     },
     {
       type: 'navItem',
       text: 'Profile',
-      link: `/user/${_id}`,
-      restricted: true
-    },
-    {
-      type: 'navItem',
-      text: 'Explore',
-      link: '/directory',
-      restricted: false
+      link: `/user/${props.user._id}`,
+      restricted: true,
     },
   ];
 
-  const navElement = (item, display, key) => (
-    <NavigationItem 
+  let currentRoute = '/' + props.path;
+
+  const navElement = (item,key) => {
+  let activeLink = '/' + item.link.split('/')[1];
+    return (
+    <NavigationItem
+      active={currentRoute === activeLink} 
       link={item.link}
-      display={display}
       key={key}>
       {item.text}
-    </NavigationItem>
-  )
+    </NavigationItem>)
+  }
 
-  const showItems = (display) => (
+  const showItems = () => (
     navItems.map((item, index) => {
       if(props.user.isAuth){
         return !item.excluded ?
-          navElement(item, display, index)
+          navElement(item, index)
         : null
       } else {
         return !item.restricted ?
-          navElement(item, display, index)
+          navElement(item, index)
         : null
       }
     })
@@ -65,7 +63,10 @@ const navigationItems = (props) =>{
 
     return (
     <ul>
-      {showItems(props.display)}
+      {showItems()}
+      <ExploreNavButton>
+        Explore
+      </ExploreNavButton>
     </ul>
   );
 }

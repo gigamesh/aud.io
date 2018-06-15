@@ -1,5 +1,11 @@
 import * as actionTypes from './actionTypes';
 
+export const clearErrorMsg = () => {
+  return {
+    type: actionTypes.CLEAR_ERROR_MSG
+  }
+}
+
 export const loginUser = ({email,password}) => {
   return {
     type: actionTypes.LOGIN_USER_INIT,
@@ -8,10 +14,10 @@ export const loginUser = ({email,password}) => {
   }
 }
 
-export const loginUserSuccess = userData =>{
+export const loginUserSuccess = response =>{
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
-    userData
+    userData: response.userData
   }
 }
 
@@ -41,9 +47,10 @@ export const authFail = () => {
   }
 }
 
-export const logoutUser = () => {
+export const logoutUser = (timeout) => {
   return {
-    type: actionTypes.LOGOUT_USER_INIT
+    type: actionTypes.LOGOUT_USER_INIT,
+    timeout
   }
 }
 
@@ -53,9 +60,52 @@ export const logoutUserSuccess = () => {
   }
 }
 
-export const getProfileData = id => {
+export const updateUser = ({profilename, headerphoto, profilephoto}) => {
   return {
-    type: actionTypes.GET_PROFILE_DATA
+    type: actionTypes.USER_UPDATE_INIT,
+    profilename,
+    headerphoto,
+    profilephoto
   }
 }
 
+export const userUpdateSuccess = (values) => {
+  return {
+    type: actionTypes.USER_UPDATE_SUCCESS,
+    values
+  }
+}
+
+export const userSignup = values => {
+  return {
+    type: actionTypes.USER_SIGNUP_INIT,
+    values
+  }
+}
+
+export const userSignupSuccess = values => {
+  return {
+    type: actionTypes.USER_SIGNUP_SUCCESS,
+    userData: values.userData
+  }
+}
+
+export const profileDataInit = id => {
+  return {
+    type: actionTypes.PROFILE_DATA_INIT,
+    id
+  }
+}
+
+export const profileDataSuccess = values => {
+  return {
+    type: actionTypes.PROFILE_DATA_SUCCESS,
+    profileData: values
+  }
+}
+
+export const profileDataFail = () => {
+  return {
+    type: actionTypes.PROFILE_DATA_FAIL
+  }
+}

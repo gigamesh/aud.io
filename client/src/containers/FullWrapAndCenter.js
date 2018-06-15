@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 
-const WrapAndCenter = (WrappedComp) => {
+const FullWrapAndCenter = (WrappedComp) => {
   const FullPageWrapper = styled.div`
     position: absolute;
     top: 0;
@@ -23,4 +23,4 @@ const WrapAndCenter = (WrappedComp) => {
   }
 };
 
-export default WrapAndCenter;
+export default FullWrapAndCenter;
