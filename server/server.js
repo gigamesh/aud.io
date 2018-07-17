@@ -6,8 +6,8 @@ const config = require('./config/config').get(process.env.NODE_ENV);
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DATABASE);
-//
+mongoose.connect(process.env.MONGOLAB_JADE_URI || config.DATABASE);
+
 const { User } = require('./models/user');
 const { UserGearItem } = require('./models/UserGearItem');
 const { MasterGearItem } = require('./models/MasterGearItem');
