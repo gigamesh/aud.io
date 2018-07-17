@@ -14,12 +14,12 @@ const ProfileAbout = props => {
   const PhotoDiv = styled.div`
     position: relative
     height: 0;
-    width: ${props.width === 'xs' ? '48%' : '24%'};
-    padding-top: ${props.width === 'xs' ? '48%' : '24%'};
+    width: ${props.width === 'xs' ? '47%' : '18.5%'};
+    padding-top: ${props.width === 'xs' ? '47%' : '18.5%'};
     /* flex-basis: 100px; */
     /* flex-grow: 1; */
     background: #eee;
-    margin: 3px;
+    margin: 0.6%;
     border: 1px solid #bbb;
   `
 
@@ -35,7 +35,7 @@ const ProfileAbout = props => {
           <PhotoDiv/><PhotoDiv/><PhotoDiv/>
           <PhotoDiv/><PhotoDiv/><PhotoDiv/>
           <PhotoDiv/><PhotoDiv/><PhotoDiv/>
-          <PhotoDiv/><PhotoDiv/><PhotoDiv/>
+          <PhotoDiv/>
         </PhotoWrap>
   )
 }
