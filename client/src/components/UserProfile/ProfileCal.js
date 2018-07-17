@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import MyTextHeading from '../mui/MyTextHeading';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -50,8 +51,15 @@ class ProfileCal extends React.Component {
     ) 
 
     return (
-      <Grid container style={{margin: '20px auto'}} spacing={16}>
-        <Grid item xs={12} md={3}>
+      <Grid container 
+        style={{margin: '15px auto', width: '100%'}} 
+        spacing={16}>
+        <Grid item xs={12} md={4}>
+          <MyTextHeading 
+            variant="headline" 
+            align="center">
+            Upcoming Dates
+          </MyTextHeading>
           <List component="nav">
             <ListItem button disableGutters onClick={this.handleClick}>
               <ListItemText primary="Lorem ipsum dolor" secondary="9-15-18" />
@@ -70,7 +78,7 @@ class ProfileCal extends React.Component {
             </ListItem>
           </List>
         </Grid>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           <Container>
             {this.state.loaded ? <WaveformLoader/> : Iframe}
           </Container>

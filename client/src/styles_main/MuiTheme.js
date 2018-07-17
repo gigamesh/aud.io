@@ -146,12 +146,17 @@ const MuiTheme = {
       },
       MuiList: {
         padding: {
-          padding: 0
+          paddingTop: 0,
+          paddingBottom: 0
         }
       },
       MuiListItem: {
         root: {
           padding: '0 10px'
+        },
+        default:{
+          paddingTop: '4px',
+          paddingBottom: '4px'
         },
         button: {
           '&:hover': {

@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
 import ProfileAbout from './ProfileAbout';
+import ProfilePhotos from './ProfilePhotos';
 import ProfileMusic from './ProfileMusic';
 import ProfileCal from './ProfileCal';
 // import ProfileGear from './ProfileGear';
@@ -67,6 +68,7 @@ class FullWidthTabs extends React.Component {
                   scrollButtons="on"
                   >
                   <Tab label="About" />
+                  <Tab label="Photos" />
                   <Tab label="Music" />
                   <Tab label="Schedule" />
                   {/* <Tab label="Gear" /> */}
@@ -78,6 +80,7 @@ class FullWidthTabs extends React.Component {
                 onChangeIndex={this.handleChangeIndex}
               >
                 <TabContainer dir={theme.direction}><ProfileAbout/></TabContainer>
+                <TabContainer dir={theme.direction}><ProfilePhotos/></TabContainer>
                 <TabContainer dir={theme.direction}><ProfileMusic/></TabContainer>
                 <TabContainer dir={theme.direction}><ProfileCal/></TabContainer>
                 {/* <TabContainer dir={theme.direction}><ProfileGear/></TabContainer> */}
