@@ -27,7 +27,6 @@ class UserCard extends React.Component{
     let user = this.props.user;
     let userId = this.props.user._id
     let profilename = this.props.user.profilename;
-    let width = this.props.width;
 
     const OuterWrap = styled.div`
       position: relative;

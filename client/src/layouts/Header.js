@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux'
-// import { searchBoxTouched, searchBoxKeypress } from '../store/actions/search';
 import { AppBar, Toolbar} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Search from '@material-ui/icons/Search';
 import NavigationItems from './../components/navigation/NavigationItems/NavigationItems';
 import ExploreNavMenu from './../components/navigation/NavigationItems/ExploreNavMenu'

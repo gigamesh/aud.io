@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
-import { Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
-import { clearErrorMsg, profileDataInit, clearProfileData} from '../../store/actions'
+import { profileDataInit } from '../../store/actions'
 import {states} from './geography';
 import { updateUser } from '../../store/actions';
 import styled from 'styled-components';
 import WaveformLoader from '../UI/WaveformLoader';
 import withWidth from '@material-ui/core/withWidth';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import MyFormControl from '../mui/MyFormControl';
-import MyFormHelperTextBig from '../mui/MyFormHelperText_Big';
 import MyPaper from '../mui/MyPaper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -35,10 +32,6 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `
 
-const MyFormControlRadio = styled(MyFormControl)`
-  div {flex-direction: row}
-`
-
 class AccountSettings extends Component {
 
   submitHandler = (e) =>{
@@ -58,8 +51,6 @@ class AccountSettings extends Component {
     values, 
     handleChange, 
     handleBlur, 
-    isValid, 
-    errorMsg,
     loading,
     width
     } = this.props;
@@ -344,5 +335,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (withWidth()(FormikForm))
+export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(FormikForm))

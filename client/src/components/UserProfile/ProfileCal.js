@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import MyTextHeading from '../mui/MyTextHeading';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -42,6 +41,7 @@ class ProfileCal extends React.Component {
         top: 0,
         left: 0,
          }} 
+        title="iframe"
         ref="iframe"
         width={'98%'} 
         height={600} 

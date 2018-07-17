@@ -26,6 +26,6 @@ export function* watchUser(){
 }
 
 export function* watchSearch(){
-  yield takeLatest(actionTypes.SEARCHBOX_KEYPRESS, getUsersSaga),
+  yield takeLatest(actionTypes.SEARCHBOX_KEYPRESS, getUsersSaga)
   yield takeLatest(actionTypes.GET_USERS_INIT, getUsersSaga)
 }

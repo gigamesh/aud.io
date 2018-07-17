@@ -13,13 +13,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MyFormControl from '../mui/MyFormControl'
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import { withFormik, Form } from 'formik'
 import * as yup from 'yup'
 
@@ -210,9 +207,6 @@ class ProfileHeaderCard extends React.Component {
     }
   `
 
-  const MyFormControlLabel = styled(FormControlLabel)`
-    svg {color: '#333'; fill: '#333'}
-  `
     return (
       <React.Fragment>
         <OuterWrap>

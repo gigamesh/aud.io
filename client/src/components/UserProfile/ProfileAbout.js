@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import MyTextHeading from '../mui/MyTextHeading';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,22 +13,6 @@ const ProfileAbout = props => {
   const ParagraphWrap = styled.div`
     text-indent: 2em;
     /* padding: 0 10px; */
-  `
-
-  const PhotoDiv = styled.div`
-    height: 0;
-    padding-top: 100px;
-    flex-basis: 100px;
-    flex-grow: 1;
-    background: #eee;
-    margin: 3px;
-    border: 1px solid #bbb;
-  `
-
-  const PhotoWrap = styled.div`
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
   `
 
   return (

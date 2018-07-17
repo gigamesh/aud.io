@@ -221,5 +221,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)
-  (withWidth()(FormikForm)))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withWidth()(FormikForm)))

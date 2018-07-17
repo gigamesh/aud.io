@@ -6,8 +6,8 @@ const config = require('./config/config').get(process.env.NODE_ENV);
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGOLAB_JADE_URI || config.DATABASE);
-
+mongoose.connect(config.DATABASE);
+//
 const { User } = require('./models/user');
 const { UserGearItem } = require('./models/UserGearItem');
 const { MasterGearItem } = require('./models/MasterGearItem');
@@ -46,7 +46,6 @@ app.get('/api/usergearitem',(req,res)=>{
 })
 
 app.get('/api/gearlist',(req,res)=>{
-  // localhost:3001/api/gearList?skip=3&limit=2&order=asc
 
   let skip = req.query.skip ? parseInt(req.query.skip) : 0;
   let limit = req.query.limit ? parseInt(req.query.limit) : 0;
@@ -281,7 +280,7 @@ if(process.env.NODE_ENV === 'production'){
   })
 }
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 4000;
 app.listen(port,()=> {
   console.log(`SERVER RUNNING ON PORT ${port}`);
 })

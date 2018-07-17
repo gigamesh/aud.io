@@ -21,19 +21,13 @@ class UsersGridLayout extends React.Component{
   }
 
   shouldComponentUpdate(nextProps){
-    let path = this.props.location.pathname;
 
     if(this.props.searchBoxTouched){
       return false
       } else { 
-        // console.log('updating usergrid');
         return true;
       }
   }
-
-  // componentWillUnmount(){
-  //   console.log('unmounting');
-  // }
 
   render(){
     let {users, loading} = this.props;

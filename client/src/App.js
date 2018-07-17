@@ -68,5 +68,4 @@ const mapDispatchToProps = dispatch =>{
   }
 }
 
-export default muiThemeRoot(withRouter(connect(null, mapDispatchToProps)
-  (withWidth()(App))));
+export default muiThemeRoot(withRouter(connect(null, mapDispatchToProps)(withWidth()(App))));
