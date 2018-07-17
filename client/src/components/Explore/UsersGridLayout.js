@@ -1,0 +1,73 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
+import { getUsers } from '../../store/actions'
+import WaveformLoader from '../UI/WaveformLoader'
+import Grid from '@material-ui/core/Grid';
+import UserCard from './UserCard'
+
+const MyGrid = styled(Grid)`
+  margin-top: -7px;
+`
+
+class UsersGridLayout extends React.Component{
+
+  componentDidMount(){ 
+    let path = this.props.location.pathname;
+    let role = path === '/musicians' ? 'musician' : '/studios' ? 'studio' : '';
+    if(path !== '/search'){
+      this.props.dispatchGetUsers(role); 
+    }
+  }
+
+  shouldComponentUpdate(nextProps){
+    let path = this.props.location.pathname;
+
+    if(this.props.searchBoxTouched){
+      return false
+      } else { 
+        // console.log('updating usergrid');
+        return true;
+      }
+  }
+
+  // componentWillUnmount(){
+  //   console.log('unmounting');
+  // }
+
+  render(){
+    let {users, loading} = this.props;
+
+    let cards = users.map((user, idx) => (
+      <Grid item xs={12} md={6} lg={4} key={idx}>
+        <UserCard user={user}/>
+      </Grid>
+    ))
+
+    return loading ? <WaveformLoader/> : (
+      <div style={{ padding: '0 3px'}}>
+        <MyGrid container spacing={16} justify="center">
+          {cards}
+        </MyGrid>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = state =>{
+  return {
+    users: state.search.users,
+    loading: state.search.loading,
+    searchBoxTouched: state.search.searchBoxTouched
+  }
+}
+
+const mapDispatchToProps = dispatch =>{
+  return {
+    dispatchGetUsers: (role) => {
+      return dispatch(getUsers(role))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsersGridLayout)

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux'
+// import { searchBoxTouched, searchBoxKeypress } from '../store/actions/search';
 import { AppBar, Toolbar} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
@@ -11,16 +12,36 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Search from '@material-ui/icons/Search';
 import NavigationItems from './../components/navigation/NavigationItems/NavigationItems';
+import ExploreNavMenu from './../components/navigation/NavigationItems/ExploreNavMenu'
+import AccountNavMenu from './../components/navigation/NavigationItems/AccountNavMenu'
+import SearchBox from '../components/navigation/SearchBox/SearchBox'
 
 const styles = theme => ({
   flex1: {
     flex: 1
+  },
+  toolbar: {
+    [theme.breakpoints.down('xl')]: {
+      minHeight: '50px',
+      maxHeight: '50px'
+    },
+  },
+  hiddenProfileName: {
+    verticalAlign: 'top', 
+    lineHeight: '1.4em'
+  },
+  searchIcon: {
+    position: 'relative',
+    float: 'right',
+    padding: 0,
+    top: '5px'
   }
 });
 
 const AppBarStyled = styled(AppBar)`
-  background: inherit;
+  background: #fafafa;
   box-shadow: none;
+  min-height: 0;
   svg {
     fill: #333;
     transform: scale(1.4);
@@ -35,16 +56,18 @@ const ToolbarStyled = styled(Toolbar)`
   padding: 0;
 `
 
-const TextFieldStyled = styled.div`
+const TextFieldWrap = styled.div`
+  /* background: pink; */
   position: relative;
-  margin-right: 16px;
-  input {
-    width: 30vw;
-    max-width: 300px;
-  }
-`
+  min-width: 260px;
+  width: 35vw;
+  max-width: 400px;
+  height: 100%;
+  top: -8px;
+ `
 
 class Header extends React.Component{
+
 
   render(){
     const props = this.props;
@@ -52,10 +75,15 @@ class Header extends React.Component{
 
     const fontSizeFunc = (size)=>{
       let exp = props.profilename.length > 7 ? (props.profilename.length - 7) : 1;
-      let multiplier = Math.pow(0.97, exp)
+      let multiplier = Math.pow(0.99, exp)
       return (multiplier * size).toFixed(1).toString().concat('vw');
-    }
+    };
 
+    let accountNavMenu = props.isAuth ? (
+      <AccountNavMenu>
+        Account
+      </AccountNavMenu>  
+    ) : null;
     return(
       <AppBarStyled position="fixed">
         <ToolbarStyled className={classes.toolbar}>
@@ -72,25 +100,24 @@ class Header extends React.Component{
               <NavigationItems 
                 path={props.path}
                 isAuth={props.isAuth}
-                display={'inline'}
                 />
+                {accountNavMenu}
+                <ExploreNavMenu>
+                  Explore
+                </ExploreNavMenu>  
             </nav>
-            <TextFieldStyled>
-              <Grid container spacing={8} alignItems="flex-end">
-                <Grid item>
-                  <TextField label=""/>
-                </Grid>
-                <Grid item>
-                  <Search/>
-                </Grid>
-              </Grid>
-            </TextFieldStyled>
+            <TextFieldWrap>
+              <SearchBox history={props.history}/>
+              <Search className={classes.searchIcon}/>
+            </TextFieldWrap>
           </Hidden>
           <Hidden mdUp>
             <div className={classes.flex1}>
             </div>
-              <Typography style={{fontSize: fontSizeFunc(7.5), verticalAlign: 'top'}} >
-                {props.profilename}
+              <Typography 
+                className={classes.hiddenProfileName} 
+                style={{fontSize: fontSizeFunc(6.6) }}>
+                {props.path === 'user' && props.profilename}
               </Typography>         
           </Hidden>
         </ToolbarStyled>
@@ -101,8 +128,16 @@ class Header extends React.Component{
 
 const mapStateToProps = state => {
   return {
-    profilename: state.user.profilename || ''
+    profilename: state.user.profilename || '',
+    isAuth: state.user.isAuth
   }
 }
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     searchBoxTouched: () => dispatch(searchBoxTouched()),
+//     searchBoxKeypress: (searchText) => dispatch(searchBoxKeypress(searchText))
+//   }
+// }
 
 export default connect(mapStateToProps)(withStyles(styles)(Header));

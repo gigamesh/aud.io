@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 
-const FullWrapAndCenter = (WrappedComp) => {
-  const FullPageWrapper = styled.div`
+const FullWrapAndCenter = (WrappedComp, currentwidth) => {
+  const FullPageWrapper = styled.div.attrs({
+    currentwidth: currentwidth
+  })`
     position: absolute;
     top: 0;
     left: 0;
-    display: flex;
+    display: ${props => props.currentwidth !== 'xs' ? 'flex' : ''};
     justify-content: center;
     align-items: center;
     height: 100%;

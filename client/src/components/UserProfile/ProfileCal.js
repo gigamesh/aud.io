@@ -1,0 +1,83 @@
+import React from 'react'
+import styled from 'styled-components'
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import WaveformLoader from '../UI/WaveformLoader';
+
+class ProfileCal extends React.Component {
+  state = {
+    loaded: false
+  }
+
+  componentDidMount(){
+    this.refs.iframe.onload = () => {
+      this.setState({loaded: true})
+    }
+  }
+
+  handleClick = e => {
+    e.preventDefault();
+  }
+
+  render(){
+    const Container = styled.div`
+      position: relative;
+      height: 0;
+      width: 100%;
+      padding-bottom: 70%;
+    `
+
+    const Iframe = (
+      <iframe src="https://calendar.google.com/calendar/embed?src=ov1q3hk6idekbd81mv0kojc3t4%40group.calendar.google.com&ctz=America%2FLos_Angeles" 
+        style={{
+        border: '1px solid #999', 
+        backgroundColor: 'transparent', 
+        display: 'block', 
+        margin: '0 auto',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+         }} 
+        ref="iframe"
+        width={'98%'} 
+        height={600} 
+        frameBorder={0} 
+        scrolling="no">
+        </iframe>
+    ) 
+
+    return (
+      <Grid container style={{margin: '20px auto'}} spacing={16}>
+        <Grid item xs={12} md={3}>
+          <List component="nav">
+            <ListItem button disableGutters onClick={this.handleClick}>
+              <ListItemText primary="Lorem ipsum dolor" secondary="9-15-18" />
+            </ListItem>
+            <ListItem button disableGutters onClick={this.handleClick}>
+              <ListItemText primary="Aut libero aperiam" secondary="9-21-18" />
+            </ListItem>
+            <ListItem button disableGutters onClick={this.handleClick}>
+              <ListItemText primary="Pariatur veniam" secondary="10-02-18" />
+            </ListItem>
+            <ListItem button disableGutters onClick={this.handleClick}>
+              <ListItemText primary="Nesciunt necessitatibus" secondary="10-06-18" />
+            </ListItem>
+            <ListItem button disableGutters onClick={this.handleClick}>
+              <ListItemText primary="Laudantium aperiam" secondary="10-21-18" />
+            </ListItem>
+          </List>
+        </Grid>
+        <Grid item xs={12} md={9}>
+          <Container>
+            {this.state.loaded ? <WaveformLoader/> : Iframe}
+          </Container>
+        </Grid>
+      </Grid>
+    )
+  }
+}
+
+export default ProfileCal

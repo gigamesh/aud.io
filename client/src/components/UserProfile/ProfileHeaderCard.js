@@ -13,7 +13,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MyFormControl from '../mui/MyFormControl'
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import { withFormik, Form } from 'formik'
 import * as yup from 'yup'
 
@@ -22,6 +28,8 @@ import { updateUser } from '../../store/actions';
 class ProfileHeaderCard extends React.Component {
   state = {
     editOpen: false,
+    profilenameColor: '#ffffff',
+    headerOverlay: 'rgba(3,3,3,0)'
   };
 
   handleEditOpen = () => {
@@ -32,18 +40,37 @@ class ProfileHeaderCard extends React.Component {
     this.setState({ editOpen: false });
   };
 
+  handleColorChange = (e) => {
+    this.setState({ profilenameColor: e.target.value});
+    this.props.setValues({
+      ...this.props.values,
+      profilenameColor: e.target.value,
+    });
+  }
+
+  handleOverlayChange = e => {
+    this.setState({ headerOverlay: e.target.value});
+    this.props.setValues({
+      ...this.props.values,
+      headerOverlay:  e.target.value
+    })
+  }
+
   submitHandler = (e) =>{
     e.preventDefault();
-
-    let { profilename, headerphoto, profilephoto } = this.props.values;
-    this.props.onFormSubmit({
-      profilename,
-      profilephoto,
-      headerphoto    
-    });
+    let values = this.props.values;
+    values.profilenameColor = this.state.profilenameColor;
+    values.headerOverlay = this.state.headerOverlay;
+    this.props.onFormSubmit(values);
     this.handleEditClose();
   }
 
+  componentDidMount(){
+    this.setState({
+      profilenameColor: this.props.user.profilenameColor,
+      headerOverlay: this.props.user.photos.headerOverlay 
+    })
+  }
 
   render(){
   let props = this.props;
@@ -68,10 +95,10 @@ class ProfileHeaderCard extends React.Component {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    padding-top: 27%;
-    &:hover #edit-btn {
+    padding-top: 24%;
+    /* &:hover #edit-btn {
       transform: scale(1);
-    }
+    } */
   `
   const InnerWrap = styled.div`
     position: absolute;
@@ -79,7 +106,6 @@ class ProfileHeaderCard extends React.Component {
     left: 0;
     width: 100%;
     height: 100%;
-    padding: 2% 1% 2% 2%;
    `
 
   const ProfileImgDiv = styled.div`
@@ -87,8 +113,8 @@ class ProfileHeaderCard extends React.Component {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    width: 20%;
-    padding-top: 20%;
+    width: 21%;
+    padding-top: 21%;
     border-radius: 50%;
     float: right;
     position: absolute;
@@ -97,15 +123,22 @@ class ProfileHeaderCard extends React.Component {
   `
 
   const TranslucentDiv = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: flex-start;
+    top: 0:
+    left: 0;
+    background: ${props => props.headerOverlay};
+    height: 100%;
+    width: 100%;
     float: right;
     text-align: right;
+    padding: 1% 1% 1% 3%;
     span {
-      /* white-space: pre; */
       display: inline-block;
       padding: 0 10px;
       line-height: 95%;
-      height: 1.1em;
-      background:rgb(18,21,22,0.3);
+      height: .95em;
     }
   `
 
@@ -113,8 +146,9 @@ class ProfileHeaderCard extends React.Component {
     position: relative;
     display: block;
     float: right;
-    height: 100%;
-    max-width: 50%;
+    max-width: 75%;
+    flex-shrink: 10;
+    border: 1px solid ${props => props.textcolor};
   `
 
   const formatUserName = name => {
@@ -126,29 +160,31 @@ class ProfileHeaderCard extends React.Component {
   }
 
   const ProfileName = styled(Typography)`
-    color: #fff;
-    font-weight: 300;
+    color: ${props => props.textcolor};
+    font-size: ${props => { return props.width === 'xs' || props.width === 'sm' 
+      ? '1.5em' : props.width === 'md' 
+      ? '2em' : props.width === 'lg' ? '3em' : '4em'}};
+    font-weight: 400;
     line-height: 0;
-    font-size: ${props.width};
   `
 
   const EditBn = styled(Button)`
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background: #fff;
+    background: #ffffff;
     opacity: 0.8;
-    transform: scale(0);
     transition: all 150ms;
+    padding: 5px;
     &:hover {
-      background: #fff;
+      background: #ffffff;
       opacity: 1;
     }
     .icon--edit {
-      padding: 0 5px;
+      padding-right: 4px;
     }
   `
-
+  
   let EditBtnComp = user.isAuth && user._id === pathId ? (
       <EditBn 
         id='edit-btn' 
@@ -160,27 +196,43 @@ class ProfileHeaderCard extends React.Component {
         Edit
       </EditBn>
   ) : null;
+
+  const EditDialogTopLineWrap = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    .namecolor--wrap {
+      float: right;
+    }
+    input {
+      display: inline-block;
+      cursor: pointer;
+    }
+  `
+
+  const MyFormControlLabel = styled(FormControlLabel)`
+    svg {color: '#333'; fill: '#333'}
+  `
     return (
       <React.Fragment>
         <OuterWrap>
           <InnerWrap>      
+            <TranslucentDiv headerOverlay={this.state.headerOverlay}>
             <ProfileImgDiv/>
-            <ProfileNameWrapper>
-              <TranslucentDiv>
-                <Hidden smDown>
-                  <ProfileName 
-                    variant={
-                      props.width === "xs" ? "display1" :
-                      props.width === "sm" ? "display2" :
-                      props.width === "md" || props.width === "lg" ? "display3" :
-                      "display4"
-                    }
-                    >
-                    {formatUserName(user.profilename) || ''}
-                  </ProfileName>
-                </Hidden>
-              </TranslucentDiv>
-            </ProfileNameWrapper>
+            <div style={{flexGrow: 1, width: '100%'}}></div>
+              <Hidden smDown>
+                <ProfileNameWrapper 
+                  textcolor={this.state.profilenameColor}
+                  >
+                    <ProfileName 
+                      textcolor={this.state.profilenameColor}
+                      width={this.props.width}
+                      >
+                      {formatUserName(user.profilename) || ''}
+                    </ProfileName>
+                </ProfileNameWrapper>
+              </Hidden>
+            </TranslucentDiv>
             {EditBtnComp}
           </InnerWrap>
         </OuterWrap>
@@ -193,28 +245,67 @@ class ProfileHeaderCard extends React.Component {
             transitionDuration={500}
             open={this.state.editOpen}
             onClose={this.handleEditClose}
-            aria-labelledby="form-dialog-title">
+            aria-labelledby="form-dialog-title"
+            >
             <Form onSubmit={this.submitHandler}>
               <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>
                 Edit Profile
               </DialogTitle>
               <DialogContent>
+                <EditDialogTopLineWrap>
+                  <MyFormControl fullWidth
+                  aria-describedby='profile-error-text'
+                  error={touched.profilename && errors.profilename}>
+                    <InputLabel htmlFor='profilename'>Profile Name</InputLabel>
+                    <Input
+                      id="profilename"
+                      name="profilename"
+                      placeholder="Profile Name"
+                      type="text"
+                      value={values.profilename}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <FormHelperText id="profile-error-text">
+                      {touched.profilename && errors.profilename && 
+                      <span>{errors.profilename}</span>}
+                    </FormHelperText>    
+                  </MyFormControl>
+                  <MyFormControl
+                    aria-describedby='profile-color-text'>
+                    <div className="namecolor--wrap">
+                      <InputLabel htmlFor='namecolor'>
+                          Color:
+                      </InputLabel>
+                      <Input 
+                        margin='none'
+                        disableUnderline
+                        id="namecolor"
+                        type="color" 
+                        name="namecolor"
+                        onChange={this.handleColorChange}
+                        value={this.state.profilenameColor}
+                        />
+                    </div>
+                  </MyFormControl>
+                </EditDialogTopLineWrap>
                 <MyFormControl fullWidth
-                aria-describedby='profile-error-text'
-                error={touched.profilename && errors.profilename}>
-                  <InputLabel htmlFor='profilename'>Profile Name</InputLabel>
+                aria-describedby='profilephoto-error-text'
+                error={touched.profilephoto && errors.profilephoto}
+                >
+                  <InputLabel htmlFor='profilephoto'>Profile Photo URL</InputLabel>
                   <Input
-                    id="profilename"
-                    name="profilename"
-                    placeholder="Profile Name"
-                    type="text"
-                    value={values.profilename}
+                    id="profilephoto"
+                    name="profilephoto"
+                    placeholder="Profile Photo URL"
+                    type="url"
+                    value={values.profilephoto}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  <FormHelperText id="profile-error-text">
-                    {touched.profilename && errors.profilename && 
-                    <span>{errors.profilename}</span>}
+                  <FormHelperText id="headerphoto-error-text">
+                    {touched.profilephoto && errors.profilephoto && 
+                    <span>{errors.profilephoto}</span>}
                   </FormHelperText>    
                 </MyFormControl>
                 <MyFormControl fullWidth
@@ -236,25 +327,37 @@ class ProfileHeaderCard extends React.Component {
                     <span>{errors.headerphoto}</span>}
                   </FormHelperText>    
                 </MyFormControl>
-                <MyFormControl fullWidth
-                aria-describedby='profilephoto-error-text'
-                error={touched.profilephoto && errors.profilephoto}
+              <MyFormControl horizontalcenter='true' fullWidth>
+                <Typography variant='body2'>Header Photo Overlay</Typography>
+                <RadioGroup
+                  row
+                  aria-label="overlay"
+                  name="overlay"
+                  value={this.state.headerOverlay}
+                  onChange={this.handleOverlayChange}
                 >
-                  <InputLabel htmlFor='profilephoto'>Profile Photo URL</InputLabel>
-                  <Input
-                    id="profilephoto"
-                    name="profilephoto"
-                    placeholder="Profile Photo URL"
-                    type="url"
-                    value={values.profilephoto}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <FormHelperText id="headerphoto-error-text">
-                    {touched.profilephoto && errors.profilephoto && 
-                    <span>{errors.profilephoto}</span>}
-                  </FormHelperText>    
-                </MyFormControl>
+                  <FormControlLabel 
+                    value="rgba(3,3,3,0.5)" 
+                    control={<Radio color="default"/>} 
+                    label="Darker" />
+                  <FormControlLabel 
+                    value="rgba(3,3,3,0.25)" 
+                    control={<Radio color="default"/>} 
+                    label="Dark" />
+                  <FormControlLabel 
+                    value="rgba(3,3,3,0)" 
+                    control={<Radio color="default"/>} 
+                    label="None" />
+                  <FormControlLabel 
+                    value="rgba(250,250,250,0.35)" 
+                    control={<Radio color="default"/>} 
+                    label="Light" />
+                  <FormControlLabel 
+                    value="rgba(250,250,250,0.7)" 
+                    control={<Radio color="default"/>} 
+                    label="Lighter" />
+                </RadioGroup>
+              </MyFormControl>
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.handleEditClose} color="primary">
@@ -277,7 +380,7 @@ const FormikForm = withFormik({
 		return {
       profilename: props.profilename,
       headerphoto: props.headerphoto,
-			profilephoto: props.profilephoto,
+			profilephoto: props.profilephoto
 		}
 	},
   validationSchema: yup.object().shape({
@@ -285,7 +388,6 @@ const FormikForm = withFormik({
       .required('Profile name required'),
     headerphoto: yup.string().url('Must be a valid URL'),
     profilephoto: yup.string().url('Must be a valid URL')
-
   }),
 })(ProfileHeaderCard);
 
@@ -293,13 +395,15 @@ const mapStateToProps = state => {
   return {
     profilename: state.user.profilename || '',
     headerphoto: state.user.photos.header || '',
-    profilephoto: state.user.photos.primary || ''
+    profilephoto: state.user.photos.primary || '',
+    profilenameColor: state.user.profilenameColor || '#ffffff',
+    headerOverlay: state.user.photos.headerOverlay || 'rgba(3,3,3,0)'
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFormSubmit: (vals) => dispatch(updateUser(vals))
+    onFormSubmit: (vals) => dispatch(updateUser(vals, 'ProfileHeaderCard'))
   }
 }
 

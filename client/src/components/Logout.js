@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { logoutUser } from '../store/actions';
 import { withRouter } from 'react-router-dom';
-import Spinner from './UI/Spinner';
+import WaveformLoader from './UI/WaveformLoader';
 
 class Logout extends Component{
   
@@ -14,14 +14,17 @@ class Logout extends Component{
   }
 
   render(){
-    return <Spinner/> 
+    return <WaveformLoader/> 
   }
 }
 
 
 const mapDispatchToProps = dispatch =>{
   return {
-    logout: (timeout) => dispatch(logoutUser(timeout))
+    logout: (timeout) => {
+      dispatch(logoutUser(timeout))
+      //add a dispach that clears the search data
+    }
   }
 }
 

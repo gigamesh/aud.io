@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Redirect} from 'react-router-dom';
+import { Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux'
 import styled from 'styled-components';
-import Spinner from './UI/Spinner';
+import WaveformLoader from './UI/WaveformLoader';
+import withWidth from '@material-ui/core/withWidth';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
@@ -18,6 +19,10 @@ const ButtonWrap = styled.div`
   display: flex;
   position: relative;
   justify-content: flex-end;
+`
+
+const ErrorWrap = styled.div`
+  flex-grow: 1;
 `
 
 class Login extends Component{
@@ -43,11 +48,18 @@ class Login extends Component{
       errorMsg,
       loading,
       userId,
-      isAuth
+      isAuth,
+      width
     } = this.props;
 
+  let isFlat = width === 'xs' ? 0 : 10;
+
     const form = (
-      <MyPaper size_s='true' form='true' verticalfix='true' elevation={10}>
+      <MyPaper 
+        size_s='true' 
+        form='true' 
+        verticalfix='true' 
+        elevation={isFlat}>
         <Form onSubmit={this.submitHandler}>
           <MyFormControl fullWidth
             aria-describedby='email-error-text'
@@ -86,22 +98,28 @@ class Login extends Component{
               </FormHelperText>  
           </MyFormControl>
           <ButtonWrap>
-            <MyFormHelperTextBig error>
-                {!touched.email && !touched.password ? errorMsg : ''}
-            </MyFormHelperTextBig> 
+            <ErrorWrap>
+              <MyFormHelperTextBig error>
+                  {!touched.email && !touched.password ? errorMsg : ''}
+              </MyFormHelperTextBig> 
+            </ErrorWrap>
             <Button 
               disabled={!isValid}
               variant="outlined" 
               color="primary" 
-              type="submit" >
+              type="submit" 
+              style={{flexShrink: 0}}>
               Submit
             </Button>
           </ButtonWrap>
         </Form>
       </MyPaper>
     )
-    return loading ? <Spinner/> 
-      : userId && isAuth ? <Redirect to={`/user/${userId}`} />
+    return loading ? <WaveformLoader/> 
+      : userId && isAuth 
+      ? <Redirect 
+        to={{pathname: `/user/${userId}`,
+              state: { prevPath: this.props.location.pathname }}} />
       : form;
   }
 }
@@ -140,4 +158,5 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)
+  (withWidth()(FormikForm)))

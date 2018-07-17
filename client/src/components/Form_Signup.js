@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Redirect} from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { userSignup, clearErrorMsg } from '../store/actions'
 import styled from 'styled-components';
-import Spinner from './UI/Spinner';
+import WaveformLoader from './UI/WaveformLoader';
 import Input from '@material-ui/core/Input';
 import MyFormControl from './mui/MyFormControl';
 import MyFormHelperTextBig from './mui/MyFormHelperText_Big';
+import withWidth from '@material-ui/core/withWidth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Radio from '@material-ui/core/Radio';
@@ -20,20 +21,30 @@ import * as yup from 'yup'
 const ButtonWrap = styled.div`
   margin-top: 15px;
   display: flex;
+  position: relative;
   justify-content: flex-end;
-  font-weight: 300;
+`
+
+const ErrorWrap = styled.div`
+  flex-grow: 1;
 `
 
 class Signup extends Component {
 
   submitHandler = (e) =>{
     e.preventDefault();
-    this.props.onSignupSubmit(this.props.values);
+
+    let values = this.props.values;
+    values.profilenameColor = '#ffffff';
+    values.photos = {headerOverlay: 'rgba(3,3,3,0)'};
+  
+    this.props.onSignupSubmit(values);
     this.props.resetForm();
   }
 
+
   componentDidMount(){
-    this.props.onMounted();
+    this.props.clearError();
   }
 
   render(){
@@ -47,11 +58,18 @@ class Signup extends Component {
     errorMsg,
     loading,
     userId,
-    isAuth
+    isAuth,
+    width
     } = this.props;
 
+  let isFlat = width === 'xs' ? 0 : 10;
+
     const form = (
-      <MyPaper form='true' size_m='true' verticalfix='true' elevation={10}>
+      <MyPaper 
+        form='true' 
+        size_m='true' 
+        verticalfix='true' 
+        elevation={isFlat}>
         <Form onSubmit={this.submitHandler}>
           <Grid container spacing={8}>
             <Grid item xs={12} sm={5}>
@@ -67,11 +85,11 @@ class Signup extends Component {
                   onChange={handleChange}
                 >
                   <FormControlLabel 
-                    value="Musician" 
+                    value="musician" 
                     control={<Radio />} 
                     label="Musician" />
                   <FormControlLabel 
-                    value="Recording Studio" 
+                    value="studio" 
                     control={<Radio />} 
                     label="Recording Studio" />
                 </RadioGroup>
@@ -133,14 +151,18 @@ class Signup extends Component {
             </Grid>
             <Grid item xs={12} >
               <ButtonWrap>
-                <MyFormHelperTextBig error>
-                  {!touched.email && !touched.password ? errorMsg : ''}
-                </MyFormHelperTextBig> 
+                <ErrorWrap>
+                  <MyFormHelperTextBig error>
+                    {!touched.email && !touched.password 
+                    && !touched.profilename ? errorMsg : ''}
+                  </MyFormHelperTextBig> 
+                </ErrorWrap> 
                 <Button 
                   disabled={!isValid}
                   variant="outlined" 
                   color="primary" 
-                  type="submit" >
+                  type="submit"
+                  style={{flexShrink: 0}}>
                   Sign Me Up!
                 </Button>
               </ButtonWrap>
@@ -150,8 +172,11 @@ class Signup extends Component {
       </MyPaper>
     )
 
-    return loading ? <Spinner/> 
-      : userId && isAuth ? <Redirect to={`/user/${userId}`} />
+    return loading ? <WaveformLoader/> 
+      : userId && isAuth 
+      ? <Redirect 
+        to={{pathname: `/user/${userId}`, 
+            state: { prevPath: this.props.location.pathname }}} />
       : form;
   }
 }
@@ -191,9 +216,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onSignupSubmit: vals => dispatch(userSignup(vals)),
-    onMounted: () => dispatch(clearErrorMsg())
+    clearError: () => dispatch(clearErrorMsg())
   }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormikForm)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)
+  (withWidth()(FormikForm)))

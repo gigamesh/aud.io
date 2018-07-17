@@ -17,10 +17,8 @@ const MuiTheme = {
       }
     },
     typography: {
-      // fontWeightLight: 100,
-      // fontWeightRegular: 300,
-      // fontWeightMedium: 500,
       fontFamily: 'Montserrat',
+      fontWeightRegular: 300,
       display4: {
         fontSize: '5rem'
       },
@@ -33,9 +31,14 @@ const MuiTheme = {
       display1: {
         fontSize: '2rem'
       },
+      headline: {
+        color: "#333",
+        lineHeight: '1em'
+      },
       button: {
         textTransform: 'none',
-        fontWeight: 500
+        fontWeight: 500,
+        color: "#333",
       }
     },
     transitions: {
@@ -57,12 +60,10 @@ const MuiTheme = {
         dark: '#C62828',
       },
       background: {
-        // paper: '#0a0a0a',
-        // default: '#0a0a0a'
       },
       text: {
-        primary: "#19191b",
-        secondary: "#212125",
+        primary: "#333",
+        secondary: "#333",
         // disabled: "rgba(255, 255, 255, 0.3)",
         // hint: "rgba(255, 255, 255, 0.3)",
         // icon: "rgba(255, 255, 255, 0.3)"
@@ -83,25 +84,34 @@ const MuiTheme = {
         root: {
           maxWidth: '1400px',
           margin: '0 auto',
-          width: '100%'
+          width: '100%',
+          justifyContent: 'space-between'    
         }
       },
       MuiInputLabel: {
         root: {
-          fontWeight: 300,
-          opacity: 0.8
+          fontWeight: 400,
+          opacity: 1
         },
         shrink: {
           color: '#42A5F5'
         }
       },
+      MuiDivider: {
+        root: {
+          width: '70%',
+          backgroundColor: '#333',
+          opacity: 0.3,
+          margin: '0 auto',
+          alignSelf: 'center'
+        }
+      },
       MuiInput: {
         input: {
           padding: '3px 0',
-          color: '#000',
+          color: "#19191b",
           borderRadius: '3px',
           fontSize: '1em',
-          fontWeight: 300,
           height: '1.1em'
         }
       },
@@ -134,10 +144,45 @@ const MuiTheme = {
           paddingRight: '6px'
         }
       },
+      MuiList: {
+        padding: {
+          padding: 0
+        }
+      },
+      MuiListItem: {
+        root: {
+          padding: '0 10px'
+        },
+        button: {
+          '&:hover': {
+            backgroundColor: '#BBDEFB !important',
+            color: '#1565C0'
+          }
+        }
+      },
       MuiDrawer: {
         paper: {
           minWidth: '250px',
           justifyContent: 'center'
+        }
+      },
+      MuiRadio: {
+        root: {
+          height: '35px',
+        }
+      },
+      MuiFormLabel: {
+        root: {
+          color: '#444'
+        }
+      },
+      MuiMenuItem: {
+        root: {
+          color: '#444',
+          '&$selected': {
+            backgroundColor: '#edf6ff',
+            color: '#1565C0'
+          }
         }
       }
     }

@@ -12,8 +12,8 @@ const MyPaper = (props)=>{
     props.size_l ? ' paper--l' : ''}`
 
   className += props.form ? ' form' : '';
-
-  className += props.verticalfix ? ' paper--vertical-fix' : '';
+  className += props.verticalfix && ' paper--vertical-fix';
+  className += props.currentwidth === 'xs' && ' paper--top-margin';
 
   return(
       <Paper {...props} className={className}>

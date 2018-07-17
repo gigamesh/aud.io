@@ -1,25 +1,26 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-// import styled from 'styled-components';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
+import ProfileAbout from './ProfileAbout';
+import ProfileMusic from './ProfileMusic';
+import ProfileCal from './ProfileCal';
+// import ProfileGear from './ProfileGear';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 // import styled from 'styled-components';
 import Measure from 'react-measure';
 
 function TabContainer({ children, dir }) {
   return (
-    <Typography component="div" dir={dir}>
+    <div component="div" dir={dir}>
       {children}
-    </Typography>
+    </div>
   );
 }
 
 const styles = theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
     width: '100%',
   },
   lessPad: {
@@ -65,10 +66,10 @@ class FullWidthTabs extends React.Component {
                   scrollable={appBarWidth < 400}
                   scrollButtons="on"
                   >
-                  <Tab label="Bio" />
+                  <Tab label="About" />
                   <Tab label="Music" />
-                  <Tab label="Calendar" />
-                  <Tab label="Gear" />
+                  <Tab label="Schedule" />
+                  {/* <Tab label="Gear" /> */}
                 </Tabs>
               </AppBar>
               <SwipeableViews
@@ -76,10 +77,10 @@ class FullWidthTabs extends React.Component {
                 index={this.state.value}
                 onChangeIndex={this.handleChangeIndex}
               >
-                <TabContainer dir={theme.direction}>Bio</TabContainer>
-                <TabContainer dir={theme.direction}>Music</TabContainer>
-                <TabContainer dir={theme.direction}>Calendar</TabContainer>
-                <TabContainer dir={theme.direction}>Gear</TabContainer>
+                <TabContainer dir={theme.direction}><ProfileAbout/></TabContainer>
+                <TabContainer dir={theme.direction}><ProfileMusic/></TabContainer>
+                <TabContainer dir={theme.direction}><ProfileCal/></TabContainer>
+                {/* <TabContainer dir={theme.direction}><ProfileGear/></TabContainer> */}
               </SwipeableViews>
             </div>
           )}

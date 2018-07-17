@@ -1,21 +1,10 @@
 import React, {Component} from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { withRouter} from 'react-router-dom';
 import SideDrawer from './../components/navigation/SideDrawer';
 import Header from './Header'
 import styled from 'styled-components'
 
-const MainWrap = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 64px);
-  width: calc(96%);
-  max-width: 1400px;
-  /* background: lightgreen; */
-  margin: 64px auto 0;
-`
 
 class Layout extends Component {
   state = {
@@ -30,15 +19,28 @@ class Layout extends Component {
 
   render() {
     let currentLocation = this.props.location.pathname.split('/')[1] || '/';
+
+    const MainWrap = styled.div`
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 50px);
+      width: calc(96%);
+      max-width: 1400px;
+      margin: 50px auto 0;
+      transition: position 150ms;
+    `
     return (
     <React.Fragment>
       <Header
+        history={this.props.history}
         path={currentLocation}
         drawerToggleClicked={()=> this.toggleDrawer()}/>
 
       <SideDrawer 
         path={currentLocation}
-        isOpen={this.state.showSideDrawer}
+        isopen={this.state.showSideDrawer}
         closeHandler={()=> this.toggleDrawer()}>
         <div
           tabIndex={0}

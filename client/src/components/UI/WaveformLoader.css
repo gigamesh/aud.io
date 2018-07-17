@@ -1,0 +1,109 @@
+@keyframes lds-equalizer {
+  0% {
+    height: 66.6%;
+  }
+  33.33% {
+    height: 100%;
+  }
+  66.66% {
+    height: 13.3%;
+  }
+  100% {
+    height: 66.6%;
+  }
+}
+@-webkit-keyframes lds-equalizer {
+  0% {
+    height: 66.6%;
+  }
+  33.33% {
+    height: 100%;
+  }
+  66.66% {
+    height: 13.3%;
+  }
+  100% {
+    height: 66.6%;
+  }
+}
+
+.lds-equalizer {
+  margin: 0 auto;
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  height: 100%;
+  width: 100%;
+  max-width: 200px;
+  max-height: 100px;
+  opacity: 0.7;
+}
+.lds-equalizer div {
+  display: flex;
+  margin: 0 auto;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  width: 100%;
+  height: 100%;
+}
+.lds-equalizer-bar {
+  width: calc(1/9px);
+  -webkit-animation: lds-equalizer 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation: lds-equalizer 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+.lds-equalizer-bar:nth-child(1) {
+  background: #c2415b;
+  -webkit-animation-delay: -0.888888888888889s;
+  animation-delay: -0.888888888888889s;
+}
+.lds-equalizer-bar:nth-child(2) {
+  background: #b1516f;
+  -webkit-animation-delay: -0.666666666666667s;
+  animation-delay: -0.666666666666667s;
+}
+.lds-equalizer-bar:nth-child(3) {
+  background: #a9597a;
+  -webkit-animation-delay: -0.777777777777778s;
+  animation-delay: -0.777777777777778s;
+}
+.lds-equalizer-bar:nth-child(4) {
+  background: #98698e;
+  -webkit-animation-delay: -0.555555555555556s;
+  animation-delay: -0.555555555555556s;
+}
+.lds-equalizer-bar:nth-child(5) {
+  background: #907198;
+  -webkit-animation-delay: -0.444444444444444s;
+  animation-delay: -0.444444444444444s;
+}
+.lds-equalizer-bar:nth-child(6) {
+
+  background: #7f80ad;
+  -webkit-animation-delay: -0.111111111111111s;
+  animation-delay: -0.111111111111111s;
+}
+.lds-equalizer-bar:nth-child(7) {
+
+  background: #7788b7;
+  -webkit-animation-delay: -0.222222222222222s;
+  animation-delay: -0.222222222222222s;
+}
+.lds-equalizer-bar:nth-child(8) {
+
+  background: #6698cc;
+  -webkit-animation-delay: -0.333333333333333s;
+  animation-delay: -0.333333333333333s;
+}
+.lds-equalizer-bar:nth-child(9) {
+
+  background: #5ea0d6;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+/* .lds-equalizer {
+  width: 200px !important;
+  height: 200px !important;
+  -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+} */

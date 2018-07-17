@@ -12,7 +12,7 @@ import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import rootReducer from './store/reducers'
 import createSagaMiddleware from 'redux-saga';
-import { watchLogin } from './store/sagas';
+import { watchUser, watchSearch } from './store/sagas';
 import { saveToLocalStorage, loadState } from './util';
 
 const styleNode = document.createComment("insertion-point-jss");
@@ -41,7 +41,8 @@ window.onbeforeunload = () => {
   saveToLocalStorage(store.getState()); // save current state to localstorage.
 };
 
-sagaMiddleware.run(watchLogin);
+sagaMiddleware.run(watchUser);
+sagaMiddleware.run(watchSearch);
 
 const app = (
   <Provider store={store}>

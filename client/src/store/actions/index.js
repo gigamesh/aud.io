@@ -1,111 +1,29 @@
-import * as actionTypes from './actionTypes';
+export {
+  clearErrorMsg,
+  loginUser,
+  loginUserSuccess,
+  loginUserFail,
+  auth,
+  authSuccess,
+  authFail,
+  logoutUser,
+  logoutUserSuccess,
+  updateUser,
+  userUpdateSuccess,
+  userSignup,
+  userSignupFail,
+  userSignupSuccess,
+  profileDataInit,
+  profileDataSuccess,
+  profileDataFail,
+  clearProfileData
+} from './user';
 
-export const clearErrorMsg = () => {
-  return {
-    type: actionTypes.CLEAR_ERROR_MSG
-  }
-}
-
-export const loginUser = ({email,password}) => {
-  return {
-    type: actionTypes.LOGIN_USER_INIT,
-    email,
-    password
-  }
-}
-
-export const loginUserSuccess = response =>{
-  return {
-    type: actionTypes.LOGIN_USER_SUCCESS,
-    userData: response.userData
-  }
-}
-
-export const loginUserFail = errorMsg => {
-  return {
-    type: actionTypes.LOGIN_USER_FAIL,
-    errorMsg
-  }
-}
-
-export const auth = () => {
-  return {
-    type: actionTypes.USER_AUTH_INIT
-  }
-}
-
-export const authSuccess = userData => {
-  return {
-    type: actionTypes.USER_AUTH_SUCCESS,
-    userData
-  }
-}
-
-export const authFail = () => {
-  return {
-    type: actionTypes.USER_AUTH_FAIL
-  }
-}
-
-export const logoutUser = (timeout) => {
-  return {
-    type: actionTypes.LOGOUT_USER_INIT,
-    timeout
-  }
-}
-
-export const logoutUserSuccess = () => {
-  return {
-    type: actionTypes.LOGOUT_USER_SUCCESS
-  }
-}
-
-export const updateUser = ({profilename, headerphoto, profilephoto}) => {
-  return {
-    type: actionTypes.USER_UPDATE_INIT,
-    profilename,
-    headerphoto,
-    profilephoto
-  }
-}
-
-export const userUpdateSuccess = (values) => {
-  return {
-    type: actionTypes.USER_UPDATE_SUCCESS,
-    values
-  }
-}
-
-export const userSignup = values => {
-  return {
-    type: actionTypes.USER_SIGNUP_INIT,
-    values
-  }
-}
-
-export const userSignupSuccess = values => {
-  return {
-    type: actionTypes.USER_SIGNUP_SUCCESS,
-    userData: values.userData
-  }
-}
-
-export const profileDataInit = id => {
-  return {
-    type: actionTypes.PROFILE_DATA_INIT,
-    id
-  }
-}
-
-export const profileDataSuccess = values => {
-  return {
-    type: actionTypes.PROFILE_DATA_SUCCESS,
-    profileData: values
-  }
-}
-
-export const profileDataFail = () => {
-  return {
-    type: actionTypes.PROFILE_DATA_FAIL
-  }
-}
+export {
+  getUsers,
+  getUsersSuccess,
+  searchUsersSuccess,
+  searchBoxTouched, 
+  searchBoxKeypress, 
+  clearSearchbox
+} from './search';

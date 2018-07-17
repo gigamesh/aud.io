@@ -1,0 +1,34 @@
+.nav-btn--dropdown {
+  padding: 8px 18px;
+  opacity: 0.9;
+  color:inherit;
+  min-width: 0;
+}
+
+.nav-btn--wrap:hover .nav-btn--dropdown {
+  background: inherit;
+  opacity: 1;
+  color: #1565C0;
+}
+
+.nav-btn--wrap {
+  position: relative;
+}
+
+.nav-btn--wrap::after {
+  content: '';
+  position: absolute;
+  width: 0; 
+  height: 0; 
+  top: 34px;
+  left: 45%;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent; 
+  border-top: 6px solid #19191b;
+  opacity: 0
+}
+
+.nav-btn--wrap:hover:after {
+  border-top: 8px solid #1565C0;
+  opacity: .7;
+}

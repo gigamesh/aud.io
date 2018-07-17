@@ -4,14 +4,25 @@ const initialState = {
   loading: false,
   errorMsg: '',
   isAuth: false,
+  _id: '',
+  firstName: '',
+  lastName: '',
+  role: '',
+  email: '',
+  password: '',
+  profilename: '',
+  phoneNumber: '',
+  renter: null,
   photos: {},
   address: {},
   gearList: [],
   genres: [],
-  expertise: {}
+  expertise: {},
+  profilenameColor: '',
+  currentProfileId: ''
 }
 
-const user_reducer = (state= initialState, action) => {
+const user = (state= initialState, action) => {
   switch(action.type){
     case actionTypes.CLEAR_ERROR_MSG:
       return {
@@ -71,18 +82,29 @@ const user_reducer = (state= initialState, action) => {
     case actionTypes.USER_UPDATE_SUCCESS:
       return {
         ...state,
-        loading: false,
-        profilename: action.values.profilename,
+        ...action.values,
+        address: {
+          ...action.values.address
+        },
         photos: {
-          primary: action.values.photos.primary,
-          header: action.values.photos.header
-        }
+          ...action.values.photos
+        },
+        expertise: {
+          ...action.values.expertise
+        },
+        loading: false,
       }
     case actionTypes.USER_SIGNUP_INIT:
       return {
         ...state,
         loading: true,
         errorMsg: ''
+      }
+    case actionTypes.USER_SIGNUP_FAIL:
+      return {
+        ...state,
+        loading: false,
+        errorMsg: action.errorMsg
       }
     case actionTypes.USER_SIGNUP_SUCCESS:
       return {
@@ -92,10 +114,13 @@ const user_reducer = (state= initialState, action) => {
         ...action.userData
       }
     case actionTypes.PROFILE_DATA_INIT:
+      // console.log('_id:' + state._id, 'currentProfileId:' + state.currentProfileId);
       return {
-        ...state,
+        ...initialState,
         loading: true,
-        errorMsg: ''
+        _id: state._id,
+        isAuth: state.isAuth,
+        currentProfileId: state.currentProfileId
       }
     case actionTypes.PROFILE_DATA_SUCCESS:
       return {
@@ -114,4 +139,4 @@ const user_reducer = (state= initialState, action) => {
   }
 }
 
-export default user_reducer
+export default user
