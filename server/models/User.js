@@ -32,12 +32,15 @@ const userSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Musician','Studio'],
+    enum: ['musician','studio'],
   },
   profilename: {
     type: String,  // musician's stage name or recording studio's business name
     maxlength: 50,
     unique: true
+  },
+  profilenameColor: {
+    type: String
   },
   phoneNumber: {
     type: String,
@@ -55,6 +58,10 @@ const userSchema = mongoose.Schema({
     state: {
       type: String,
       enum: states,
+    },
+    city: {
+      type: String,
+      maxlength: 50
     },
     street: {
       type: String,
@@ -85,12 +92,19 @@ const userSchema = mongoose.Schema({
   photos: {
     primary: {
       type: String,
-      maxlength: 300
+      maxlength: 500
     },
     secondary: [{
       type: String,
-      maxlength: 300
-    }]
+      maxlength: 500
+    }],
+    header: {
+      type: String,
+      maxlength: 500
+    },
+    headerOverlay: {
+      type: String
+    }
   }
 }, {timestamps: true})
 
@@ -148,6 +162,10 @@ userSchema.methods.deleteToken = function(token,cb){
     cb(null, user);
   })
 }
+
+// userSchema.index({
+//   'profilename': 'text'
+//   });
 
 const User = mongoose.model('User', userSchema);
 

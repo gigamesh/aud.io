@@ -60,22 +60,51 @@ app.get('/api/gearlist',(req,res)=>{
 })
 
 app.get('/api/users',(req,res)=>{
-  let _id = req.query._id ? req.query._id : null;
+  let id = req.query.id ? req.query.id : null;
 
-  if(_id){
-    User.findById(_id, (err, user) => {
+  if(id){
+    User.findById(id, (err, user) => {
       if(err) return res.status(400).send(err);
       res.send(user);      
     })
   } else {
+    let role = req.query.role || '';
+    let query = req.query.query || '';
+    let genres = req.query.genres || '';
     let skip = req.query.skip ? parseInt(req.query.skip) : 0;
     let limit = req.query.limit ? parseInt(req.query.limit) : 0;
     let order = req.query.order ? req.query.order : 'asc';
 
-    User.find().skip(skip).sort({_id:order}).limit(limit).exec((err, users)=>{
-      if(err) return res.status(400).send(err);
-      res.status(200).send(users)
-    })
+    let findObj = {};
+    if(role){
+      findObj['role'] = role;
+    }
+    if(query){
+      findObj['profilename'] = new RegExp(query, 'gi');
+    }
+
+    let dbQuery = User
+      .find(findObj)
+      .skip(skip)
+      .sort({_id:order});
+
+    if(query){
+      dbQuery.limit(10).exec((err, users)=>{
+        if(err) return res.status(400).send(err);
+        let filteredData = users.map(val => {
+          return {
+            _id: val._id,
+            profilename: val.profilename
+          }
+        });
+        res.status(200).send(filteredData);
+      })
+    } else {
+      dbQuery.limit(limit).exec((err, users)=>{
+        if(err) return res.status(400).send(err);
+        res.status(200).send(users);
+      })
+    }
   }
 })
 
@@ -99,7 +128,7 @@ app.post('/api/usergearitem',(req, res)=> {
       {new: true},
       (err,user) => {
         if(err) return res.status(400).send(err);
-        console.log(user.gearList);
+        // console.log(user.gearList);
     })
     res.status(200).json({
       post: true,
@@ -115,10 +144,7 @@ app.post('/api/mastergearitem',(req,res)=> {
     if(err) {
       return res.json({success: false})
     };
-    res.status(200).json({
-      success: true,
-      user: item
-    })
+    res.status(200).json(doc)
   })
 })
 
@@ -126,18 +152,22 @@ app.post('/api/signup',(req,res)=> {
   const user = new User(req.body);
   user.save((err,doc)=>{
     if(err) {
+      console.log(err);
       return res.json({success: false, msg: err.errmsg})
     };
-    user.genres.forEach(genre =>{
-      Genre.findOrCreate({
-        genre: genre.toLowerCase()
-      },(err, result)=>{
-        if(err) throw err;
+    // user.genres.forEach(genre =>{
+    //   Genre.findOrCreate({
+    //     genre: genre.toLowerCase()
+    //   },(err, result)=>{
+    //     if(err) throw err;
+    //   })
+    // })
+    user.generateToken((err,user)=> {
+      if(err) return res.status(400).send(err);
+      res.cookie('auth',user.token).json({
+        isAuth: true,
+        userData: user
       })
-    })
-    res.status(200).json({
-      success: true,
-      user: doc
     })
   })
 })
@@ -148,10 +178,7 @@ app.post('/api/genre',(req,res)=>{
     if(err){
       return res.json({success: false})
     };
-    res.status(200).json({
-      success: true,
-      user: doc
-    })
+    res.status(200).json(doc)
   })
 })
 
@@ -185,20 +212,49 @@ app.post('/api/login',(req,res)=> {
 app.post('/api/usergearitem',(req,res)=> {
   UserGearItem.findByIdAndUpdate(req.body._id, req.body, {new: true},(err,doc)=>{
     if(err) return res.status(400).send(err);
-    res.json({
-      success: true,
-      doc
-    })
+    if(!doc) return res.status(400).send({success: false});
+    res.json(doc)
   })
 })
 
-app.post('/api/update_user',(req,res)=> {
-  User.findByIdAndUpdate(req.body._id, req.body, {new: true},(err,doc)=>{
+app.post('/api/update_user', auth, (req,res)=> {
+  let updateObj;
+  /* req.body will only contain partial data depending on origin 
+  so these if statements ensure nothing in the database gets overwritten 
+  with undefined values  */
+
+  if(req.body.origin === 'ProfileHeaderCard'){
+    updateObj = {
+      profilename: req.body.profilename,
+      profilenameColor: req.body.profilenameColor,
+      photos: {
+        primary: req.body.profilephoto,
+        header: req.body.headerphoto,
+        headerOverlay: req.body.headerOverlay
+      }
+    }
+  }
+
+  if(req.body.origin === 'AccountSettings'){
+    updateObj = {
+      profilename: req.body.profilename,
+      email: req.body.email,
+      role: req.body.role,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      address: {
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        postalCode: req.body.postalCode
+      }
+    }
+  }
+  console.log(updateObj);
+  User.findByIdAndUpdate(req.user._id, updateObj, {new: true},(err,doc)=>{
     if(err) return res.status(400).send(err);
-    res.json({
-      success: true,
-      doc
-    })
+    if(!doc) return res.status(400).send({success: false});
+    res.json(doc)
   })
 })
 
@@ -206,7 +262,6 @@ app.post('/api/update_user',(req,res)=> {
 
 app.delete('/api/update_usergearitem',(req,res)=>{
   let id = req.query.id;
-  console.log(id);
   UserGearItem.findOne({_id: id},(err,item)=>{
     if(err) return res.status(400).send(err);
     User.findByIdAndUpdate(item.ownerId,
