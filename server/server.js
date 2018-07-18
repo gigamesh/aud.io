@@ -8,7 +8,7 @@ const app = express();
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || config.DATABASE );
 //
-const { User } = require('./models/user');
+const { User } = require('./models/User');
 const { UserGearItem } = require('./models/UserGearItem');
 const { MasterGearItem } = require('./models/MasterGearItem');
 const { Genre } = require('./models/Genre');
