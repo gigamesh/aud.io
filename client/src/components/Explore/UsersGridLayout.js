@@ -54,7 +54,7 @@ class UsersGridLayout extends React.Component{
       <React.Fragment>
         <WaveformLoader/>
         <MessageWrap>
-          <p>Initial load may take ~10 seconds due to demo limitations (free database service needs time to wake up).</p>
+          <p>Initial load may take 10-20 seconds due to demo limitations (the free database service needs time to wake up).</p>
           <p>Thank you for your patience! :)</p>
         </MessageWrap>
       </React.Fragment>
