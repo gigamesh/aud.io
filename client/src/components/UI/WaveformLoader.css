@@ -27,18 +27,6 @@
   }
 }
 
-.lds-equalizer {
-  margin: 0 auto;
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-  transform: translate(-50%, 50%);
-  height: 100%;
-  width: 100%;
-  max-width: 200px;
-  max-height: 100px;
-  opacity: 0.7;
-}
 .lds-equalizer div {
   display: flex;
   margin: 0 auto;
