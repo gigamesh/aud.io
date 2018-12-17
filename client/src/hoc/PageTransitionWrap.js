@@ -1,20 +1,19 @@
-import React from 'react';
-import WrapAndCenter from './../containers/WrapAndCenter'
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React from "react";
+import WrapAndCenter from "./../containers/WrapAndCenter";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const PageTransitionWrap = WrappedComponent => {
-  return props => (   
+  return props => (
     <TransitionGroup>
       <WrapAndCenter>
         <CSSTransition
-          // transitionName={props.match.path === '/login' ? 'SlideIn' : 'SlideOut'}
+        // transitionName={props.match.path === '/login' ? 'SlideIn' : 'SlideOut'}
         >
           <WrappedComponent {...props} />
         </CSSTransition>
       </WrapAndCenter>
     </TransitionGroup>
-    
-  )
-}
+  );
+};
 
 export default PageTransitionWrap;

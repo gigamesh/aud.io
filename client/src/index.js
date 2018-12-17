@@ -1,19 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose} from 'redux';
-import promiseMiddleware from 'redux-promise';
-import './styles_main/global.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
+import promiseMiddleware from "redux-promise";
+import "./styles_main/global.css";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
-import rootReducer from './store/reducers'
-import createSagaMiddleware from 'redux-saga';
-import { watchUser, watchSearch } from './store/sagas';
-import { saveToLocalStorage, loadState } from './util';
+import rootReducer from "./store/reducers";
+import createSagaMiddleware from "redux-saga";
+import { watchUser, watchSearch } from "./store/sagas";
+import { saveToLocalStorage, loadState } from "./util";
 
 const styleNode = document.createComment("insertion-point-jss");
 document.head.insertBefore(styleNode, document.head.firstChild);
@@ -30,8 +30,11 @@ const sagaMiddleware = createSagaMiddleware();
 // REDUX STUFF
 let persistedState = loadState(); // retreives local storage
 
-const store = createStore(rootReducer, persistedState,
-  composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware)));
+const store = createStore(
+  rootReducer,
+  persistedState,
+  composeEnhancers(applyMiddleware(promiseMiddleware, sagaMiddleware))
+);
 
 store.subscribe(() => {
   saveToLocalStorage(store.getState()); // save current state to localstorage.
@@ -52,11 +55,10 @@ const app = (
       </BrowserRouter>
     </JssProvider>
   </Provider>
-)
+);
 
-const root = document.getElementById('root');
-if(root != null){
+const root = document.getElementById("root");
+if (root != null) {
   ReactDOM.render(app, root);
   registerServiceWorker();
 }
-

@@ -1,23 +1,22 @@
-import React, {Component} from 'react';
-import { withRouter} from 'react-router-dom';
-import SideDrawer from './../components/navigation/SideDrawer';
-import Header from './Header'
-import styled from 'styled-components'
-
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import SideDrawer from "./../components/navigation/SideDrawer";
+import Header from "./Header";
+import styled from "styled-components";
 
 class Layout extends Component {
   state = {
     showSideDrawer: false
-  }
+  };
 
   toggleDrawer = () => {
-    this.setState((prevState) => {
-      return {showSideDrawer: !prevState.showSideDrawer};
+    this.setState(prevState => {
+      return { showSideDrawer: !prevState.showSideDrawer };
     });
   };
 
   render() {
-    let currentLocation = this.props.location.pathname.split('/')[1] || '/';
+    let currentLocation = this.props.location.pathname.split("/")[1] || "/";
 
     const MainWrap = styled.div`
       position: relative;
@@ -29,32 +28,31 @@ class Layout extends Component {
       max-width: 1400px;
       margin: 50px auto 0;
       transition: position 150ms;
-    `
+    `;
     return (
-    <React.Fragment>
-      <Header
-        history={this.props.history}
-        path={currentLocation}
-        drawerToggleClicked={()=> this.toggleDrawer()}/>
+      <React.Fragment>
+        <Header
+          history={this.props.history}
+          path={currentLocation}
+          drawerToggleClicked={() => this.toggleDrawer()}
+        />
 
-      <SideDrawer 
-        path={currentLocation}
-        isopen={this.state.showSideDrawer}
-        closeHandler={()=> this.toggleDrawer()}>
-        <div
-          tabIndex={0}
-          role="button"
-          onClick={()=> this.toggleDrawer()}
-          onKeyDown={()=> this.toggleDrawer()}
+        <SideDrawer
+          path={currentLocation}
+          isopen={this.state.showSideDrawer}
+          closeHandler={() => this.toggleDrawer()}
         >
-        </div>
-      </SideDrawer>
-        <MainWrap path={currentLocation}>
-          {this.props.children}
-        </MainWrap>
-    </React.Fragment>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={() => this.toggleDrawer()}
+            onKeyDown={() => this.toggleDrawer()}
+          />
+        </SideDrawer>
+        <MainWrap path={currentLocation}>{this.props.children}</MainWrap>
+      </React.Fragment>
     );
   }
-};
+}
 
 export default withRouter(Layout);

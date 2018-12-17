@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 // import { Redirect} from 'react-router-dom';
 
-class NotFound extends Component{
-  componentDidMount(){
-    this.props.history.push('/')
+class NotFound extends Component {
+  componentDidMount() {
+    this.props.history.push("/");
   }
 
-  render(){
+  render() {
     return (
       <div>
         <h1>404 Not found</h1>
       </div>
-    )
+    );
   }
 }
 
-export default NotFound
+export default NotFound;
