@@ -36,7 +36,7 @@ class Signup extends Component {
     let values = this.props.values;
     values.profilenameColor = "#ffffff";
     values.photos = { headerOverlay: "rgba(3,3,3,0)" };
-
+    values.photos.header = "/img/profile/default-header.jpg";
     this.props.onSignupSubmit(values);
     this.props.resetForm();
   };

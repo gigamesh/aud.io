@@ -1,31 +1,33 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-import Card from '@material-ui/core/Card';
-import withWidth from '@material-ui/core/withWidth';
-import Typography from '@material-ui/core/Typography';
-import WaveformLoader from '../UI/WaveformLoader';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Card from "@material-ui/core/Card";
+import withWidth from "@material-ui/core/withWidth";
+import Typography from "@material-ui/core/Typography";
+import WaveformLoader from "../UI/WaveformLoader";
 
+interface Props {
+  user: any;
+}
 
-class UserCard extends React.Component{
+class UserCard extends React.Component<Props> {
   state = {
     loaded: false
-  }
+  };
 
   componentDidMount() {
-      
     const loaderImg = new Image();
 
     loaderImg.src = this.props.user.photos.header;
 
     loaderImg.onload = () => {
-      this.setState({loaded: true});
-    }
+      this.setState({ loaded: true });
+    };
   }
 
-  render(){
+  render() {
     let user = this.props.user;
-    let userId = this.props.user._id
+    let userId = this.props.user._id;
     let profilename = this.props.user.profilename;
 
     const OuterWrap = styled.div`
@@ -33,10 +35,12 @@ class UserCard extends React.Component{
       width: 100%;
       height: 0;
       padding-top: 50%;
-    `
+    `;
+
+    const defHeader = "/img/profile/default-header.jpg";
 
     const InnerWrap = styled.div`
-      background: url(${user.photos.header || "/img/profile/default-header.jpg"});
+      background: url(${user.photos.header || defHeader});
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
@@ -48,18 +52,18 @@ class UserCard extends React.Component{
       left: 0;
       padding: 1%;
       transition: all 400ms ease-in-out;
-    `
+    `;
 
     const ProfileNameWrap = styled.div`
       position: absolute;
       z-index: 30;
       width: 98%;
       flex-shrink: 10;
-      color: ${user ? user.profilenameColor : '#333'};
+      color: ${user ? user.profilenameColor : "#333"};
       padding: 0.5%;
       margin: 0 2px;
       font-weight: 300;
-      line-height: .9em;
+      line-height: 0.9em;
       opacity: 1;
       h1 {
         color: inherit;
@@ -67,7 +71,7 @@ class UserCard extends React.Component{
       p {
         color: inherit;
       }
-    `
+    `;
 
     const MyCard = styled(Card)`
       position: absolute;
@@ -79,14 +83,14 @@ class UserCard extends React.Component{
       &:hover .usercard--coloroverlay {
         opacity: 1;
       }
-      &:hover .usercard--innerwrap{
+      &:hover .usercard--innerwrap {
         filter: grayscale(100%);
         -webkit-filter: grayscale(100%);
       }
       &:hover .headercard-profilename {
         opacity: 1;
       }
-    `
+    `;
 
     const Overlay = styled.div`
       position: absolute;
@@ -100,8 +104,12 @@ class UserCard extends React.Component{
       opacity: 1;
       z-index: 10;
       transition: all 400ms ease-in-out;
-      background-image: linear-gradient(20deg, rgba(0,0,0,0) 40%, rgba(4,20,38,0.8) 90%);
-    `
+      background-image: linear-gradient(
+        20deg,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(4, 20, 38, 0.8) 90%
+      );
+    `;
 
     const ColorOverlay = styled.div`
       position: absolute;
@@ -111,9 +119,9 @@ class UserCard extends React.Component{
       left: 0;
       opacity: 0;
       z-index: 20;
-      background-color: rgba(72, 152, 242,0.2);
+      background-color: rgba(72, 152, 242, 0.2);
       transition: all 400ms ease-in-out;
-    `
+    `;
 
     const WaveformWrapper = styled.div`
       position: relative;
@@ -122,46 +130,45 @@ class UserCard extends React.Component{
       align-items: center;
       height: 100%;
       width: 100%;
-    `
+    `;
     const WaveformInnerWrap = styled.div`
       position: relative;
       width: 40%;
       height: 40%;
-    `
+    `;
 
     const loadedUserCard = (
       <Link to={`/user/${userId}`}>
         <OuterWrap>
           <MyCard raised>
-          <Overlay className='usercard--overlay'>
-          </Overlay>
-          <ColorOverlay className='usercard--coloroverlay'/>
-          <InnerWrap className='usercard--innerwrap'>
-              <div style={{flexGrow: 1, width: '100%'}}></div>
-          </InnerWrap>
-          <ProfileNameWrap className={'headercard-profilename'}>
-            <Typography variant='headline' align='right'>
-              {profilename}
-            </Typography>
-            <Typography variant='body1' align='right'>
-              {user.address ? user.address.city : ''}
-            </Typography>
-          </ProfileNameWrap>
+            <Overlay className="usercard--overlay" />
+            <ColorOverlay className="usercard--coloroverlay" />
+            <InnerWrap className="usercard--innerwrap">
+              <div style={{ flexGrow: 1, width: "100%" }} />
+            </InnerWrap>
+            <ProfileNameWrap className={"headercard-profilename"}>
+              <Typography variant="headline" align="right">
+                {profilename}
+              </Typography>
+              <Typography variant="body1" align="right">
+                {user.address ? user.address.city : ""}
+              </Typography>
+            </ProfileNameWrap>
           </MyCard>
         </OuterWrap>
-      </Link> 
-    )
+      </Link>
+    );
 
     const wrappedWaveform = (
       <WaveformWrapper>
         <WaveformInnerWrap>
-          <WaveformLoader/>
-        </WaveformInnerWrap>  
+          <WaveformLoader />
+        </WaveformInnerWrap>
       </WaveformWrapper>
-    )
+    );
 
-    return this.state.loaded ? loadedUserCard : wrappedWaveform
+    return this.state.loaded ? loadedUserCard : wrappedWaveform;
   }
 }
 
-export default withWidth()(UserCard)
+export default withWidth()(UserCard);

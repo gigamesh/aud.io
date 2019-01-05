@@ -1,5 +1,5 @@
 // SAVE STATE TO LOCAL STORAGE (in the event of a page refresh)
-export const saveToLocalStorage = state => {
+export const saveToLocalStorage = (state: any) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("state", serializedState);

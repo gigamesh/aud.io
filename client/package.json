@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^1.1.0",
-    "@material-ui/icons": "^1.0.0",
     "animated": "^0.2.2",
     "autosuggest-highlight": "^3.1.1",
     "axios": "^0.17.1",
     "classnames": "^2.2.6",
     "formik": "^1.0.0-beta.2",
+    "http-proxy-middleware": "^0.19.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-anime": "^2.1.0",
@@ -22,7 +21,7 @@
     "react-popper": "^1.0.0-beta.6",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^2.1.0",
     "react-simple-sidenav": "^0.1.6",
     "react-sizeme": "^2.5.1",
     "react-swipeable-views": "^0.12.13",
@@ -31,7 +30,8 @@
     "redux-promise": "^0.5.3",
     "redux-saga": "^0.16.0",
     "styled-components": "^3.2.6",
-    "yup": "^0.25.1"
+    "typescript": "^3.2.2",
+    "yup": "^0.26.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,13 +39,24 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": {
-    "/api/": {
-      "target": "http://localhost:4000"
-    }
-  },
   "devDependencies": {
-    "jest": "^20.0.4",
-    "jest-cli": "^20.0.4"
-  }
+    "@material-ui/core": "^1.1.0",
+    "@material-ui/icons": "^1.0.0",
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10.12.18",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-redux": "^6.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/styled-components": "^4.1.4",
+    "@types/yup": "^0.26.3",
+    "jest": "^23.6.0",
+    "jest-cli": "^23.6.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

@@ -2,34 +2,29 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const LogoWrap = styled.div`
-    user-select: none;
-    margin: 0;
-    position: relative;
-    top: -32px;
+  user-select: none;
+  margin: 0;
+  position: relative;
+  top: -32px;
+  width: 100%;
+  max-width: 1300px;
+  min-width: 320px;
+
+  > svg {
+    font-family: "Comfortaa", cursive;
     width: 100%;
-    /* transform: scale(.2); */
-
-       /* &.size { */
-      max-width: 1300px;
-      min-width: 320px;
-    /* } */
-
-    > svg {
-      font-family: 'Comfortaa', cursive;
-      width: 100%;
-      height: auto;
-      font-size: 140px;
-      text-transform: lowercase;
-      letter-spacing: -10px;
-      filter: brightness(120%);
+    height: auto;
+    font-size: 140px;
+    text-transform: lowercase;
+    letter-spacing: -10px;
+    filter: brightness(120%);
 
     > .img-layer {
-        fill: url(#p-img);
-      }
+      fill: url(#p-img);
+    }
 
     > .gradient-layer {
-        fill: url(#gr-overlay);
-      }
+      fill: url(#gr-overlay);
     }
   }
 `;

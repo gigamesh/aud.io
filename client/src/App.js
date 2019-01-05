@@ -12,8 +12,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Form_Login from "./components/Form_Login";
 import Form_Signup from "./components/Form_Signup";
 import AccountSettings from "./components/AccountSettings/AccountSettings";
-import Logout from "./components/Logout.js";
-import { logoutUser } from "./store/actions";
+import Logout from "./components/Logout";
 import muiThemeRoot from "./muiThemeRoot";
 import NotFound from "./components/NotFound";
 import withWidth from "@material-ui/core/withWidth";
@@ -61,17 +60,4 @@ class App extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    logout: timeout => dispatch(logoutUser(timeout))
-  };
-};
-
-export default muiThemeRoot(
-  withRouter(
-    connect(
-      null,
-      mapDispatchToProps
-    )(withWidth()(App))
-  )
-);
+export default muiThemeRoot(withRouter(withWidth()(App)));

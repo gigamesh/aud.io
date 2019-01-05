@@ -125,11 +125,4 @@ const mapStateToProps = state => {
   };
 };
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     searchBoxTouched: () => dispatch(searchBoxTouched()),
-//     searchBoxKeypress: (searchText) => dispatch(searchBoxKeypress(searchText))
-//   }
-// }
-
 export default connect(mapStateToProps)(withStyles(styles)(Header));

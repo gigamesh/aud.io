@@ -1,84 +1,84 @@
-import * as actionTypes from '../actions/actionTypes';
+import actionTypes from "../actions/actionTypes";
 
 const initialState = {
   loading: false,
-  errorMsg: '',
+  errorMsg: "",
   isAuth: false,
-  _id: '',
-  firstName: '',
-  lastName: '',
-  role: '',
-  email: '',
-  password: '',
-  profilename: '',
-  phoneNumber: '',
+  _id: "",
+  firstName: "",
+  lastName: "",
+  role: "",
+  email: "",
+  password: "",
+  profilename: "",
+  phoneNumber: "",
   renter: null,
   photos: {},
   address: {},
   gearList: [],
   genres: [],
   expertise: {},
-  profilenameColor: '',
-  currentProfileId: ''
-}
+  profilenameColor: "",
+  currentProfileId: ""
+};
 
-const user = (state= initialState, action) => {
-  switch(action.type){
+const user = (state = initialState, action: any) => {
+  switch (action.type) {
     case actionTypes.CLEAR_ERROR_MSG:
       return {
         ...state,
-        errorMsg: ''
-      }
+        errorMsg: ""
+      };
     case actionTypes.LOGIN_USER_INIT:
       return {
-        ...initialState, 
+        ...initialState,
         loading: true,
-        errorMsg: ''
-        }
+        errorMsg: ""
+      };
     case actionTypes.LOGIN_USER_SUCCESS:
       return {
         ...state,
         loading: false,
         isAuth: true,
         ...action.userData
-      }
+      };
     case actionTypes.LOGIN_USER_FAIL:
       return {
         ...state,
         loading: false,
         errorMsg: action.errorMsg
-      }
+      };
     case actionTypes.USER_AUTH_INIT:
       return {
-        ...initialState, 
+        ...initialState,
         loading: true,
-        errorMsg: ''
-        }
+        errorMsg: ""
+      };
     case actionTypes.USER_AUTH_SUCCESS:
       return {
         ...state,
         loading: false,
         ...action.userData
-      }
+      };
     case actionTypes.USER_AUTH_FAIL:
       return {
         ...state,
         loading: false,
         userData: null
-      }
+      };
     case actionTypes.LOGOUT_USER_INIT:
       return {
         ...state,
         loading: true
-      }
+      };
     case actionTypes.LOGOUT_USER_SUCCESS:
-      return initialState
+      return initialState;
     case actionTypes.USER_UPDATE_INIT:
       return {
         ...state,
         loading: true,
-        errorMsg: ''
-      }
+        errorMsg: ""
+      };
     case actionTypes.USER_UPDATE_SUCCESS:
       return {
         ...state,
@@ -92,27 +92,27 @@ const user = (state= initialState, action) => {
         expertise: {
           ...action.values.expertise
         },
-        loading: false,
-      }
+        loading: false
+      };
     case actionTypes.USER_SIGNUP_INIT:
       return {
         ...state,
         loading: true,
-        errorMsg: ''
-      }
+        errorMsg: ""
+      };
     case actionTypes.USER_SIGNUP_FAIL:
       return {
         ...state,
         loading: false,
         errorMsg: action.errorMsg
-      }
+      };
     case actionTypes.USER_SIGNUP_SUCCESS:
       return {
         ...state,
         loading: false,
         isAuth: true,
         ...action.userData
-      }
+      };
     case actionTypes.PROFILE_DATA_INIT:
       // console.log('_id:' + state._id, 'currentProfileId:' + state.currentProfileId);
       return {
@@ -121,22 +121,22 @@ const user = (state= initialState, action) => {
         _id: state._id,
         isAuth: state.isAuth,
         currentProfileId: state.currentProfileId
-      }
+      };
     case actionTypes.PROFILE_DATA_SUCCESS:
       return {
         ...state,
         loading: false,
         ...action.profileData
-      }
+      };
     case actionTypes.PROFILE_DATA_FAIL:
       return {
         ...state,
         loading: false,
-        errorMsg: 'There was an error'
-      }
-    default: 
+        errorMsg: "There was an error"
+      };
+    default:
       return state;
   }
-}
+};
 
-export default user
+export default user;
