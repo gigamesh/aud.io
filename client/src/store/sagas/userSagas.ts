@@ -1,10 +1,17 @@
 import axios from "axios";
 import { delay } from "redux-saga";
 import { put, call } from "redux-saga/effects";
-
+import { IUser } from "../../typeDefs";
 import * as actions from "../actions";
 
-export function* loginUserSaga(action: any) {
+////////// LOGIN
+interface ILoginAction {
+  type: string;
+  email: string;
+  password: string;
+}
+
+export function* loginUserSaga(action: ILoginAction) {
   const { email, password } = action;
   try {
     const response = yield axios
@@ -26,7 +33,9 @@ export function* loginUserSaga(action: any) {
   }
 }
 
-export function* authUserSaga(action: any) {
+////////// AUTH
+
+export function* authUserSaga() {
   try {
     const response = yield axios.get("/api/auth").then(res => res.data);
     if (response.isAuth) {
@@ -39,22 +48,51 @@ export function* authUserSaga(action: any) {
   }
 }
 
-export function* logoutUserSaga(action: any) {
-  yield delay(action.timeout);
-  yield call(() => localStorage.removeItem("state"));
-  yield axios.get(`/api/logout`);
-  yield put(actions.logoutUserSuccess());
+////////// LOGOUT
+interface ILogoutAction {
+  type: string;
+  timeout: number;
 }
 
-export function* userUpdateSaga(action: any) {
+export function* logoutUserSaga(action: ILogoutAction) {
+  yield delay(action.timeout);
+  yield axios.get(`/api/logout`);
+  yield put(actions.logoutUserSuccess());
+  yield localStorage.removeItem("state");
+}
+
+////////// UPDATE
+interface IUpdateAction {
+  type: string;
+  origin: string;
+  values: IUser;
+}
+
+export function* userUpdateSaga(action: IUpdateAction) {
   action.values.origin = action.origin;
+
   const response = yield axios
     .post(`/api/update_user`, action.values)
     .then(res => res.data);
   yield put(actions.userUpdateSuccess(response));
 }
 
-export function* userSignupSaga(action: any) {
+////////// SIGNUP
+export type UserSignupVals = {
+  email: string;
+  password: string;
+  photos: string[];
+  profilename: string;
+  profilenameColor: string;
+  role: string;
+};
+
+interface ISignupAction {
+  type: string;
+  values: UserSignupVals;
+}
+
+export function* userSignupSaga(action: ISignupAction) {
   const response = yield axios
     .post("/api/signup", action.values)
     .then(res => res.data);
@@ -72,7 +110,13 @@ export function* userSignupSaga(action: any) {
   }
 }
 
-export function* profileDataSaga(action: any) {
+////////// SIGNUP
+type ProfileDataAction = {
+  type: string;
+  id: string;
+};
+
+export function* profileDataSaga(action: ProfileDataAction) {
   let id = action.id;
   if (id) {
     try {

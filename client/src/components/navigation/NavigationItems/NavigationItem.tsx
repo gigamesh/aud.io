@@ -12,7 +12,6 @@ interface Props {
 }
 
 const NavigationItem: React.SFC<Props & RouteComponentProps> = props => {
-  console.log(props);
   return (
     <NavButton
       disableRipple={props.disableRipple ? true : false}

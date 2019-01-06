@@ -9,7 +9,7 @@ export const searchBoxTouched = () => {
 export const searchBoxKeypress = (query: String) => {
   return {
     type: actionTypes.SEARCHBOX_KEYPRESS,
-    payload: query
+    query
   };
 };
 
@@ -22,7 +22,7 @@ export const clearSearchbox = () => {
 export const getUsers = (role: String) => {
   return {
     type: actionTypes.GET_USERS_INIT,
-    payload: role
+    role
   };
 };
 

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import SideDrawer from "./../components/navigation/SideDrawer";
+import SideDrawer from "../components/navigation/SideDrawer";
 import Header from "./Header";
 import styled from "styled-components";
 
-class Layout extends Component {
+class Layout extends Component<any, any> {
   state = {
     showSideDrawer: false
   };
 
   toggleDrawer = () => {
-    this.setState(prevState => {
+    this.setState((prevState: any) => {
       return { showSideDrawer: !prevState.showSideDrawer };
     });
   };
@@ -49,7 +49,7 @@ class Layout extends Component {
             onKeyDown={() => this.toggleDrawer()}
           />
         </SideDrawer>
-        <MainWrap path={currentLocation}>{this.props.children}</MainWrap>
+        <MainWrap>{this.props.children}</MainWrap>
       </React.Fragment>
     );
   }

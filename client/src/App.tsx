@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 import FullWrapAndCenter from "./containers/FullWrapAndCenter";
 import FullWrap from "./containers/FullWrap";
 import Layout from "./layouts/Layout";
@@ -17,9 +16,9 @@ import muiThemeRoot from "./muiThemeRoot";
 import NotFound from "./components/NotFound";
 import withWidth from "@material-ui/core/withWidth";
 
-class App extends Component {
+class App extends Component<any, any> {
   render() {
-    const { width } = this.props;
+    const { width }: any = this.props;
     const currentKey = this.props.location.pathname.split("/")[1] || "/";
 
     return (
@@ -60,4 +59,4 @@ class App extends Component {
   }
 }
 
-export default muiThemeRoot(withRouter(withWidth()(App)));
+export default muiThemeRoot(withRouter(withWidth()(App) as any));

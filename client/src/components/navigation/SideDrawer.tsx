@@ -18,7 +18,6 @@ const DrawerStyled = styled(Drawer)`
 `;
 
 const SideDrawer = (props: Partial<any>) => {
-  console.log(props);
   return (
     <DrawerStyled onClick={props.closeHandler} open={props.isopen}>
       <ul>

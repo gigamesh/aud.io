@@ -29,18 +29,7 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `;
 
-class Signup extends Component {
-  submitHandler = e => {
-    e.preventDefault();
-
-    let values = this.props.values;
-    values.profilenameColor = "#ffffff";
-    values.photos = { headerOverlay: "rgba(3,3,3,0)" };
-    values.photos.header = "/img/profile/default-header.jpg";
-    this.props.onSignupSubmit(values);
-    this.props.resetForm();
-  };
-
+class Signup extends Component<any, any> {
   componentDidMount() {
     this.props.clearError();
   }
@@ -64,7 +53,7 @@ class Signup extends Component {
 
     const form = (
       <MyPaper form="true" size_m="true" verticalfix="true" elevation={isFlat}>
-        <Form onSubmit={this.submitHandler}>
+        <Form>
           <Grid container spacing={8}>
             <Grid item xs={12} sm={5}>
               <MyFormControl
@@ -194,18 +183,19 @@ class Signup extends Component {
 
 const FormikForm = withFormik({
   isInitialValid: false,
-  mapPropsToValues(props) {
+  mapPropsToValues(props: any) {
     return {
       profilename: props.profilename || "",
       email: props.email || "",
       password: props.password || "",
-      role: props.role || ""
+      role: props.role || "",
+      onSignupSubmit: props.onSignupSubmit
     };
   },
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
-      .max(50, params => `Name may not exceed ${params.max} characters`)
+      .max(50, (params: any) => `Name may not exceed ${params.max} characters`)
       .required("Profile name required"),
     email: yup
       .string()
@@ -213,15 +203,29 @@ const FormikForm = withFormik({
       .required("Email address required"),
     password: yup
       .string()
-      .min(6, params => `Must be at least ${params.min} characters long`)
-      .max(50, params => `Password may not exceed ${params.max} characters`)
+      .min(6, (params: any) => `Must be at least ${params.min} characters long`)
+      .max(
+        50,
+        (params: any) => `Password may not exceed ${params.max} characters`
+      )
       .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password required"),
     role: yup.string().required("^Required")
-  })
+  }),
+  handleSubmit: (values: any, bag) => {
+    let data = {
+      profilenameColor: "#ffffff",
+      photos: { header: "/img/profile/default-header.jpg" },
+      email: values.email,
+      role: values.role,
+      profilename: values.profilename
+    };
+    values.onSignupSubmit(data);
+    bag.resetForm();
+  }
 })(Signup);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
   return {
     loading: state.user.loading,
     errorMsg: state.user.errorMsg,
@@ -230,16 +234,14 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    onSignupSubmit: vals => dispatch(userSignup(vals)),
+    onSignupSubmit: (vals: any) => dispatch(userSignup(vals)),
     clearError: () => dispatch(clearErrorMsg())
   };
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(withWidth()(FormikForm))
-);
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withWidth()(FormikForm)) as any);

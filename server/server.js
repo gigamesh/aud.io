@@ -255,7 +255,7 @@ app.post("/api/update_user", auth, (req, res) => {
       }
     };
   }
-  console.log(updateObj);
+
   User.findByIdAndUpdate(req.user._id, updateObj, { new: true }, (err, doc) => {
     if (err) return res.status(400).send(err);
     if (!doc) return res.status(400).send({ success: false });

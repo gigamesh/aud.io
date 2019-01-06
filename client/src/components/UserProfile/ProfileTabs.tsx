@@ -1,46 +1,46 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import ProfileAbout from './ProfileAbout';
-import ProfilePhotos from './ProfilePhotos';
-import ProfileMusic from './ProfileMusic';
-import ProfileCal from './ProfileCal';
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
+import SwipeableViews from "react-swipeable-views";
+import AppBar from "@material-ui/core/AppBar";
+import ProfileAbout from "./ProfileAbout";
+import ProfilePhotos from "./ProfilePhotos";
+import ProfileMusic from "./ProfileMusic";
+import ProfileCal from "./ProfileCal";
 // import ProfileGear from './ProfileGear';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 // import styled from 'styled-components';
-import Measure from 'react-measure';
+import Measure from "react-measure";
 
-function TabContainer({ children, dir }) {
+function TabContainer({ children, dir }: any) {
   return (
-    <div component="div" dir={dir}>
-      {children}
-    </div>
+    // <div component="div" dir={dir}>
+    //   {children}
+    // </div>
+    <div>{children}</div>
   );
 }
 
-const styles = theme => ({
+const styles = () => ({
   root: {
-    width: '100%',
+    width: "100%"
   },
   lessPad: {
-    padding: '6px'
+    padding: "6px"
   }
 });
 
-
-class FullWidthTabs extends React.Component {
+class FullWidthTabs extends React.Component<any, any> {
   state = {
     value: 0,
     appBarWidth: 400
   };
 
-  handleChange = (event, value) => {
+  handleChange = (event: any, value: number) => {
     this.setState({ value });
   };
 
-  handleChangeIndex = index => {
+  handleChangeIndex = (index: number) => {
     this.setState({ value: index });
   };
 
@@ -51,11 +51,11 @@ class FullWidthTabs extends React.Component {
       <div className={classes.root}>
         <Measure
           bounds
-          onResize={(contentRect) => {
+          onResize={(contentRect: any) => {
             this.setState({ appBarWidth: contentRect.bounds.width });
           }}
         >
-          {({ measureRef }) => (
+          {({ measureRef }: any) => (
             <div ref={measureRef}>
               <AppBar position="static" color="default">
                 <Tabs
@@ -66,7 +66,7 @@ class FullWidthTabs extends React.Component {
                   centered={appBarWidth >= 400}
                   scrollable={appBarWidth < 400}
                   scrollButtons="on"
-                  >
+                >
                   <Tab label="About" />
                   <Tab label="Photos" />
                   <Tab label="Music" />
@@ -75,14 +75,22 @@ class FullWidthTabs extends React.Component {
                 </Tabs>
               </AppBar>
               <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                 index={this.state.value}
                 onChangeIndex={this.handleChangeIndex}
               >
-                <TabContainer dir={theme.direction}><ProfileAbout/></TabContainer>
-                <TabContainer dir={theme.direction}><ProfilePhotos/></TabContainer>
-                <TabContainer dir={theme.direction}><ProfileMusic/></TabContainer>
-                <TabContainer dir={theme.direction}><ProfileCal/></TabContainer>
+                <TabContainer dir={theme.direction}>
+                  <ProfileAbout />
+                </TabContainer>
+                <TabContainer dir={theme.direction}>
+                  <ProfilePhotos />
+                </TabContainer>
+                <TabContainer dir={theme.direction}>
+                  <ProfileMusic />
+                </TabContainer>
+                <TabContainer dir={theme.direction}>
+                  <ProfileCal />
+                </TabContainer>
                 {/* <TabContainer dir={theme.direction}><ProfileGear/></TabContainer> */}
               </SwipeableViews>
             </div>

@@ -22,7 +22,7 @@ import * as yup from "yup";
 
 import { updateUser } from "../../store/actions";
 
-class ProfileHeaderCard extends React.Component {
+class ProfileHeaderCard extends React.Component<any, any> {
   state = {
     editOpen: false,
     profilenameColor: "#ffffff",
@@ -37,7 +37,7 @@ class ProfileHeaderCard extends React.Component {
     this.setState({ editOpen: false });
   };
 
-  handleColorChange = e => {
+  handleColorChange = (e: any) => {
     this.setState({ profilenameColor: e.target.value });
     this.props.setValues({
       ...this.props.values,
@@ -45,7 +45,7 @@ class ProfileHeaderCard extends React.Component {
     });
   };
 
-  handleOverlayChange = e => {
+  handleOverlayChange = (e: any) => {
     this.setState({ headerOverlay: e.target.value });
     this.props.setValues({
       ...this.props.values,
@@ -53,7 +53,7 @@ class ProfileHeaderCard extends React.Component {
     });
   };
 
-  submitHandler = e => {
+  submitHandler = (e: any) => {
     e.preventDefault();
     let values = this.props.values;
     values.profilenameColor = this.state.profilenameColor;
@@ -120,13 +120,13 @@ class ProfileHeaderCard extends React.Component {
       transform: translateY(-50%);
     `;
 
-    const TranslucentDiv = styled.div`
+    const TranslucentDiv = styled.div<any>`
       position: absolute;
       display: flex;
       align-items: flex-start;
       top: 0;
       left: 0;
-      background: ${props => props.headerOverlay};
+      background: ${(props: any) => props.headerOverlay};
       height: 100%;
       width: 100%;
       float: right;
@@ -140,24 +140,24 @@ class ProfileHeaderCard extends React.Component {
       }
     `;
 
-    const ProfileNameWrapper = styled.div`
+    const ProfileNameWrapper = styled.div<any>`
       position: relative;
       display: block;
       float: right;
       max-width: 75%;
       flex-shrink: 10;
-      border: 1px solid ${props => props.textcolor};
+      border: 1px solid ${(props: any) => props.textcolor};
     `;
 
-    const formatUserName = name => {
+    const formatUserName = (name: string) => {
       let nameArr = name.split(" ");
       let nameArrMap = nameArr.map((word, i) => <span key={i}>{word} </span>);
       return nameArrMap;
     };
 
-    const ProfileName = styled(Typography)`
-      color: ${props => props.textcolor};
-      font-size: ${props => {
+    const ProfileName = styled(Typography)<any>`
+      color: ${(props: any) => props.textcolor};
+      font-size: ${(props: any) => {
         return props.width === "xs" || props.width === "sm"
           ? "1.5em"
           : props.width === "md"
@@ -246,7 +246,7 @@ class ProfileHeaderCard extends React.Component {
             onClose={this.handleEditClose}
             aria-labelledby="form-dialog-title"
           >
-            <Form onSubmit={this.submitHandler}>
+            <form onSubmit={this.submitHandler}>
               <DialogTitle
                 id="form-dialog-title"
                 style={{ textAlign: "center" }}
@@ -280,7 +280,6 @@ class ProfileHeaderCard extends React.Component {
                     <div className="namecolor--wrap">
                       <InputLabel htmlFor="namecolor">Color:</InputLabel>
                       <Input
-                        margin="none"
                         disableUnderline
                         id="namecolor"
                         type="color"
@@ -382,7 +381,7 @@ class ProfileHeaderCard extends React.Component {
                   Submit
                 </Button>
               </DialogActions>
-            </Form>
+            </form>
           </Dialog>
         </div>
       </React.Fragment>
@@ -391,7 +390,7 @@ class ProfileHeaderCard extends React.Component {
 }
 
 const FormikForm = withFormik({
-  mapPropsToValues(props) {
+  mapPropsToValues(props: any) {
     return {
       profilename: props.profilename,
       headerphoto: props.headerphoto,
@@ -401,14 +400,15 @@ const FormikForm = withFormik({
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
-      .max(50, params => `Name may not exceed ${params.max} characters`)
+      .max(50, (params: any) => `Name may not exceed ${params.max} characters`)
       .required("Profile name required"),
     headerphoto: yup.string().url("Must be a valid URL"),
     profilephoto: yup.string().url("Must be a valid URL")
-  })
+  }),
+  handleSubmit: () => {}
 })(ProfileHeaderCard);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
   return {
     profilename: state.user.profilename || "",
     headerphoto: state.user.photos.header || "",
@@ -418,9 +418,9 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    onFormSubmit: vals => {
+    onFormSubmit: (vals: any) => {
       dispatch(updateUser(vals, "ProfileHeaderCard"));
     }
   };

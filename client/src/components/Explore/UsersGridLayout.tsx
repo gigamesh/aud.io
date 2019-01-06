@@ -5,11 +5,11 @@ import { getUsers } from "../../store/actions";
 import WaveformLoader from "../UI/WaveformLoader";
 import Grid from "@material-ui/core/Grid";
 import UserCard from "./UserCard";
-import { User } from "../../typeDefs";
+import { IUser } from "../../typeDefs";
 
 interface Props {
   location: any;
-  users: Array<User>;
+  users: Array<IUser>;
   dispatchGetUsers: Function;
   searchBoxTouched: boolean;
   loading: boolean;
@@ -17,6 +17,10 @@ interface Props {
 
 const MyGrid = styled(Grid)`
   margin-top: -7px;
+`;
+
+const Text = styled.p`
+  color: #ccc;
 `;
 
 class UsersGridLayout extends React.Component<Props> {
@@ -46,10 +50,10 @@ class UsersGridLayout extends React.Component<Props> {
 
     const loadingMessage = () => (
       <React.Fragment>
-        <p>
-          Initial load may take 10-20 seconds due to database host limitations.
-        </p>
-        <p>Thank you for your patience. :)</p>
+        <Text>
+          Initial load may be delayed to due database interuptions. Thank you
+          for your patience. :)
+        </Text>
       </React.Fragment>
     );
 

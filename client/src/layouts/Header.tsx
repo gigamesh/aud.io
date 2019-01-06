@@ -2,38 +2,39 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { AppBar, Toolbar } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Typography from "@material-ui/core/Typography";
 import Search from "@material-ui/icons/Search";
-import NavigationItems from "./../components/navigation/NavigationItems/NavigationItems";
-import ExploreNavMenu from "./../components/navigation/NavigationItems/ExploreNavMenu";
-import AccountNavMenu from "./../components/navigation/NavigationItems/AccountNavMenu";
+import NavigationItems from "../components/navigation/NavigationItems/NavigationItems";
+import ExploreNavMenu from "../components/navigation/NavigationItems/ExploreNavMenu";
+import AccountNavMenu from "../components/navigation/NavigationItems/AccountNavMenu";
 import SearchBox from "../components/navigation/SearchBox/SearchBox";
 
-const styles = theme => ({
-  flex1: {
-    flex: 1
-  },
-  toolbar: {
-    [theme.breakpoints.down("xl")]: {
-      minHeight: "50px",
-      maxHeight: "50px"
+const styles = (theme: any) =>
+  createStyles({
+    flex1: {
+      flex: 1
+    },
+    toolbar: {
+      [theme.breakpoints.down("xl")]: {
+        minHeight: "50px",
+        maxHeight: "50px"
+      }
+    },
+    hiddenProfileName: {
+      verticalAlign: "top",
+      lineHeight: "1.4em"
+    },
+    searchIcon: {
+      position: "relative",
+      float: "right",
+      padding: 0,
+      top: "5px"
     }
-  },
-  hiddenProfileName: {
-    verticalAlign: "top",
-    lineHeight: "1.4em"
-  },
-  searchIcon: {
-    position: "relative",
-    float: "right",
-    padding: 0,
-    top: "5px"
-  }
-});
+  });
 
 const AppBarStyled = styled(AppBar)`
   background: #fafafa;
@@ -63,12 +64,12 @@ const TextFieldWrap = styled.div`
   top: -8px;
 `;
 
-class Header extends React.Component {
+class Header extends React.Component<any, any> {
   render() {
     const props = this.props;
     const { classes } = props;
 
-    const fontSizeFunc = size => {
+    const fontSizeFunc = (size: number) => {
       let exp = props.profilename.length > 7 ? props.profilename.length - 7 : 1;
       let multiplier = Math.pow(0.99, exp);
       return (multiplier * size)
@@ -118,7 +119,7 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
   return {
     profilename: state.user.profilename || "",
     isAuth: state.user.isAuth

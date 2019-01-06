@@ -4,7 +4,7 @@ import { logoutUser } from "../store/actions";
 import { withRouter } from "react-router-dom";
 import WaveformLoader from "./UI/WaveformLoader";
 
-class Logout extends Component {
+class Logout extends Component<any, any> {
   componentDidMount() {
     this.props.logout(400);
     setTimeout(() => {
@@ -17,18 +17,15 @@ class Logout extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    logout: timeout => {
+    logout: (timeout: number) => {
       dispatch(logoutUser(timeout));
-      //add a dispach that clears the search data
     }
   };
 };
 
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps
-  )(Logout)
-);
+export default withRouter(connect(
+  null,
+  mapDispatchToProps
+)(Logout) as any);

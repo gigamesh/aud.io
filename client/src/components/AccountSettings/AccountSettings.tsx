@@ -31,16 +31,19 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `;
 
-class AccountSettings extends Component {
-  submitHandler = e => {
-    e.preventDefault();
-    this.props.onFormSubmit(this.props.values);
-    this.props.history.push(`/user/${this.props.userId}`);
-  };
-
+class AccountSettings extends Component<any, any> {
   componentDidMount() {
     this.props.getProfileData(this.props.userId);
   }
+
+  handleSubmit = (e: any) => {
+    e.preventDefault();
+    console.log(this.props);
+
+    let data = JSON.parse(JSON.stringify(this.props.values));
+    delete data.userId;
+    this.props.onFormSubmit(data);
+  };
 
   render() {
     let {
@@ -68,7 +71,7 @@ class AccountSettings extends Component {
 
     const form = (
       <MyPaper form="true" size_xl="true" verticalfix="true" elevation={isFlat}>
-        <Form onSubmit={this.submitHandler}>
+        <form onSubmit={this.handleSubmit}>
           <Grid container spacing={24}>
             <Grid item md={12} lg={5}>
               <MyFormControl
@@ -139,10 +142,7 @@ class AccountSettings extends Component {
             <Grid item md={12} lg={7}>
               <Grid container spacing={8}>
                 <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <MyFormControl
-                    fullWidth
-                    // error={touched.password && errors.password}
-                  >
+                  <MyFormControl fullWidth>
                     <Input
                       id="firstName"
                       type="text"
@@ -152,17 +152,11 @@ class AccountSettings extends Component {
                       onChange={handleChange}
                       placeholder="First Name"
                     />
-                    <FormHelperText id="name-error-text">
-                      {/* {touched.password && errors.password && 
-                        <span>{errors.password || '&nbsp'}</span>} */}
-                    </FormHelperText>
+                    <FormHelperText id="name-error-text" />
                   </MyFormControl>
                 </Grid>
                 <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <MyFormControl
-                    fullWidth
-                    // error={touched.password && errors.password}
-                  >
+                  <MyFormControl fullWidth>
                     <Input
                       id="lastName"
                       type="text"
@@ -172,10 +166,7 @@ class AccountSettings extends Component {
                       onChange={handleChange}
                       placeholder="Last Name"
                     />
-                    <FormHelperText id="name-error-text">
-                      {/* {touched.password && errors.password && 
-                        <span>{errors.password || '&nbsp'}</span>} */}
-                    </FormHelperText>
+                    <FormHelperText id="name-error-text" />
                   </MyFormControl>
                 </Grid>
               </Grid>
@@ -189,17 +180,11 @@ class AccountSettings extends Component {
                   onBlur={handleBlur}
                   placeholder="Street Address"
                 />
-                <FormHelperText id="name-error-text">
-                  {/* {touched.password && errors.password && 
-                  <span>{errors.password || '&nbsp'}</span>} */}
-                </FormHelperText>
+                <FormHelperText id="name-error-text" />
               </MyFormControl>
               <Grid container spacing={8}>
                 <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <MyFormControl
-                    fullWidth
-                    // error={touched.password && errors.password}
-                  >
+                  <MyFormControl fullWidth>
                     <Input
                       id="city"
                       type="text"
@@ -209,10 +194,7 @@ class AccountSettings extends Component {
                       onChange={handleChange}
                       placeholder="City"
                     />
-                    <FormHelperText id="name-error-text">
-                      {/* {touched.password && errors.password && 
-                        <span>{errors.password || '&nbsp'}</span>} */}
-                    </FormHelperText>
+                    <FormHelperText id="name-error-text" />
                   </MyFormControl>
                 </Grid>
                 <Grid
@@ -227,7 +209,7 @@ class AccountSettings extends Component {
                     style={{ width: "90px", display: "inline-flex" }}
                   >
                     <Select
-                      size={10}
+                      // size={10}
                       native
                       value={values.state}
                       onChange={handleChange}
@@ -249,10 +231,7 @@ class AccountSettings extends Component {
                   lg={3}
                   style={{ width: "100%" }}
                 >
-                  <MyFormControl
-                    fullWidth
-                    // error={touched.password && errors.password}
-                  >
+                  <MyFormControl fullWidth>
                     <Input
                       id="postalCode"
                       type="text"
@@ -262,21 +241,13 @@ class AccountSettings extends Component {
                       onChange={handleChange}
                       placeholder="Zip Code"
                     />
-                    <FormHelperText id="name-error-text">
-                      {/* {touched.password && errors.password && 
-                      <span>{errors.password || '&nbsp'}</span>} */}
-                    </FormHelperText>
+                    <FormHelperText id="name-error-text" />
                   </MyFormControl>
                 </Grid>
               </Grid>
             </Grid>
             <ButtonWrap>
-              <ErrorWrap>
-                {/* <MyFormHelperTextBig error>
-                    {!touched.email && !touched.password 
-                    && !touched.profilename ? errorMsg : ''}
-                  </MyFormHelperTextBig>  */}
-              </ErrorWrap>
+              <ErrorWrap />
               <Button
                 variant="outlined"
                 color="primary"
@@ -287,7 +258,7 @@ class AccountSettings extends Component {
               </Button>
             </ButtonWrap>
           </Grid>
-        </Form>
+        </form>
       </MyPaper>
     );
 
@@ -297,38 +268,7 @@ class AccountSettings extends Component {
 
 const FormikForm = withFormik({
   enableReinitialize: true,
-  validationSchema: yup.object().shape({
-    profilename: yup
-      .string()
-      .max(50, params => `Name may not exceed ${params.max} characters`)
-      .required("Profile name required"),
-    email: yup
-      .string()
-      .email("Invalid email address")
-      .required("Email address required"),
-    password: yup
-      .string()
-      .min(6, params => `Must be at least ${params.min} characters long`)
-      .max(50, params => `Password may not exceed ${params.max} characters`)
-      .matches(/[0-9]/, "Password must contain at least one number")
-      .required("Password required"),
-    role: yup.string().required("^Required"),
-    firstName: yup
-      .string()
-      .max(50, params => `May not exceed ${params.max} characters`),
-    lastName: yup
-      .string()
-      .max(50, params => `May not exceed ${params.max} characters`),
-    street: yup
-      .string()
-      .max(100, params => `May not exceed ${params.max} characters`),
-    city: yup
-      .string()
-      .max(50, params => `May not exceed ${params.max} characters`),
-    state: yup.string(),
-    postalCode: yup.string()
-  }),
-  mapPropsToValues(props) {
+  mapPropsToValues(props: any) {
     return {
       profilename: props.profilename || "",
       email: props.email || "",
@@ -339,12 +279,48 @@ const FormikForm = withFormik({
       street: props.street || "",
       city: props.city || "",
       state: props.state || "",
-      postalCode: props.postalCode || ""
+      postalCode: props.postalCode || "",
+      userId: props.userId
     };
-  }
+  },
+  validationSchema: yup.object().shape({
+    profilename: yup
+      .string()
+      .max(50, (params: any) => `Name may not exceed ${params.max} characters`)
+      .required("Profile name required"),
+    email: yup
+      .string()
+      .email("Invalid email address")
+      .required("Email address required"),
+    password: yup
+      .string()
+      .min(6, (params: any) => `Must be at least ${params.min} characters long`)
+      .max(
+        50,
+        (params: any) => `Password may not exceed ${params.max} characters`
+      )
+      .matches(/[0-9]/, "Password must contain at least one number")
+      .required("Password required"),
+    role: yup.string().required("^Required"),
+    firstName: yup
+      .string()
+      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+    lastName: yup
+      .string()
+      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+    street: yup
+      .string()
+      .max(100, (params: any) => `May not exceed ${params.max} characters`),
+    city: yup
+      .string()
+      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+    state: yup.string(),
+    postalCode: yup.string()
+  }),
+  handleSubmit: () => {}
 })(AccountSettings);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
   return {
     userId: state.user._id,
     loading: state.user.loading,
@@ -361,10 +337,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    onFormSubmit: vals => dispatch(updateUser(vals, "AccountSettings")),
-    getProfileData: userId => dispatch(profileDataInit(userId))
+    onFormSubmit: (vals: any) => dispatch(updateUser(vals, "AccountSettings")),
+    getProfileData: (userId: string) => dispatch(profileDataInit(userId))
   };
 };
 

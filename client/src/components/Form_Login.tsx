@@ -25,16 +25,7 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `;
 
-class Login extends Component {
-  submitHandler = e => {
-    e.preventDefault();
-    this.props.onLoginSubmit(
-      this.props.values.email,
-      this.props.values.password
-    );
-    this.props.resetForm();
-  };
-
+class Login extends Component<any, any> {
   componentDidMount() {
     this.props.onMounted();
   }
@@ -58,7 +49,7 @@ class Login extends Component {
 
     const form = (
       <MyPaper size_s="true" form="true" verticalfix="true" elevation={isFlat}>
-        <Form onSubmit={this.submitHandler}>
+        <Form>
           <MyFormControl
             fullWidth
             aria-describedby="email-error-text"
@@ -71,7 +62,6 @@ class Login extends Component {
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              // inputComponent={Field}
               placeholder="Email"
             />
             <FormHelperText id="email-error-text">
@@ -92,7 +82,6 @@ class Login extends Component {
               value={values.password}
               onBlur={handleBlur}
               onChange={handleChange}
-              // inputComponent={Field}
               placeholder="Password"
             />
             <FormHelperText id="password-error-text">
@@ -137,8 +126,9 @@ class Login extends Component {
 
 const FormikForm = withFormik({
   isInitialValid: false,
-  mapPropsToValues(props) {
+  mapPropsToValues(props: any) {
     return {
+      onLoginSubmit: props.onLoginSubmit,
       email: props.email || "",
       password: props.password || ""
     };
@@ -150,14 +140,21 @@ const FormikForm = withFormik({
       .required("Email address required"),
     password: yup
       .string()
-      .min(6, params => `Must be at least ${params.min} characters long`)
-      .max(50, params => `Password may not exceed ${params.max} characters`)
+      .min(6, (params: any) => `Must be at least ${params.min} characters long`)
+      .max(
+        50,
+        (params: any) => `Password may not exceed ${params.max} characters`
+      )
       .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password required")
-  })
+  }),
+  handleSubmit: (values: any, bag) => {
+    values.onLoginSubmit(values.email, values.password);
+    bag.resetForm();
+  }
 })(Login);
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
   return {
     loading: state.user.loading,
     errorMsg: state.user.errorMsg,
@@ -166,17 +163,15 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    onLoginSubmit: (email, password) =>
+    onLoginSubmit: (email: string, password: string) =>
       dispatch(loginUser({ email, password })),
     onMounted: () => dispatch(clearErrorMsg())
   };
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(withWidth()(FormikForm))
-);
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withWidth()(FormikForm)) as any);

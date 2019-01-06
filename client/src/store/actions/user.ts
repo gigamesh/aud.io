@@ -1,4 +1,6 @@
 import actionTypes from "./actionTypes";
+import { UserSignupVals } from "../sagas/userSagas";
+import { IUser } from "../../typeDefs";
 
 export const clearErrorMsg = () => {
   return {
@@ -26,6 +28,7 @@ interface LoginUserSuccessObj {
 }
 
 export const loginUserSuccess = (response: LoginUserSuccessObj) => {
+  console.log(response.userData);
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
     userData: response.userData
@@ -95,15 +98,6 @@ export const userUpdateSuccess = (values: any) => {
   };
 };
 
-interface UserSignupVals {
-  email: String;
-  password: String;
-  photos: any;
-  profilename: String;
-  profilenameColor: String;
-  role: String;
-}
-
 export const userSignup = (values: UserSignupVals) => {
   return {
     type: actionTypes.USER_SIGNUP_INIT,
@@ -132,7 +126,7 @@ export const profileDataInit = (id: String) => {
   };
 };
 
-export const profileDataSuccess = (values: any) => {
+export const profileDataSuccess = (values: IUser) => {
   return {
     type: actionTypes.PROFILE_DATA_SUCCESS,
     profileData: values
