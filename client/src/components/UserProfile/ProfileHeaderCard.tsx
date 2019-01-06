@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { RootState } from "../../store/reducers";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
@@ -408,7 +409,7 @@ const FormikForm = withFormik({
   handleSubmit: () => {}
 })(ProfileHeaderCard);
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     profilename: state.user.profilename || "",
     headerphoto: state.user.photos.header || "",

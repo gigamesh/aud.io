@@ -22,7 +22,12 @@ const initialState = {
   currentProfileId: ""
 };
 
-const user = (state = initialState, action: any) => {
+interface IActionType {
+  type: string;
+  [index: string]: any;
+}
+
+const user = (state = initialState, action: IActionType) => {
   switch (action.type) {
     case actionTypes.CLEAR_ERROR_MSG:
       return {

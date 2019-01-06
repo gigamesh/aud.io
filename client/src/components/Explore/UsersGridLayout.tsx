@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { RootState } from "../../store/reducers";
 import styled from "styled-components";
 import { getUsers } from "../../store/actions";
 import WaveformLoader from "../UI/WaveformLoader";
@@ -69,7 +70,7 @@ class UsersGridLayout extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     users: state.search.users,
     loading: state.search.loading,

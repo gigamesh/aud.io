@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { RootState } from "../../store/reducers";
 import { connect } from "react-redux";
 import ProfileHeaderCard from "./ProfileHeaderCard";
 import ProfileTabs from "./ProfileTabs";
@@ -46,7 +47,7 @@ class UserProfile extends Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: RootState) => ({
   user: state.user,
   loading: state.user.loading,
   error: state.user.error,

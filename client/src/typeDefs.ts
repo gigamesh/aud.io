@@ -15,7 +15,7 @@ export interface IUser {
   _id?: string;
 }
 
-export interface actionObj {
+export interface IActionObj {
   type: string;
   payload?: any;
 }

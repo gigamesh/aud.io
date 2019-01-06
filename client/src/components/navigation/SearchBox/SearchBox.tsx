@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { RootState } from "../../store/reducers";
 import { Link } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
@@ -199,7 +200,7 @@ class SearchBox extends React.Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     suggestions: state.search.searchResults
   };

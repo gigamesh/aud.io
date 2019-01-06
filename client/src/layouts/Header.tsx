@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { RootState } from "../store/reducers";
 import { AppBar, Toolbar } from "@material-ui/core";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import Hidden from "@material-ui/core/Hidden";
@@ -13,8 +14,9 @@ import ExploreNavMenu from "../components/navigation/NavigationItems/ExploreNavM
 import AccountNavMenu from "../components/navigation/NavigationItems/AccountNavMenu";
 import SearchBox from "../components/navigation/SearchBox/SearchBox";
 
-const styles = (theme: any) =>
-  createStyles({
+const styles = (theme: any) => {
+  console.log(theme);
+  return createStyles({
     flex1: {
       flex: 1
     },
@@ -35,6 +37,7 @@ const styles = (theme: any) =>
       top: "5px"
     }
   });
+};
 
 const AppBarStyled = styled(AppBar)`
   background: #fafafa;
@@ -119,7 +122,7 @@ class Header extends React.Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     profilename: state.user.profilename || "",
     isAuth: state.user.isAuth

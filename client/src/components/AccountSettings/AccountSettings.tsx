@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { RootState } from "../../store/reducers";
 import { profileDataInit } from "../../store/actions";
 import { states } from "./geography";
 import { updateUser } from "../../store/actions";
@@ -320,7 +321,7 @@ const FormikForm = withFormik({
   handleSubmit: () => {}
 })(AccountSettings);
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     userId: state.user._id,
     loading: state.user.loading,

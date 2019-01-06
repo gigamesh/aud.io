@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { RootState } from "../store/reducers";
 import { userSignup, clearErrorMsg } from "../store/actions";
 import styled from "styled-components";
 import WaveformLoader from "./UI/WaveformLoader";
@@ -225,7 +226,7 @@ const FormikForm = withFormik({
   }
 })(Signup);
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     loading: state.user.loading,
     errorMsg: state.user.errorMsg,

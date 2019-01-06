@@ -24,7 +24,7 @@ export const loginUser = ({
 
 interface LoginUserSuccessObj {
   isAuth: boolean;
-  userData: any;
+  userData: IUser;
 }
 
 export const loginUserSuccess = (response: LoginUserSuccessObj) => {
@@ -48,7 +48,7 @@ export const auth = () => {
   };
 };
 
-export const authSuccess = (userData: any) => {
+export const authSuccess = (userData: IUser) => {
   return {
     type: actionTypes.USER_AUTH_SUCCESS,
     userData
@@ -91,7 +91,7 @@ export const updateUser = (values: UpdateUserVals, origin: String) => {
   };
 };
 
-export const userUpdateSuccess = (values: any) => {
+export const userUpdateSuccess = (values: IUser) => {
   return {
     type: actionTypes.USER_UPDATE_SUCCESS,
     values
@@ -112,10 +112,10 @@ export const userSignupFail = (errorMsg: String) => {
   };
 };
 
-export const userSignupSuccess = (values: any) => {
+export const userSignupSuccess = ({ userData }: { userData: IUser }) => {
   return {
     type: actionTypes.USER_SIGNUP_SUCCESS,
-    userData: values.userData
+    userData: userData
   };
 };
 

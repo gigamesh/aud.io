@@ -1,6 +1,7 @@
 import React from "react";
 import NavigationItem from "./NavigationItem";
 import { connect } from "react-redux";
+import { RootState } from "../../../store/reducers";
 
 interface INavItem {
   type: string;
@@ -139,7 +140,7 @@ class NavigationItems extends React.Component<any, any> {
     );
   }
 }
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {
     userId: state.user._id,
     isAuth: state.user.isAuth,

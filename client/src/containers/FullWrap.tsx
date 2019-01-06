@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import * as React from "react";
 import styled from "styled-components";
 
 const FullWrap = (WrappedComp: any) => {
@@ -9,7 +9,7 @@ const FullWrap = (WrappedComp: any) => {
     height: 100%;
     width: 100%;
   `;
-  return class extends Component {
+  return class extends React.Component {
     render() {
       return (
         <FullPageWrapper>
