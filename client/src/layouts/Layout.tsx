@@ -4,13 +4,17 @@ import SideDrawer from "../components/navigation/SideDrawer";
 import Header from "./Header";
 import styled from "styled-components";
 
-class Layout extends Component<any, any> {
-  state = {
-    showSideDrawer: false
-  };
+const initState = {
+  showSideDrawer: false
+};
+
+type State = typeof initState;
+
+class Layout extends Component<any, State> {
+  state = initState;
 
   toggleDrawer = () => {
-    this.setState((prevState: any) => {
+    this.setState((prevState: State) => {
       return { showSideDrawer: !prevState.showSideDrawer };
     });
   };
