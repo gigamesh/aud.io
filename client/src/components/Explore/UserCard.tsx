@@ -73,7 +73,7 @@ class UserCard extends React.Component<Props> {
       }
     `;
 
-    const MyCard = styled(Card)`
+    const MyCard = styled(Card)<any>`
       position: absolute;
       width: 100%;
       height: 100%;
@@ -147,7 +147,7 @@ class UserCard extends React.Component<Props> {
               <div style={{ flexGrow: 1, width: "100%" }} />
             </InnerWrap>
             <ProfileNameWrap className={"headercard-profilename"}>
-              <Typography variant="headline" align="right">
+              <Typography variant="h5" align="right" style={{ color: "#fff" }}>
                 {profilename}
               </Typography>
               <Typography variant="body1" align="right">

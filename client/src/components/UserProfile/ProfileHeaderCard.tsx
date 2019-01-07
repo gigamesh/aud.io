@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { ActionType } from "typesafe-actions";
 import { RootState } from "../../store/reducers";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
-import Button from "@material-ui/core/Button";
+import Button, { ButtonProps } from "@material-ui/core/Button";
 import withWidth from "@material-ui/core/withWidth";
 import Edit from "@material-ui/icons/Edit";
 import Dialog from "@material-ui/core/Dialog";
@@ -18,17 +20,40 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import MyFormControl from "../mui/MyFormControl";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
-import { withFormik, Form } from "formik";
+import { withFormik, InjectedFormikProps } from "formik";
 import * as yup from "yup";
+import { IUser } from "../../typeDefs";
 
 import { updateUser } from "../../store/actions";
 
-class ProfileHeaderCard extends React.Component<any, any> {
-  state = {
-    editOpen: false,
-    profilenameColor: "#ffffff",
-    headerOverlay: "rgba(3,3,3,0)"
-  };
+type IProfileHeaderProps = {
+  pathId: string;
+  user: IUser;
+  width: string;
+};
+
+type SCProps = {
+  headerOverlay: string;
+  textcolor: string;
+  width: string;
+};
+
+type Props = InjectedFormikProps<
+  ReturnType<typeof mapDispatchToProps> & IProfileHeaderProps,
+  any
+>;
+
+const initialState = {
+  editOpen: false,
+  profilenameColor: "#ffffff",
+  headerOverlay: "rgba(3,3,3,0)"
+};
+
+class ProfileHeaderCard extends React.Component<
+  Props,
+  Readonly<Partial<typeof initialState>>
+> {
+  state = initialState;
 
   handleEditOpen = () => {
     this.setState({ editOpen: true });
@@ -38,7 +63,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
     this.setState({ editOpen: false });
   };
 
-  handleColorChange = (e: any) => {
+  handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ profilenameColor: e.target.value });
     this.props.setValues({
       ...this.props.values,
@@ -46,7 +71,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
     });
   };
 
-  handleOverlayChange = (e: any) => {
+  handleOverlayChange = (e: React.ChangeEvent<any>) => {
     this.setState({ headerOverlay: e.target.value });
     this.props.setValues({
       ...this.props.values,
@@ -54,7 +79,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
     });
   };
 
-  submitHandler = (e: any) => {
+  submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let values = this.props.values;
     values.profilenameColor = this.state.profilenameColor;
@@ -89,15 +114,11 @@ class ProfileHeaderCard extends React.Component<any, any> {
       position: relative;
       width: 100%;
       height: 0;
-      /* background: pink; */
       background: url(${headerBackground});
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
       padding-top: 24%;
-      /* &:hover #edit-btn {
-      transform: scale(1);
-    } */
     `;
     const InnerWrap = styled.div`
       position: absolute;
@@ -121,13 +142,13 @@ class ProfileHeaderCard extends React.Component<any, any> {
       transform: translateY(-50%);
     `;
 
-    const TranslucentDiv = styled.div<any>`
+    const TranslucentDiv = styled.div<Partial<SCProps>>`
       position: absolute;
       display: flex;
       align-items: flex-start;
       top: 0;
       left: 0;
-      background: ${(props: any) => props.headerOverlay};
+      background: ${props => props.headerOverlay};
       height: 100%;
       width: 100%;
       float: right;
@@ -141,13 +162,13 @@ class ProfileHeaderCard extends React.Component<any, any> {
       }
     `;
 
-    const ProfileNameWrapper = styled.div<any>`
+    const ProfileNameWrapper = styled.div<Partial<SCProps>>`
       position: relative;
       display: block;
       float: right;
       max-width: 75%;
       flex-shrink: 10;
-      border: 1px solid ${(props: any) => props.textcolor};
+      border: 1px solid ${props => props.textcolor};
     `;
 
     const formatUserName = (name: string) => {
@@ -156,9 +177,9 @@ class ProfileHeaderCard extends React.Component<any, any> {
       return nameArrMap;
     };
 
-    const ProfileName = styled(Typography)<any>`
-      color: ${(props: any) => props.textcolor};
-      font-size: ${(props: any) => {
+    const ProfileName = styled(Typography as any)<Partial<SCProps>>`
+      color: ${props => props.textcolor};
+      font-size: ${props => {
         return props.width === "xs" || props.width === "sm"
           ? "1.5em"
           : props.width === "md"
@@ -171,7 +192,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
       line-height: 0;
     `;
 
-    const EditBn = styled(Button)`
+    const EditBn = styled(Button)<any>`
       position: absolute;
       bottom: 10px;
       right: 10px;
@@ -192,7 +213,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
       user.isAuth && user._id === pathId ? (
         <EditBn
           id="edit-btn"
-          variant="raised"
+          variant="contained"
           aria-label="edit"
           size="small"
           onClick={this.handleEditOpen}
@@ -243,7 +264,7 @@ class ProfileHeaderCard extends React.Component<any, any> {
             maxWidth="md"
             fullScreen={props.width === "xs"}
             transitionDuration={500}
-            open={this.state.editOpen}
+            open={this.state.editOpen || false}
             onClose={this.handleEditClose}
             aria-labelledby="form-dialog-title"
           >
@@ -390,7 +411,9 @@ class ProfileHeaderCard extends React.Component<any, any> {
   }
 }
 
-const FormikForm = withFormik({
+type FormikVals = Partial<ReturnType<typeof mapStateToProps>>;
+
+const FormikForm = withFormik<Props, FormikVals>({
   mapPropsToValues(props: any) {
     return {
       profilename: props.profilename,
@@ -401,13 +424,13 @@ const FormikForm = withFormik({
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
-      .max(50, (params: any) => `Name may not exceed ${params.max} characters`)
+      .max(50, (props: any) => `Name may not exceed ${props.max} characters`)
       .required("Profile name required"),
     headerphoto: yup.string().url("Must be a valid URL"),
     profilephoto: yup.string().url("Must be a valid URL")
   }),
   handleSubmit: () => {}
-})(ProfileHeaderCard);
+})(ProfileHeaderCard) as any;
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -419,7 +442,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     onFormSubmit: (vals: any) => {
       dispatch(updateUser(vals, "ProfileHeaderCard"));

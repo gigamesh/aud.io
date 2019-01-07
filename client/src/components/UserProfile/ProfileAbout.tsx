@@ -22,7 +22,7 @@ const ProfileAbout = (props: any) => {
       style={{ width: "calc(100% - 20px)", margin: "10px auto" }}
     >
       <Grid item md={9}>
-        <MyTextHeading variant="headline" align="center">
+        <MyTextHeading variant="h5" align="center">
           Biography
         </MyTextHeading>
         <ParagraphWrap>
@@ -54,7 +54,7 @@ const ProfileAbout = (props: any) => {
         </ParagraphWrap>
       </Grid>
       <Grid item xs={12} md={3}>
-        <MyTextHeading variant="headline" align="center">
+        <MyTextHeading variant="h5" align="center">
           Expertise
         </MyTextHeading>
         <List component="nav" style={{ border: "1px solid #bbb" }}>

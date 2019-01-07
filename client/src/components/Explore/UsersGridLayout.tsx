@@ -16,7 +16,7 @@ interface Props {
   loading: boolean;
 }
 
-const MyGrid = styled(Grid)`
+const MyGrid = styled(Grid)<any>`
   margin-top: -7px;
 `;
 

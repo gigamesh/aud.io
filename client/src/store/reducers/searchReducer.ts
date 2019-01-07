@@ -1,5 +1,4 @@
 import actionTypes from "../actions/actionTypes";
-import { IActionObj } from "../../typeDefs";
 
 const initialState = {
   loading: false,
@@ -8,7 +7,12 @@ const initialState = {
   searchBoxTouched: false
 };
 
-const search = (state = initialState, action: IActionObj) => {
+interface IActionType {
+  type: string;
+  payload: [];
+}
+
+const search = (state = initialState, action: IActionType) => {
   switch (action.type) {
     case actionTypes.SEARCHBOX_TOUCHED:
       return {

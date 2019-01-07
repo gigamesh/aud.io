@@ -13,11 +13,7 @@ export interface IUser {
   origin?: string;
   __v?: number;
   _id?: string;
-}
-
-export interface IActionObj {
-  type: string;
-  payload?: any;
+  isAuth?: boolean;
 }
 
 export interface ISearchAction {

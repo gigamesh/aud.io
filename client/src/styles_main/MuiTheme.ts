@@ -16,6 +16,7 @@ const MuiTheme = {
     }
   },
   typography: {
+    useNextVariants: true,
     fontFamily: "Montserrat",
     fontWeightRegular: 300,
     display4: {
@@ -30,7 +31,7 @@ const MuiTheme = {
     display1: {
       fontSize: "2rem"
     },
-    headline: {
+    h5: {
       color: "#333",
       lineHeight: "1em"
     },

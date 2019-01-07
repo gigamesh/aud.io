@@ -1,8 +1,8 @@
-import styled from 'styled-components'
-import Typography from '@material-ui/core/Typography';
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
-const MyTextHeading = styled(Typography)`
+const MyTextHeading = styled(Typography)<any>`
   margin-bottom: 20px;
-`
+`;
 
-export default MyTextHeading
+export default MyTextHeading;

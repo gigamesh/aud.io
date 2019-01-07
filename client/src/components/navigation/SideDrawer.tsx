@@ -4,7 +4,7 @@ import NavigationItems from "./NavigationItems/NavigationItems";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 
-const DrawerStyled = styled(Drawer)`
+const DrawerStyled = styled(Drawer)<any>`
   ul {
     display: flex;
     flex-direction: column;

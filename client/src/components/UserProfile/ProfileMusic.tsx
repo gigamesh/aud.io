@@ -11,7 +11,7 @@ const ProfileMusic = () => {
     min-width: 700px;
     margin: 0 auto;
   `;
-  const WaveformText = styled(Typography)`
+  const WaveformText = styled(Typography)<any>`
     position: relative;
     top: -10px;
     font-size: 1.2em;

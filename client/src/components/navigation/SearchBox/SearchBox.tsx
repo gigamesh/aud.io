@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { RootState } from "../../store/reducers";
+import { RootState } from "../../../store/reducers";
 import { Link } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";

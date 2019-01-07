@@ -9,7 +9,7 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { create } from "jss";
-import JssProvider from "react-jss/lib/JssProvider";
+import { JssProvider } from "react-jss";
 import rootReducer from "./store/reducers";
 import createSagaMiddleware from "redux-saga";
 import { watchUser, watchSearch } from "./store/sagas";

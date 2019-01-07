@@ -15,7 +15,6 @@ import AccountNavMenu from "../components/navigation/NavigationItems/AccountNavM
 import SearchBox from "../components/navigation/SearchBox/SearchBox";
 
 const styles = (theme: any) => {
-  console.log(theme);
   return createStyles({
     flex1: {
       flex: 1
@@ -39,7 +38,7 @@ const styles = (theme: any) => {
   });
 };
 
-const AppBarStyled = styled(AppBar)`
+const AppBarStyled = styled(AppBar)<any>`
   background: #fafafa;
   box-shadow: none;
   min-height: 0;
@@ -52,7 +51,7 @@ const AppBarStyled = styled(AppBar)`
   }
 `;
 
-const ToolbarStyled = styled(Toolbar)`
+const ToolbarStyled = styled(Toolbar)<any>`
   width: calc(96%);
   padding: 0;
 `;

@@ -60,7 +60,7 @@ class ProfileCal extends React.Component {
         spacing={16}
       >
         <Grid item xs={12} md={4}>
-          <MyTextHeading variant="headline" align="center">
+          <MyTextHeading variant="h5" align="center">
             Upcoming Dates
           </MyTextHeading>
           <List component="nav">

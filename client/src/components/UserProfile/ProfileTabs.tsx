@@ -64,7 +64,7 @@ class FullWidthTabs extends React.Component<any, any> {
                   indicatorColor="primary"
                   textColor="primary"
                   centered={appBarWidth >= 400}
-                  scrollable={appBarWidth < 400}
+                  variant={appBarWidth < 400 ? "scrollable" : "fullWidth"}
                   scrollButtons="on"
                 >
                   <Tab label="About" />

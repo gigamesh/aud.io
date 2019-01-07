@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import * as React from "react";
 import { withRouter } from "react-router-dom";
 import { RootState } from "../../store/reducers";
 import { connect } from "react-redux";
@@ -7,8 +7,9 @@ import ProfileTabs from "./ProfileTabs";
 import WaveformLoader from "../UI/WaveformLoader";
 import { profileDataInit } from "../../store/actions";
 
-class UserProfile extends Component<any, any> {
-  pathId: any;
+class UserProfile extends React.Component<any, any> {
+  pathId: string | undefined;
+
   componentDidMount() {
     this.pathId = this.props.match.params.id;
     // prevents geting profile data again if user just signedup or logged in
