@@ -6,21 +6,22 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import WaveformLoader from "../UI/WaveformLoader";
-import { any } from "prop-types";
 
 class ProfileCal extends React.Component {
-  iframe: any;
+  iframe: HTMLIFrameElement | undefined;
   state = {
     loaded: false
   };
 
   componentDidMount() {
-    this.iframe.onload = () => {
-      this.setState({ loaded: true });
-    };
+    if (this.iframe) {
+      this.iframe.onload = () => {
+        this.setState({ loaded: true });
+      };
+    }
   }
 
-  handleClick = (e: any) => {
+  handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
   };
 
@@ -45,7 +46,7 @@ class ProfileCal extends React.Component {
           left: 0
         }}
         title="iframe"
-        ref={el => (this.iframe = el)}
+        ref={(el: HTMLIFrameElement) => (this.iframe = el)}
         width={"98%"}
         height={600}
         frameBorder={0}

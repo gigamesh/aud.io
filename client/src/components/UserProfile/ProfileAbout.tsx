@@ -8,10 +8,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 import withWidth from "@material-ui/core/withWidth";
 
-const ProfileAbout = (props: any) => {
+const ProfileAbout = (props: { width: string }) => {
   const ParagraphWrap = styled.div`
     text-indent: 2em;
-    /* padding: 0 10px; */
   `;
 
   return (

@@ -1,3 +1,5 @@
+export type Nullable<T> = { [P in keyof T]: T[P] | null };
+
 export interface IUser {
   createdAt?: string;
   email: string;
@@ -21,3 +23,8 @@ export interface ISearchAction {
   query?: string;
   role?: string;
 }
+
+export type Classes = {
+  root: string;
+  lessPad: string;
+};

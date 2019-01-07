@@ -1,24 +1,18 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, Theme } from "@material-ui/core/styles";
 import SwipeableViews from "react-swipeable-views";
 import AppBar from "@material-ui/core/AppBar";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhotos from "./ProfilePhotos";
 import ProfileMusic from "./ProfileMusic";
 import ProfileCal from "./ProfileCal";
-// import ProfileGear from './ProfileGear';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-// import styled from 'styled-components';
-import Measure from "react-measure";
+import Measure, { ContentRect } from "react-measure";
+import { Nullable, Classes } from "../../typeDefs";
 
-function TabContainer({ children, dir }: any) {
-  return (
-    // <div component="div" dir={dir}>
-    //   {children}
-    // </div>
-    <div>{children}</div>
-  );
+function TabContainer({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>;
 }
 
 const styles = () => ({
@@ -30,13 +24,26 @@ const styles = () => ({
   }
 });
 
-class FullWidthTabs extends React.Component<any, any> {
+const initialState = {
+  value: 0,
+  appBarWidth: 400
+};
+
+type Props = {
+  theme: Theme;
+  classes: Classes;
+};
+
+class FullWidthTabs extends React.Component<
+  Props,
+  Nullable<typeof initialState>
+> {
   state = {
     value: 0,
     appBarWidth: 400
   };
 
-  handleChange = (event: any, value: number) => {
+  handleChange = (e: React.ChangeEvent<{}>, value: number) => {
     this.setState({ value });
   };
 
@@ -51,8 +58,10 @@ class FullWidthTabs extends React.Component<any, any> {
       <div className={classes.root}>
         <Measure
           bounds
-          onResize={(contentRect: any) => {
-            this.setState({ appBarWidth: contentRect.bounds.width });
+          onResize={(contentRect: ContentRect) => {
+            this.setState({
+              appBarWidth: contentRect.bounds ? contentRect.bounds.width : null
+            });
           }}
         >
           {({ measureRef }: any) => (
@@ -71,7 +80,6 @@ class FullWidthTabs extends React.Component<any, any> {
                   <Tab label="Photos" />
                   <Tab label="Music" />
                   <Tab label="Schedule" />
-                  {/* <Tab label="Gear" /> */}
                 </Tabs>
               </AppBar>
               <SwipeableViews
@@ -79,19 +87,18 @@ class FullWidthTabs extends React.Component<any, any> {
                 index={this.state.value}
                 onChangeIndex={this.handleChangeIndex}
               >
-                <TabContainer dir={theme.direction}>
+                <TabContainer>
                   <ProfileAbout />
                 </TabContainer>
-                <TabContainer dir={theme.direction}>
+                <TabContainer>
                   <ProfilePhotos />
                 </TabContainer>
-                <TabContainer dir={theme.direction}>
+                <TabContainer>
                   <ProfileMusic />
                 </TabContainer>
-                <TabContainer dir={theme.direction}>
+                <TabContainer>
                   <ProfileCal />
                 </TabContainer>
-                {/* <TabContainer dir={theme.direction}><ProfileGear/></TabContainer> */}
               </SwipeableViews>
             </div>
           )}

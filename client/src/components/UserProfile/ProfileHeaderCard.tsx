@@ -1,12 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { ActionType } from "typesafe-actions";
 import { RootState } from "../../store/reducers";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
-import Button, { ButtonProps } from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import withWidth from "@material-ui/core/withWidth";
 import Edit from "@material-ui/icons/Edit";
 import Dialog from "@material-ui/core/Dialog";
@@ -36,6 +35,15 @@ type SCProps = {
   headerOverlay: string;
   textcolor: string;
   width: string;
+};
+
+type FormVals = {
+  headerOverlay: string;
+  headerphoto: string;
+  origin: string;
+  profilename: string;
+  profilenameColor: string;
+  profilephoto: string;
 };
 
 type Props = InjectedFormikProps<
@@ -444,7 +452,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    onFormSubmit: (vals: any) => {
+    onFormSubmit: (vals: FormVals) => {
       dispatch(updateUser(vals, "ProfileHeaderCard"));
     }
   };

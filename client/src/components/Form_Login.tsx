@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { RootState } from "../store/reducers";
 import styled from "styled-components";
 import WaveformLoader from "./UI/WaveformLoader";
@@ -11,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import MyPaper from "./mui/MyPaper";
 import MyFormControl from "./mui/MyFormControl";
 import MyFormHelperTextBig from "./mui/MyFormHelperText_Big";
-import { withFormik, Form } from "formik";
+import { withFormik, Form, InjectedFormikProps } from "formik";
 import * as yup from "yup";
 import { loginUser, clearErrorMsg } from "../store/actions";
 
@@ -26,7 +27,12 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `;
 
-class Login extends Component<any, any> {
+type Props = InjectedFormikProps<
+  ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>,
+  any
+> & { width: string; location: any };
+
+class Login extends Component<Props, {}> {
   componentDidMount() {
     this.props.onMounted();
   }
@@ -125,6 +131,12 @@ class Login extends Component<any, any> {
   }
 }
 
+type FormikProps = {
+  onLoginSubmit: any;
+  email: string;
+  password: string;
+};
+
 const FormikForm = withFormik({
   isInitialValid: false,
   mapPropsToValues(props: any) {
@@ -149,7 +161,7 @@ const FormikForm = withFormik({
       .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password required")
   }),
-  handleSubmit: (values: any, bag) => {
+  handleSubmit: (values: Partial<FormikProps>, bag) => {
     values.onLoginSubmit(values.email, values.password);
     bag.resetForm();
   }
@@ -164,7 +176,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     onLoginSubmit: (email: string, password: string) =>
       dispatch(loginUser({ email, password })),
