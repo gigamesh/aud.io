@@ -36,7 +36,7 @@
   height: 100%;
 }
 .lds-equalizer-bar {
-  width: calc(1/9px);
+  width: 3px;
   -webkit-animation: lds-equalizer 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   animation: lds-equalizer 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
@@ -66,25 +66,21 @@
   animation-delay: -0.444444444444444s;
 }
 .lds-equalizer-bar:nth-child(6) {
-
   background: #7f80ad;
   -webkit-animation-delay: -0.111111111111111s;
   animation-delay: -0.111111111111111s;
 }
 .lds-equalizer-bar:nth-child(7) {
-
   background: #7788b7;
   -webkit-animation-delay: -0.222222222222222s;
   animation-delay: -0.222222222222222s;
 }
 .lds-equalizer-bar:nth-child(8) {
-
   background: #6698cc;
   -webkit-animation-delay: -0.333333333333333s;
   animation-delay: -0.333333333333333s;
 }
 .lds-equalizer-bar:nth-child(9) {
-
   background: #5ea0d6;
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
