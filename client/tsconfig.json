@@ -14,7 +14,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "allowUnreachableCode": true
+    "allowUnreachableCode": true,
+    "typeRoots": ["../node_modules/@types", "../@types"]
   },
   "include": ["src"]
 }
