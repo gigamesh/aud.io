@@ -13,6 +13,7 @@ import NavigationItems from "../components/navigation/NavigationItems/Navigation
 import ExploreNavMenu from "../components/navigation/NavigationItems/ExploreNavMenu";
 import AccountNavMenu from "../components/navigation/NavigationItems/AccountNavMenu";
 import SearchBox from "../components/navigation/SearchBox/SearchBox";
+import { IObj } from "../typeDefs";
 
 const styles = (theme: any) => {
   return createStyles({
@@ -57,7 +58,6 @@ const ToolbarStyled = styled(Toolbar)<any>`
 `;
 
 const TextFieldWrap = styled.div`
-  /* background: pink; */
   position: relative;
   min-width: 260px;
   width: 35vw;
@@ -66,7 +66,16 @@ const TextFieldWrap = styled.div`
   top: -8px;
 `;
 
-class Header extends React.Component<any, any> {
+type HeaderProps = {
+  profilename: string;
+  isAuth: boolean;
+  drawerToggleClicked: () => void;
+  history: IObj;
+  path: string;
+  classes: IObj;
+};
+
+class Header extends React.Component<HeaderProps, {}> {
   render() {
     const props = this.props;
     const { classes } = props;

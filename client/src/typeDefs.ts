@@ -28,3 +28,7 @@ export type Classes = {
   root: string;
   lessPad: string;
 };
+
+export interface IObj {
+  [index: string]: any;
+}

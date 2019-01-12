@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-// import { Redirect} from 'react-router-dom';
+import { RouteComponentProps } from "react-router-dom";
 
-class NotFound extends Component<any, any> {
+class NotFound extends Component<RouteComponentProps, {}> {
   componentDidMount() {
     this.props.history.push("/");
   }

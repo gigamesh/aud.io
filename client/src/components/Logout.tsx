@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { logoutUser } from "../store/actions";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import WaveformLoader from "./UI/WaveformLoader";
 
-class Logout extends Component<any, any> {
+type LogoutProps = RouteComponentProps & ReturnType<typeof mapDispatchToProps>;
+
+class Logout extends Component<LogoutProps, {}> {
   componentDidMount() {
     this.props.logout(400);
     setTimeout(() => {
@@ -17,7 +20,7 @@ class Logout extends Component<any, any> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     logout: (timeout: number) => {
       dispatch(logoutUser(timeout));
@@ -25,7 +28,9 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-export default withRouter(connect(
-  null,
-  mapDispatchToProps
-)(Logout) as any);
+export default withRouter(
+  connect(
+    null,
+    mapDispatchToProps
+  )(Logout)
+);

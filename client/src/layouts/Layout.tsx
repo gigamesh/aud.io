@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import SideDrawer from "../components/navigation/SideDrawer";
 import Header from "./Header";
 import styled from "styled-components";
@@ -10,7 +10,7 @@ const initState = {
 
 type State = typeof initState;
 
-class Layout extends Component<any, State> {
+class Layout extends Component<RouteComponentProps, State> {
   state = initState;
 
   toggleDrawer = () => {
