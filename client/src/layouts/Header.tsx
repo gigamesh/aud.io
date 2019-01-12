@@ -15,7 +15,7 @@ import AccountNavMenu from "../components/navigation/NavigationItems/AccountNavM
 import SearchBox from "../components/navigation/SearchBox/SearchBox";
 import { IObj } from "../typeDefs";
 
-const styles = (theme: any) => {
+const styles = (theme: IObj) => {
   return createStyles({
     flex1: {
       flex: 1
@@ -39,7 +39,7 @@ const styles = (theme: any) => {
   });
 };
 
-const AppBarStyled = styled(AppBar)<any>`
+const AppBarStyled = styled(AppBar)<IObj>`
   background: #fafafa;
   box-shadow: none;
   min-height: 0;
@@ -52,7 +52,7 @@ const AppBarStyled = styled(AppBar)<any>`
   }
 `;
 
-const ToolbarStyled = styled(Toolbar)<any>`
+const ToolbarStyled = styled(Toolbar)<IObj>`
   width: calc(96%);
   padding: 0;
 `;

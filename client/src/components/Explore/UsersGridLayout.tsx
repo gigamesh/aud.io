@@ -1,22 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { RootState } from "../../store/reducers";
 import styled from "styled-components";
 import { getUsers } from "../../store/actions";
 import WaveformLoader from "../UI/WaveformLoader";
 import Grid from "@material-ui/core/Grid";
 import UserCard from "./UserCard";
-import { IUser } from "../../typeDefs";
+import { IUser, IObj } from "../../typeDefs";
 
 interface Props {
-  location: any;
+  location: IObj;
   users: Array<IUser>;
   dispatchGetUsers: Function;
   searchBoxTouched: boolean;
   loading: boolean;
 }
 
-const MyGrid = styled(Grid)<any>`
+const MyGrid = styled(Grid)<IObj>`
   margin-top: -7px;
 `;
 
@@ -78,7 +79,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     dispatchGetUsers: (role: String) => {
       return dispatch(getUsers(role));

@@ -21,7 +21,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import { withFormik, InjectedFormikProps } from "formik";
 import * as yup from "yup";
-import { IUser } from "../../typeDefs";
+import { IUser, IObj } from "../../typeDefs";
 
 import { updateUser } from "../../store/actions";
 
@@ -79,7 +79,7 @@ class ProfileHeaderCard extends React.Component<
     });
   };
 
-  handleOverlayChange = (e: React.ChangeEvent<any>) => {
+  handleOverlayChange = (e: React.ChangeEvent<IObj>) => {
     this.setState({ headerOverlay: e.target.value });
     this.props.setValues({
       ...this.props.values,
@@ -200,7 +200,7 @@ class ProfileHeaderCard extends React.Component<
       line-height: 0;
     `;
 
-    const EditBn = styled(Button)<any>`
+    const EditBn = styled(Button)<IObj>`
       position: absolute;
       bottom: 10px;
       right: 10px;
@@ -422,7 +422,7 @@ class ProfileHeaderCard extends React.Component<
 type FormikVals = Partial<ReturnType<typeof mapStateToProps>>;
 
 const FormikForm = withFormik<Props, FormikVals>({
-  mapPropsToValues(props: any) {
+  mapPropsToValues(props: IObj) {
     return {
       profilename: props.profilename,
       headerphoto: props.headerphoto,
@@ -432,7 +432,7 @@ const FormikForm = withFormik<Props, FormikVals>({
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
-      .max(50, (props: any) => `Name may not exceed ${props.max} characters`)
+      .max(50, (props: IObj) => `Name may not exceed ${props.max} characters`)
       .required("Profile name required"),
     headerphoto: yup.string().url("Must be a valid URL"),
     profilephoto: yup.string().url("Must be a valid URL")

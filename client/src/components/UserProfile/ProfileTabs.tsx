@@ -9,7 +9,7 @@ import ProfileCal from "./ProfileCal";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Measure, { ContentRect } from "react-measure";
-import { Nullable, Classes } from "../../typeDefs";
+import { Nullable, Classes, IObj } from "../../typeDefs";
 
 function TabContainer({ children }: { children: React.ReactNode }) {
   return <div>{children}</div>;
@@ -64,7 +64,7 @@ class FullWidthTabs extends React.Component<
             });
           }}
         >
-          {({ measureRef }: any) => (
+          {({ measureRef }: IObj) => (
             <div ref={measureRef}>
               <AppBar position="static" color="default">
                 <Tabs

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
+import { IObj } from "../../typeDefs";
 
 const ProfileMusic = () => {
   const Waveform = styled.img`
@@ -11,7 +12,7 @@ const ProfileMusic = () => {
     min-width: 700px;
     margin: 0 auto;
   `;
-  const WaveformText = styled(Typography)<any>`
+  const WaveformText = styled(Typography)<IObj>`
     position: relative;
     top: -10px;
     font-size: 1.2em;

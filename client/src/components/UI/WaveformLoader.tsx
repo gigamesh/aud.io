@@ -35,7 +35,11 @@ const MessageWrap = styled.div`
   font-weight: 500;
 `;
 
-const WaveformLoader = (props: any) => (
+type WaveProps = {
+  message?: () => React.ReactNode;
+};
+
+const WaveformLoader = (props: WaveProps) => (
   <WaveFormWrap>
     <WaveForm className="lds-equalizer">
       <div>

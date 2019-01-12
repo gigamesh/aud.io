@@ -15,6 +15,7 @@ import MyFormHelperTextBig from "./mui/MyFormHelperText_Big";
 import { withFormik, Form, InjectedFormikProps } from "formik";
 import * as yup from "yup";
 import { loginUser, clearErrorMsg } from "../store/actions";
+import { IObj } from "../typeDefs";
 
 const ButtonWrap = styled.div`
   margin-top: 15px;
@@ -30,7 +31,7 @@ const ErrorWrap = styled.div`
 type Props = InjectedFormikProps<
   ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>,
   any
-> & { width: string; location: any };
+> & { width: string; location: IObj };
 
 class Login extends Component<Props, {}> {
   componentDidMount() {
@@ -132,7 +133,7 @@ class Login extends Component<Props, {}> {
 }
 
 type FormikProps = {
-  onLoginSubmit: any;
+  onLoginSubmit: (e?: string, p?: string) => void;
   email: string;
   password: string;
 };
@@ -162,7 +163,8 @@ const FormikForm = withFormik({
       .required("Password required")
   }),
   handleSubmit: (values: Partial<FormikProps>, bag) => {
-    values.onLoginSubmit(values.email, values.password);
+    if (values.onLoginSubmit)
+      values.onLoginSubmit(values.email, values.password);
     bag.resetForm();
   }
 })(Login);

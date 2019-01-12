@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { RootState } from "../../store/reducers";
 import { profileDataInit } from "../../store/actions";
 import { states } from "./geography";
@@ -18,8 +19,9 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Select from "@material-ui/core/Select";
-import { withFormik, Form } from "formik";
+import { withFormik } from "formik";
 import * as yup from "yup";
+import { IObj } from "../../typeDefs";
 
 const ButtonWrap = styled.div`
   width: 100%;
@@ -32,12 +34,12 @@ const ErrorWrap = styled.div`
   flex-grow: 1;
 `;
 
-class AccountSettings extends Component<any, any> {
+class AccountSettings extends Component<any, {}> {
   componentDidMount() {
     this.props.getProfileData(this.props.userId);
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(this.props);
 
@@ -269,7 +271,7 @@ class AccountSettings extends Component<any, any> {
 
 const FormikForm = withFormik({
   enableReinitialize: true,
-  mapPropsToValues(props: any) {
+  mapPropsToValues(props: IObj) {
     return {
       profilename: props.profilename || "",
       email: props.email || "",
@@ -287,7 +289,7 @@ const FormikForm = withFormik({
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
-      .max(50, (params: any) => `Name may not exceed ${params.max} characters`)
+      .max(50, (params: IObj) => `Name may not exceed ${params.max} characters`)
       .required("Profile name required"),
     email: yup
       .string()
@@ -295,26 +297,29 @@ const FormikForm = withFormik({
       .required("Email address required"),
     password: yup
       .string()
-      .min(6, (params: any) => `Must be at least ${params.min} characters long`)
+      .min(
+        6,
+        (params: IObj) => `Must be at least ${params.min} characters long`
+      )
       .max(
         50,
-        (params: any) => `Password may not exceed ${params.max} characters`
+        (params: IObj) => `Password may not exceed ${params.max} characters`
       )
       .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password required"),
     role: yup.string().required("^Required"),
     firstName: yup
       .string()
-      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+      .max(50, (params: IObj) => `May not exceed ${params.max} characters`),
     lastName: yup
       .string()
-      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+      .max(50, (params: IObj) => `May not exceed ${params.max} characters`),
     street: yup
       .string()
-      .max(100, (params: any) => `May not exceed ${params.max} characters`),
+      .max(100, (params: IObj) => `May not exceed ${params.max} characters`),
     city: yup
       .string()
-      .max(50, (params: any) => `May not exceed ${params.max} characters`),
+      .max(50, (params: IObj) => `May not exceed ${params.max} characters`),
     state: yup.string(),
     postalCode: yup.string()
   }),
@@ -338,9 +343,9 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    onFormSubmit: (vals: any) => dispatch(updateUser(vals, "AccountSettings")),
+    onFormSubmit: (vals: IObj) => dispatch(updateUser(vals, "AccountSettings")),
     getProfileData: (userId: string) => dispatch(profileDataInit(userId))
   };
 };

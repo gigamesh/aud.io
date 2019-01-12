@@ -5,9 +5,10 @@ import Card from "@material-ui/core/Card";
 import withWidth from "@material-ui/core/withWidth";
 import Typography from "@material-ui/core/Typography";
 import WaveformLoader from "../UI/WaveformLoader";
+import { IUser, IObj } from "../../typeDefs";
 
 interface Props {
-  user: any;
+  user: Partial<IUser>;
 }
 
 class UserCard extends React.Component<Props> {
@@ -73,7 +74,7 @@ class UserCard extends React.Component<Props> {
       }
     `;
 
-    const MyCard = styled(Card)<any>`
+    const MyCard = styled(Card)<IObj>`
       position: absolute;
       width: 100%;
       height: 100%;

@@ -3,8 +3,9 @@ import styled from "styled-components";
 import NavigationItems from "./NavigationItems/NavigationItems";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
+import { IObj } from "../../typeDefs";
 
-const DrawerStyled = styled(Drawer)<any>`
+const DrawerStyled = styled(Drawer)<IObj>`
   ul {
     display: flex;
     flex-direction: column;
@@ -17,7 +18,14 @@ const DrawerStyled = styled(Drawer)<any>`
   }
 `;
 
-const SideDrawer = (props: Partial<any>) => {
+type SideDrawerProps = {
+  closeHandler: () => void;
+  isopen: boolean;
+  isAuth?: boolean;
+  path: string;
+};
+
+const SideDrawer: React.SFC<SideDrawerProps> = props => {
   return (
     <DrawerStyled onClick={props.closeHandler} open={props.isopen}>
       <ul>

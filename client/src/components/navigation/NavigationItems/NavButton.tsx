@@ -2,13 +2,14 @@ import React from "react";
 import styled, { css } from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withTheme } from "@material-ui/core/styles";
+import { IObj } from "../../../typeDefs";
 
 const activeStyle = css`
   &:after {
     content: "";
     border-bottom: 6px solid ${props => props.theme.palette.primary.light};
     position: absolute;
-    width: ${(props: any) =>
+    width: ${(props: IObj) =>
       props.ordercheck === 0 && !props.isopen
         ? "calc(100% - 14px);"
         : "calc(100% - 28px)"};
@@ -18,9 +19,9 @@ const activeStyle = css`
   }
 `;
 
-const NavButton = (props: any) => {
+const NavButton = (props: IObj) => {
   const { theme } = props;
-  const NavButtonMain = styled(Button)`
+  const NavButtonMain = styled(Button)<IObj>`
     display: inline-block;
     a {
       color: inherit;
@@ -54,11 +55,11 @@ const NavButton = (props: any) => {
         top: 7px;
         transition: all 200ms;
       }
-      ${(props: any) => props.active === "true" && activeStyle};
+      ${(props: IObj) => props.active === "true" && activeStyle};
     }
   `;
 
-  const NavButtonSecondary = styled(Button)`
+  const NavButtonSecondary = styled(Button)<IObj>`
     a {
       color: ${theme.palette.text.primary};
     }

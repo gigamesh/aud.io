@@ -11,6 +11,7 @@ export interface IUser {
   profilename: string;
   profilenameColor?: "#ffffff";
   role?: string;
+  address: IObj;
   updatedAt?: string;
   origin?: string;
   __v?: number;

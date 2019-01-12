@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { RootState } from "../../../store/reducers";
 import { Link } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
@@ -9,13 +10,15 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles, createStyles } from "@material-ui/core/styles";
-
 import {
   searchBoxTouched,
   searchBoxKeypress,
   clearSearchbox,
   getUsers
 } from "../../../store/actions";
+import { IUser, IObj } from "../../../typeDefs";
+
+type Suggestion = Partial<IUser>;
 
 const styles = (theme: any) =>
   createStyles({
@@ -43,14 +46,16 @@ const styles = (theme: any) =>
     }
   });
 
-class SearchBox extends React.Component<any, any> {
-  input: any;
-  state = {
-    value: "",
-    suggestions: []
-  };
+const initialState = {
+  value: "",
+  suggestions: []
+};
 
-  renderInput = (inputProps: any) => {
+class SearchBox extends React.Component<IObj, typeof initialState> {
+  input: HTMLInputElement | undefined;
+  state = initialState;
+
+  renderInput = (inputProps: IObj) => {
     const { classes, ref, ...other } = inputProps;
 
     return (
@@ -67,9 +72,12 @@ class SearchBox extends React.Component<any, any> {
     );
   };
 
-  renderSuggestion = (suggestion: any, { query, isHighlighted }: any) => {
-    const matches = match(suggestion.profilename, query);
-    const parts = parse(suggestion.profilename, matches);
+  renderSuggestion = (
+    suggestion: Suggestion,
+    { query, isHighlighted }: IObj
+  ) => {
+    const matches = match(suggestion.profilename!, query);
+    const parts = parse(suggestion.profilename!, matches);
 
     let compiledParts = parts.map((part, index) => {
       return part.highlight ? (
@@ -92,17 +100,13 @@ class SearchBox extends React.Component<any, any> {
     });
 
     return (
-      <MenuItem
-        selected={isHighlighted}
-        component="div"
-        // className={isHighlighted ? 'suggestionSelected' : ''}
-      >
+      <MenuItem selected={isHighlighted} component="div">
         <div>{finalSuggestion}</div>
       </MenuItem>
     );
   };
 
-  renderSuggestionsContainer = (options: any) => {
+  renderSuggestionsContainer = (options: IObj) => {
     const { containerProps, children } = options;
     return (
       <Paper {...containerProps} square>
@@ -111,8 +115,8 @@ class SearchBox extends React.Component<any, any> {
     );
   };
 
-  getSuggestionValue = (suggestion: any) => {
-    return suggestion.profilename;
+  getSuggestionValue = (suggestion: Suggestion) => {
+    return suggestion.profilename!;
   };
 
   getSuggestions = (value: string) => {
@@ -122,10 +126,10 @@ class SearchBox extends React.Component<any, any> {
 
     return inputLength === 0
       ? []
-      : this.props.suggestions.filter((suggestion: any) => {
+      : this.props.suggestions.filter((suggestion: Suggestion) => {
           const keep =
             count < 5 &&
-            suggestion.profilename.toLowerCase().slice(0, inputLength) ===
+            suggestion.profilename!.toLowerCase().slice(0, inputLength) ===
               inputValue;
 
           if (keep) {
@@ -147,18 +151,15 @@ class SearchBox extends React.Component<any, any> {
     });
   };
 
-  handleSearchBoxChange = (e: any, { newValue, method }: any) => {
+  handleSearchBoxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    { newValue, method }: IObj
+  ) => {
     if (method === "enter") {
     }
     this.setState({
       value: newValue
     });
-  };
-
-  onSuggestionSelected = (e: any, { suggestion }: any) => {
-    this.props.history.push(`/user/${suggestion._id}`);
-    this.setState({ value: "" });
-    this.input.blur();
   };
 
   render() {
@@ -183,14 +184,10 @@ class SearchBox extends React.Component<any, any> {
         onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
         renderSuggestionsContainer={this.renderSuggestionsContainer}
         getSuggestionValue={this.getSuggestionValue}
-        onSuggestionSelected={this.onSuggestionSelected}
         renderSuggestion={this.renderSuggestion}
         focusInputOnSuggestionClick={false}
         inputProps={{
           onFocus: this.props.searchBoxTouched,
-          // type: "text",
-          // id: "searchbox",
-          // name: "searchbox",
           classes,
           value: this.state.value,
           onChange: this.handleSearchBoxChange
@@ -206,10 +203,10 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     searchBoxTouched: () => dispatch(searchBoxTouched()),
-    searchBoxKeypress: (searchText: any) =>
+    searchBoxKeypress: (searchText: string) =>
       dispatch(searchBoxKeypress(searchText)),
     getUsers: () => dispatch(getUsers("")),
     clearSearchbox: () => dispatch(clearSearchbox())

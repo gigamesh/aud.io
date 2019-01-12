@@ -2,6 +2,7 @@ import React from "react";
 import NavigationItem from "./NavigationItem";
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
+import { IObj } from "../../../typeDefs";
 
 interface INavItem {
   type: string;
@@ -11,7 +12,7 @@ interface INavItem {
   excluded?: boolean;
 }
 
-class NavigationItems extends React.Component<any, any> {
+class NavigationItems extends React.Component<IObj, {}> {
   shouldComponentUpdate() {
     if (this.props.isopen) {
       return false;
