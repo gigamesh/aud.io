@@ -467,13 +467,13 @@ module.exports = function(webpackEnv) {
       ]
     },
     plugins: [
-      isEnvProduction &&
-        new CompressionPlugin({
-          test: /\.(js|css)$/,
-          filename: "[path][query]",
-          algorithm: "gzip",
-          deleteOriginalAssets: true
-        }),
+      // isEnvProduction &&
+      //   new CompressionPlugin({
+      //     test: /\.(js|css)$/,
+      //     filename: "[path][query]",
+      //     algorithm: "gzip",
+      //     deleteOriginalAssets: true
+      //   }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
