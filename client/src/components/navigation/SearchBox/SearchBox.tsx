@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../../store/reducers";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
@@ -48,7 +48,8 @@ const styles = (theme: any) =>
 
 const initialState = {
   value: "",
-  suggestions: []
+  suggestions: [],
+  redirectID: ""
 };
 
 class SearchBox extends React.Component<IObj, typeof initialState> {
@@ -156,16 +157,27 @@ class SearchBox extends React.Component<IObj, typeof initialState> {
     { newValue, method }: IObj
   ) => {
     if (method === "enter") {
+      console.log(newValue);
     }
     this.setState({
       value: newValue
     });
   };
 
+  handleSelected = (e: IObj, rest: IObj) => {
+    const { suggestion }: IObj = rest;
+    this.setState({ value: "" });
+    if (rest.method === "enter" && suggestion._id) {
+      this.setState({ redirectID: suggestion._id });
+    }
+  };
+
   render() {
     const { classes } = this.props;
 
-    return (
+    return this.state.redirectID ? (
+      <Redirect to={`/user/${this.state.redirectID}`} />
+    ) : (
       <Autosuggest
         ref={(autosuggest: any) => {
           if (autosuggest !== null) {
@@ -180,6 +192,7 @@ class SearchBox extends React.Component<IObj, typeof initialState> {
         }}
         renderInputComponent={this.renderInput}
         suggestions={this.props.suggestions}
+        onSuggestionSelected={this.handleSelected}
         onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
         renderSuggestionsContainer={this.renderSuggestionsContainer}

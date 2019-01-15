@@ -17,6 +17,9 @@ const LogoWrap = styled.div`
     width: 100%;
     height: auto;
   }
+  @media (min-width: 500px) and (max-width: 1400px) {
+    max-width: 75vw;
+  }
 `;
 
 class BigAnimatedLogo extends Component {
