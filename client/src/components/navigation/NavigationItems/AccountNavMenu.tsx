@@ -2,8 +2,9 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
 import DropDownNavMenu from "./DropDownNavMenu/DropDownNavMenu";
+import { IObj } from "../../../typeDefs";
 
-const AccountNavMenu = (props: { userId: string }) => {
+const AccountNavMenu = (props: IObj) => {
   return (
     <DropDownNavMenu
       {...props}

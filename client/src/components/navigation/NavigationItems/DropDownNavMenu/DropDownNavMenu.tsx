@@ -62,6 +62,7 @@ class DropDownNavBtn extends React.Component<any, any> {
           navbuttontype={"secondary"}
           active={false}
           link={item.link}
+          handleClick={props.handleClick}
           disableRipple
         >
           {item.displayText}

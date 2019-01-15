@@ -76,6 +76,10 @@ type HeaderProps = {
 };
 
 class Header extends React.Component<HeaderProps, {}> {
+  handleClick = (link: string) => {
+    this.props.history.push(link);
+  };
+
   render() {
     const props = this.props;
     const { classes } = props;
@@ -90,7 +94,7 @@ class Header extends React.Component<HeaderProps, {}> {
     };
 
     let accountNavMenu = props.isAuth ? (
-      <AccountNavMenu>Account</AccountNavMenu>
+      <AccountNavMenu handleClick={this.handleClick}>Account</AccountNavMenu>
     ) : null;
     return (
       <AppBarStyled position="fixed">
@@ -106,9 +110,15 @@ class Header extends React.Component<HeaderProps, {}> {
           </Hidden>
           <Hidden smDown>
             <nav className={classes.flex1}>
-              <NavigationItems path={props.path} isAuth={props.isAuth} />
+              <NavigationItems
+                handleClick={this.handleClick}
+                path={props.path}
+                isAuth={props.isAuth}
+              />
               {accountNavMenu}
-              <ExploreNavMenu>Explore</ExploreNavMenu>
+              <ExploreNavMenu handleClick={this.handleClick}>
+                Explore
+              </ExploreNavMenu>
             </nav>
             <TextFieldWrap>
               <SearchBox history={props.history} />

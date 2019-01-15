@@ -1,17 +1,9 @@
 import React from "react";
 import { NavLink, withRouter, RouteComponentProps } from "react-router-dom";
 import NavButton from "./NavButton";
+import { IObj } from "../../../typeDefs";
 
-interface Props {
-  active?: boolean;
-  disableRipple?: boolean;
-  navbuttontype?: string;
-  ordercheck?: number;
-  isopen?: boolean;
-  link?: string;
-}
-
-const NavigationItem: React.SFC<Props & RouteComponentProps> = props => {
+const NavigationItem: React.SFC<IObj & RouteComponentProps> = props => {
   return (
     <NavButton
       disableRipple={props.disableRipple ? true : false}
@@ -20,15 +12,9 @@ const NavigationItem: React.SFC<Props & RouteComponentProps> = props => {
       active={props.active ? props.active.toString() : null}
       ordercheck={props.ordercheck}
       isopen={props.isopen}
+      onClick={() => props.handleClick(props.link)}
     >
-      <NavLink
-        to={{
-          pathname: props.link,
-          state: { prevPath: props.location.pathname }
-        }}
-      >
-        {props.children}
-      </NavLink>
+      {props.children}
     </NavButton>
   );
 };

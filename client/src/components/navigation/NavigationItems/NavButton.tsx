@@ -23,7 +23,7 @@ const NavButton = (props: IObj) => {
   const { theme } = props;
   const NavButtonMain = styled(Button)<IObj>`
     display: inline-block;
-    a {
+    span {
       color: inherit;
       z-index: 20;
     }
@@ -36,7 +36,7 @@ const NavButton = (props: IObj) => {
       background: inherit;
       opacity: 1;
     }
-    a {
+    span {
       &:after {
         content: "";
         border-bottom: 6px solid ${theme.palette.primary.light};
@@ -60,7 +60,7 @@ const NavButton = (props: IObj) => {
   `;
 
   const NavButtonSecondary = styled(Button)<IObj>`
-    a {
+    span {
       color: ${theme.palette.text.primary};
     }
     min-width: 0px;
@@ -71,7 +71,7 @@ const NavButton = (props: IObj) => {
     opacity: 0.9;
     &:hover {
       background: inherit;
-      a {
+      span {
         color: ${theme.palette.primary.dark};
         opacity: 1;
       }

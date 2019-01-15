@@ -105,6 +105,7 @@ class NavigationItems extends React.Component<IObj, {}> {
           key={key}
           ordercheck={count}
           isopen={props.isopen}
+          handleClick={props.handleClick}
         >
           {item.text}
         </NavigationItem>
