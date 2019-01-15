@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
+const compression = require("compression");
 const app = express();
 
 mongoose.Promise = global.Promise;
@@ -17,7 +18,7 @@ const { auth } = require("./middleware/auth");
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-
+app.use(compression());
 app.use(express.static("client/build"));
 
 // GET //
