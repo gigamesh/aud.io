@@ -32,9 +32,8 @@ const styles = (theme: IObj) => {
     },
     searchIcon: {
       position: "relative",
-      float: "right",
       padding: 0,
-      top: "5px"
+      marginLeft: "8px"
     }
   });
 };
@@ -58,12 +57,14 @@ const ToolbarStyled = styled(Toolbar)<IObj>`
 `;
 
 const TextFieldWrap = styled.div`
-  position: relative;
-  min-width: 260px;
+  min-width: 240px;
   width: 35vw;
   max-width: 400px;
   height: 100%;
   top: -8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 type HeaderProps = {

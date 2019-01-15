@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RootState } from "../../../store/reducers";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
@@ -24,7 +24,7 @@ const styles = (theme: any) =>
   createStyles({
     container: {
       flexGrow: 1,
-      position: "absolute",
+      position: "relative",
       width: "calc(100% - 28px)",
       top: 0,
       left: 0
@@ -69,6 +69,7 @@ class SearchBox extends React.Component<IObj, typeof initialState> {
           },
           ...other
         }}
+        style={{ margin: 0 }}
       />
     );
   };
@@ -168,16 +169,13 @@ class SearchBox extends React.Component<IObj, typeof initialState> {
     const { suggestion }: IObj = rest;
     this.setState({ value: "" });
     if (rest.method === "enter" && suggestion._id) {
-      this.setState({ redirectID: suggestion._id });
+      this.props.history.push(`/user/${suggestion._id}`);
     }
   };
 
   render() {
     const { classes } = this.props;
-
-    return this.state.redirectID ? (
-      <Redirect to={`/user/${this.state.redirectID}`} />
-    ) : (
+    return (
       <Autosuggest
         ref={(autosuggest: any) => {
           if (autosuggest !== null) {
