@@ -40,8 +40,12 @@ class BigAnimatedLogo extends Component {
   render() {
     return (
       <LogoWrap>
-        {}
-        <img src="/logo.gif" alt="Logo Animation" />
+        {this.state.animLoaded ? (
+          <img src="/logo.gif" alt="Logo Animation" />
+        ) : null}
+        {!this.state.animLoaded ? (
+          <img src="/logo-fallback.png" alt="Logo" />
+        ) : null}
       </LogoWrap>
     );
   }
