@@ -1,17 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#2E79A8" />
+    <meta
+      name="description"
+      content="A network for musicians, studios, and gear hoarders."
+    />
+    <meta property="og:url" content="https://aud-io.herokuapp.com/" />
+    <meta property="og:title" content="aud.io" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-img.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+
+    <meta property="twitter:image" content="/twit-sum-large.jpg" />
+    <meta property="twitter:site" content="@gigamesh" />
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,300,300i,400,500,900" rel="stylesheet">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Comfortaa"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,300,300i,400,500,900"
+      rel="stylesheet"
+    />
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -24,9 +47,17 @@
     <title>aud.io</title>
   </head>
   <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
+    <script type="application/ld+json">
+      {
+        "@type": "WebSite",
+        "url": "https://aud-io.herokuapp.com",
+        "name": "aud.io",
+        "description": "A network for musicians, studios, and gear hoarders.",
+        "genre": "music",
+        "keywords": "musicians,studios,gear,rental,sharing,community,network,directory"
+      }
+    </script>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
     <div id="root"></div>
     <!--
       This HTML file is a template.
