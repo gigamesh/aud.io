@@ -1,9 +1,14 @@
+import React from "react";
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
+const fs = require("fs");
+const ReactDOMServer = require("react-dom/server");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
+const App = require("../client/src/App.tsx");
 const app = express();
 
 mongoose.Promise = global.Promise;
@@ -20,6 +25,13 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static("client/build"));
+
+let indexPath;
+if (process.env.NODE_ENV === "production") {
+  indexPath = path.resolve(__dirname, "../client", "build", "index.html");
+} else {
+  indexPath = path.resolve(__dirname, "../client", "public", "index.html");
+}
 
 // GET //
 
@@ -147,7 +159,7 @@ app.post("/api/usergearitem", (req, res) => {
 app.post("/api/mastergearitem", (req, res) => {
   const gearItem = new MasterGearItem(req.body);
 
-  gearItem.save((err, item) => {
+  gearItem.save((err, doc) => {
     if (err) {
       return res.json({ success: false });
     }
@@ -283,13 +295,34 @@ app.delete("/api/update_usergearitem", (req, res) => {
   });
 });
 
+const serverRenderer = (req, res, next) => {
+  fs.readFile(indexPath, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("An error occurred");
+    }
+    return res.send(
+      data.replace(
+        '<div id="root"></div>',
+        `<div id="root">${ReactDOMServer.renderToString(<App />)}</div>`
+      )
+    );
+  });
+};
+
 // PRODUCTOIN BUILD SET UP
 if (process.env.NODE_ENV === "production") {
-  const path = require("path");
   app.get("/*", (req, res) => {
-    res.sendfile(path.resolve(__dirname, "../client", "build", "index.html"));
+    res.sendfile(path.resolve(__dirname, "build", "index.html"));
   });
 }
+
+// // DEV BUILD SET UP
+// if (process.env.NODE_ENV !== "production") {
+//   app.get("/*", (req, res) => {
+//     res.sendfile(path.resolve(__dirname, "public", "index.html"));
+//   });
+// }
 
 const port = process.env.PORT || 4000;
 app.listen(port, "0.0.0.0", () => {
