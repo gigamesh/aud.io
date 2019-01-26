@@ -1,7 +1,3 @@
-// require("babel-register")({
-//   presets: ["react"]
-// });
-
 const React = require("react");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -12,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
-const App = require("../src/App.tsx");
+const App = require("../App.tsx");
 const app = express();
 
 mongoose.Promise = global.Promise;
