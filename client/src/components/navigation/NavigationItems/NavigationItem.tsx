@@ -12,7 +12,7 @@ const NavigationItem: React.SFC<IObj & RouteComponentProps> = props => {
       active={props.active ? props.active.toString() : null}
       ordercheck={props.ordercheck}
       isopen={props.isopen}
-      onClick={() => props.handleClick(props.link)}
+      onClick={() => props.history.push(props.link)}
     >
       {props.children}
     </NavButton>

@@ -21,12 +21,19 @@ const MyGrid = styled(Grid)<IObj>`
   margin-top: -7px;
 `;
 
-const Text = styled.p`
-  color: #ccc;
+const Text = styled.p<IObj>`
+  color: #444;
+  opacity: ${({ loaded }) => (loaded ? 1 : 0)};
+  transition: opacity 1s ease 500ms;
 `;
 
 class UsersGridLayout extends React.Component<Props> {
+  state = {
+    loaded: false
+  };
+
   public componentDidMount() {
+    setTimeout(() => this.setState({ loaded: true }), 0);
     let path = this.props.location.pathname;
     let role = path === "/musicians" ? "musician" : "/studios" ? "studio" : "";
     if (path !== "/search") {
@@ -52,7 +59,7 @@ class UsersGridLayout extends React.Component<Props> {
 
     const loadingMessage = () => (
       <React.Fragment>
-        <Text>
+        <Text loaded={this.state.loaded}>
           Initial load may be delayed to due database interuptions. Thank you
           for your patience. :)
         </Text>
