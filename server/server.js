@@ -4,9 +4,9 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
-const multer = require("multer");
-const upload = multer({ dest: "./uploadedImages/" });
 const app = express();
+const path = require("path");
+const multer = require("multer");
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || config.DATABASE);
@@ -225,47 +225,98 @@ app.post("/api/usergearitem", (req, res) => {
   );
 });
 
-// auth,
-app.post("/api/update_user", upload.single("primary"), (req, res) => {
-  console.log(req.body);
+// IMAGE UPLOADER
+
+app.post("/api/upload", auth, (req, res) => {
+  const storage = multer.diskStorage({
+    destination: `./userImages/${req.user.profilename}/`,
+    filename: function(req, file, cb) {
+      cb(
+        null,
+        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+      );
+    }
+  });
+
+  const fileFilter = (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
+    const mimetype = filetypes.test(file.mimetype);
+
+    if (extname && mimetype) {
+      console.log(file.mimetype);
+      cb(null, true);
+    } else {
+      cb({ message: "Must be JPG or PNG" }, false);
+    }
+  };
+
+  const multerOptions = {
+    storage,
+    fileFilter,
+    limits: { fileSize: 1024 * 1024 * 6 }
+  };
+
+  const upload = multer(multerOptions).single("primary");
+
+  upload(req, res, err => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      User.findById(req.user._id, (err, user) => {
+        user.photos.primary = req.file.path;
+        user.save((err, user) => {
+          if (err) return res.status(400).send(err);
+          res.json(user);
+        });
+      });
+    }
+  });
+});
+
+// UPDATE USER
+
+app.post("/api/update_user", auth, (req, res) => {
   let updateObj;
   /* req.body will only contain partial data depending on origin 
   so these if statements ensure nothing in the database gets overwritten 
   with undefined values  */
 
-  // if (req.body.origin === "ProfileHeaderCard") {
-  //   updateObj = {
-  //     profilename: req.body.profilename,
-  //     profilenameColor: req.body.profilenameColor,
-  //     photos: {
-  //       primary: req.body.profilephoto,
-  //       header: req.body.headerphoto,
-  //       headerOverlay: req.body.headerOverlay
-  //     }
-  //   };
-  // }
+  if (req.body.origin === "ProfileHeaderCard") {
+    updateObj = {
+      profilename: req.body.profilename,
+      profilenameColor: req.body.profilenameColor,
+      photos: {
+        primary: req.body.primary,
+        header: req.body.headerphoto,
+        headerOverlay: req.body.headerOverlay
+      }
+    };
+  }
 
-  // if (req.body.origin === "AccountSettings") {
-  //   updateObj = {
-  //     profilename: req.body.profilename,
-  //     email: req.body.email,
-  //     role: req.body.role,
-  //     firstName: req.body.firstName,
-  //     lastName: req.body.lastName,
-  //     address: {
-  //       street: req.body.street,
-  //       city: req.body.city,
-  //       state: req.body.state,
-  //       postalCode: req.body.postalCode
-  //     }
-  //   };
-  // }
+  if (req.body.origin === "AccountSettings") {
+    updateObj = {
+      profilename: req.body.profilename,
+      email: req.body.email,
+      role: req.body.role,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      address: {
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        postalCode: req.body.postalCode
+      }
+    };
+  }
 
-  // User.findByIdAndUpdate(req.user._id, updateObj, { new: true }, (err, doc) => {
-  //   if (err) return res.status(400).send(err);
-  //   if (!doc) return res.status(400).send({ success: false });
-  //   res.json(doc);
-  // });
+  User.findByIdAndUpdate(req.user._id, updateObj, { new: true }, (err, doc) => {
+    if (err) return res.status(400).send(err);
+    if (!doc) return res.status(400).send({ success: false });
+    res.json(doc);
+  });
 });
 
 // DELETE //
