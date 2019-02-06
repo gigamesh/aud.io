@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
 const app = express();
+const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static("client/build"));
+app.use(cors());
 
 // GET //
 
@@ -229,7 +231,7 @@ app.post("/api/usergearitem", (req, res) => {
 
 app.post("/api/upload", auth, (req, res) => {
   const storage = multer.diskStorage({
-    destination: `./userImages/${req.user.profilename}/`,
+    destination: `./client/public/userImages/${req.user.profilename}/`,
     filename: function(req, file, cb) {
       cb(
         null,
@@ -246,7 +248,6 @@ app.post("/api/upload", auth, (req, res) => {
     const mimetype = filetypes.test(file.mimetype);
 
     if (extname && mimetype) {
-      console.log(file.mimetype);
       cb(null, true);
     } else {
       cb({ message: "Must be JPG or PNG" }, false);
