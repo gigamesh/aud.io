@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -6,12 +7,16 @@ const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
 const app = express();
 const cors = require("cors");
-const path = require("path");
-const multer = require("multer");
+// const path = require("path");
+// const multer = require("multer");
+const cloudinary = require("cloudinary");
+const formData = require("express-form-data");
+
+// CONFIG //
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || config.DATABASE);
-//
+
 const { User } = require("./models/User");
 const { UserGearItem } = require("./models/UserGearItem");
 const { MasterGearItem } = require("./models/MasterGearItem");
@@ -19,11 +24,39 @@ const { Genre } = require("./models/Genre");
 
 const { auth } = require("./middleware/auth");
 
+const CLIENT_ORIGIN =
+  process.env.NODE_ENV === "production"
+    ? "http://aud-io.herokuapp.com"
+    : "http://localhost:3000";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+});
+
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
+
+app.use(formData.parse());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(compression());
 app.use(express.static("client/build"));
-app.use(cors());
+
+// IMAGE UPLOADER
+
+app.post("/api/upload", auth, (req, res) => {
+  const values = Object.values(req.files);
+  const promises = values.map(image => cloudinary.uploader.upload(image.path));
+
+  Promise.all(promises)
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
+});
 
 // GET //
 
@@ -225,56 +258,6 @@ app.post("/api/usergearitem", (req, res) => {
       res.json(doc);
     }
   );
-});
-
-// IMAGE UPLOADER
-
-app.post("/api/upload", auth, (req, res) => {
-  const storage = multer.diskStorage({
-    destination: `./client/public/userImages/${req.user.profilename}/`,
-    filename: function(req, file, cb) {
-      cb(
-        null,
-        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-      );
-    }
-  });
-
-  const fileFilter = (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-      cb(null, true);
-    } else {
-      cb({ message: "Must be JPG or PNG" }, false);
-    }
-  };
-
-  const multerOptions = {
-    storage,
-    fileFilter,
-    limits: { fileSize: 1024 * 1024 * 6 }
-  };
-
-  const upload = multer(multerOptions).single("primary");
-
-  upload(req, res, err => {
-    if (err) {
-      res.status(400).send(err);
-    } else {
-      User.findById(req.user._id, (err, user) => {
-        user.photos.primary = req.file.path;
-        user.save((err, user) => {
-          if (err) return res.status(400).send(err);
-          res.json(user);
-        });
-      });
-    }
-  });
 });
 
 // UPDATE USER

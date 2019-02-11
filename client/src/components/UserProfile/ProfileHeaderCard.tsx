@@ -8,17 +8,8 @@ import Hidden from "@material-ui/core/Hidden";
 import Button from "@material-ui/core/Button";
 import withWidth from "@material-ui/core/withWidth";
 import Edit from "@material-ui/icons/Edit";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import MyFormControl from "../mui/MyFormControl";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
+import ProfileEditModal from "./ProfileEditModal";
+
 import { withFormik, InjectedFormikProps } from "formik";
 import * as yup from "yup";
 import { IUser, IObj } from "../../typeDefs";
@@ -63,6 +54,13 @@ class ProfileHeaderCard extends React.Component<
 > {
   state = initialState;
 
+  componentDidMount() {
+    this.setState({
+      profilenameColor: this.props.user.profilenameColor,
+      headerOverlay: this.props.user.photos.headerOverlay
+    });
+  }
+
   handleEditOpen = () => {
     this.setState({ editOpen: true });
   };
@@ -87,25 +85,49 @@ class ProfileHeaderCard extends React.Component<
     });
   };
 
+  addFileHandler = (e: React.ChangeEvent<IObj>) => {
+    this.props.handleChange(e);
+    const id = e.target.id;
+    const file = e.target.files[0];
+
+    // if (id === "profilephoto") {
+    //   this.setState({ profilePhotoName: file.name });
+    // } else if (id === "headerphoto") {
+    //   this.setState({ headerPhotoName: file.name });
+    // }
+    this.props.setFieldValue(id, file);
+  };
+
   submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let values = this.props.values;
     values.profilenameColor = this.state.profilenameColor;
     values.headerOverlay = this.state.headerOverlay;
+
+    //validate image
+    if (values.profilephoto || values.headerphoto) {
+      const photos = [values.profilephoto, values.headerphoto];
+      photos.forEach(photo => {
+        console.log(
+          JSON.stringify(
+            {
+              fileName: photo.name,
+              type: photo.type,
+              size: `${photo.size} bytes`
+            },
+            null,
+            2
+          )
+        );
+      });
+    }
+
     this.props.onFormSubmit(values);
     this.handleEditClose();
   };
 
-  componentDidMount() {
-    this.setState({
-      profilenameColor: this.props.user.profilenameColor,
-      headerOverlay: this.props.user.photos.headerOverlay
-    });
-  }
-
   render() {
-    let props = this.props;
-    let {
+    const {
       values,
       handleChange,
       handleBlur,
@@ -115,7 +137,7 @@ class ProfileHeaderCard extends React.Component<
       pathId
     } = this.props;
 
-    let headerBackground =
+    const headerBackground =
       user.photos.header || `/img/profile/default-header.jpg`;
 
     const OuterWrap = styled.div`
@@ -231,19 +253,6 @@ class ProfileHeaderCard extends React.Component<
         </EditBn>
       ) : null;
 
-    const EditDialogTopLineWrap = styled.div`
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      .namecolor--wrap {
-        float: right;
-      }
-      input {
-        display: inline-block;
-        cursor: pointer;
-      }
-    `;
-
     return (
       <React.Fragment>
         <OuterWrap>
@@ -266,154 +275,22 @@ class ProfileHeaderCard extends React.Component<
           </InnerWrap>
         </OuterWrap>
 
-        <div>
-          <Dialog
-            fullWidth
-            maxWidth="md"
-            fullScreen={props.width === "xs"}
-            transitionDuration={500}
-            open={this.state.editOpen || false}
-            onClose={this.handleEditClose}
-            aria-labelledby="form-dialog-title"
-          >
-            <form onSubmit={this.submitHandler}>
-              <DialogTitle
-                id="form-dialog-title"
-                style={{ textAlign: "center" }}
-              >
-                Edit Profile
-              </DialogTitle>
-              <DialogContent>
-                <EditDialogTopLineWrap>
-                  <MyFormControl
-                    fullWidth
-                    aria-describedby="profile-error-text"
-                    error={touched.profilename && errors.profilename}
-                  >
-                    <InputLabel htmlFor="profilename">Profile Name</InputLabel>
-                    <Input
-                      id="profilename"
-                      name="profilename"
-                      placeholder="Profile Name"
-                      type="text"
-                      value={values.profilename}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <FormHelperText id="profile-error-text">
-                      {touched.profilename && errors.profilename && (
-                        <span>{errors.profilename}</span>
-                      )}
-                    </FormHelperText>
-                  </MyFormControl>
-                  <MyFormControl aria-describedby="profile-color-text">
-                    <div className="namecolor--wrap">
-                      <InputLabel htmlFor="namecolor">Color:</InputLabel>
-                      <Input
-                        disableUnderline
-                        id="namecolor"
-                        type="color"
-                        name="namecolor"
-                        onChange={this.handleColorChange}
-                        value={this.state.profilenameColor}
-                      />
-                    </div>
-                  </MyFormControl>
-                </EditDialogTopLineWrap>
-                <MyFormControl
-                  fullWidth
-                  aria-describedby="profilephoto-error-text"
-                  error={touched.profilephoto && errors.profilephoto}
-                >
-                  <InputLabel htmlFor="profilephoto">
-                    Profile Photo URL
-                  </InputLabel>
-                  <Input
-                    id="profilephoto"
-                    name="profilephoto"
-                    placeholder="Profile Photo URL"
-                    type="url"
-                    value={values.profilephoto}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <FormHelperText id="headerphoto-error-text">
-                    {touched.profilephoto && errors.profilephoto && (
-                      <span>{errors.profilephoto}</span>
-                    )}
-                  </FormHelperText>
-                </MyFormControl>
-                <MyFormControl
-                  fullWidth
-                  aria-describedby="headerphoto-error-text"
-                  error={touched.headerphoto && errors.headerphoto}
-                >
-                  <InputLabel htmlFor="headerphoto">
-                    Header Photo URL
-                  </InputLabel>
-                  <Input
-                    id="headerphoto"
-                    name="headerphoto"
-                    placeholder="Header Photo URL"
-                    type="url"
-                    value={values.headerphoto}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <FormHelperText id="headerphoto-error-text">
-                    {touched.headerphoto && errors.headerphoto && (
-                      <span>{errors.headerphoto}</span>
-                    )}
-                  </FormHelperText>
-                </MyFormControl>
-                <MyFormControl horizontalcenter="true" fullWidth>
-                  <Typography variant="body2">Header Photo Overlay</Typography>
-                  <RadioGroup
-                    row
-                    aria-label="overlay"
-                    name="overlay"
-                    value={this.state.headerOverlay}
-                    onChange={this.handleOverlayChange}
-                  >
-                    <FormControlLabel
-                      value="rgba(3,3,3,0.5)"
-                      control={<Radio color="default" />}
-                      label="Darker"
-                    />
-                    <FormControlLabel
-                      value="rgba(3,3,3,0.25)"
-                      control={<Radio color="default" />}
-                      label="Dark"
-                    />
-                    <FormControlLabel
-                      value="rgba(3,3,3,0)"
-                      control={<Radio color="default" />}
-                      label="None"
-                    />
-                    <FormControlLabel
-                      value="rgba(250,250,250,0.35)"
-                      control={<Radio color="default" />}
-                      label="Light"
-                    />
-                    <FormControlLabel
-                      value="rgba(250,250,250,0.7)"
-                      control={<Radio color="default" />}
-                      label="Lighter"
-                    />
-                  </RadioGroup>
-                </MyFormControl>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleEditClose} color="primary">
-                  Cancel
-                </Button>
-                <Button type="submit" color="primary">
-                  Submit
-                </Button>
-              </DialogActions>
-            </form>
-          </Dialog>
-        </div>
+        <ProfileEditModal
+          values={values}
+          handleChange={handleChange}
+          handleBlur={handleBlur}
+          touched={touched}
+          errors={errors}
+          handleEditClose={this.handleEditClose}
+          submitHandler={this.submitHandler}
+          handleColorChange={this.handleColorChange}
+          handleOverlayChange={this.handleOverlayChange}
+          headerOverlay={this.state.headerOverlay}
+          editOpen={this.state.editOpen}
+          profilenameColor={this.state.profilenameColor}
+          setFieldValue={this.props.setFieldValue}
+          addFileHandler={this.addFileHandler}
+        />
       </React.Fragment>
     );
   }
@@ -424,18 +301,14 @@ type FormikVals = Partial<ReturnType<typeof mapStateToProps>>;
 const FormikForm = withFormik<Props, FormikVals>({
   mapPropsToValues(props: IObj) {
     return {
-      profilename: props.profilename,
-      headerphoto: props.headerphoto,
-      profilephoto: props.profilephoto
+      profilename: props.profilename
     };
   },
   validationSchema: yup.object().shape({
     profilename: yup
       .string()
       .max(50, (props: IObj) => `Name may not exceed ${props.max} characters`)
-      .required("Profile name required"),
-    headerphoto: yup.string().url("Must be a valid URL"),
-    profilephoto: yup.string().url("Must be a valid URL")
+      .required("Profile name required")
   }),
   handleSubmit: () => {}
 })(ProfileHeaderCard) as any;
@@ -443,8 +316,6 @@ const FormikForm = withFormik<Props, FormikVals>({
 const mapStateToProps = (state: RootState) => {
   return {
     profilename: state.user.profilename || "",
-    headerphoto: state.user.photos.header || "",
-    profilephoto: state.user.photos.primary || "",
     profilenameColor: state.user.profilenameColor || "#ffffff",
     headerOverlay: state.user.photos.headerOverlay || "rgba(3,3,3,0)"
   };

@@ -47,7 +47,7 @@ window.onbeforeunload = () => {
 sagaMiddleware.run(watchUser);
 sagaMiddleware.run(watchSearch);
 
-const app = (
+const FinalApp = () => (
   <Provider store={store}>
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <BrowserRouter>
@@ -59,6 +59,13 @@ const app = (
 
 const root = document.getElementById("root");
 if (root != null) {
-  ReactDOM.render(app, root);
-  registerServiceWorker();
+  ReactDOM.render(<FinalApp />, root);
+  // if (module.hot) {
+  //   module.hot.accept(FinalApp, () => {
+  //     const NextApp = FinalApp;
+  //     ReactDOM.render(<NextApp />, root);
+  //   });
+  // }
 }
+
+registerServiceWorker();
