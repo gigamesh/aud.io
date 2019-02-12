@@ -102,18 +102,15 @@ const userSchema = mongoose.Schema(
     },
     photos: {
       primary: {
-        type: String,
-        maxlength: 500
+        type: Object
       },
       secondary: [
         {
-          type: String,
-          maxlength: 500
+          type: Object
         }
       ],
       header: {
-        type: String,
-        maxlength: 500
+        type: Object
       },
       headerOverlay: {
         type: String

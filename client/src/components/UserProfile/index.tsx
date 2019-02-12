@@ -41,7 +41,7 @@ class UserProfile extends React.Component<any, any> {
       <WaveformLoader />
     ) : (
       <React.Fragment>
-        <ProfileHeaderCard user={this.props.user} pathId={this.pathId} />
+        <ProfileHeaderCard pathId={this.pathId} />
         <ProfileTabs />
       </React.Fragment>
     );

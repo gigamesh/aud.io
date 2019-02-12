@@ -7,7 +7,8 @@ import {
   logoutUserSaga,
   userUpdateSaga,
   userSignupSaga,
-  profileDataSaga
+  profileDataSaga,
+  profileUpdateSaga
 } from "./userSagas";
 
 import { getUsersSaga } from "./searchSagas";
@@ -19,6 +20,7 @@ export function* watchUser() {
     takeEvery(actionTypes.LOGOUT_USER_INIT, logoutUserSaga),
     takeEvery(actionTypes.PROFILE_DATA_INIT, profileDataSaga),
     takeEvery(actionTypes.USER_UPDATE_INIT, userUpdateSaga),
+    takeEvery(actionTypes.PROFILE_UPDATE_INIT, profileUpdateSaga),
     takeEvery(actionTypes.USER_SIGNUP_INIT, userSignupSaga)
   ]);
 }

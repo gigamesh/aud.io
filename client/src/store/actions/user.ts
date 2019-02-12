@@ -1,6 +1,7 @@
 import actionTypes from "./actionTypes";
 import { UserSignupVals } from "../sagas/userSagas";
-import { IUser } from "../../typeDefs";
+import { IUser, IObj } from "../../typeDefs";
+import { type } from "os";
 
 export const clearErrorMsg = () => {
   return {
@@ -89,6 +90,17 @@ export const updateUser = (values: UpdateUserVals, origin: String) => {
     values,
     origin
   };
+};
+
+export const updateProfile = (formData: IObj) => {
+  return {
+    type: actionTypes.PROFILE_UPDATE_INIT,
+    formData
+  };
+};
+
+export const updateProfileSuccess = (payload: IObj) => {
+  return { type: actionTypes.PROFILE_UPDATE_SUCCESS, payload };
 };
 
 export const userUpdateSuccess = (values: IUser) => {

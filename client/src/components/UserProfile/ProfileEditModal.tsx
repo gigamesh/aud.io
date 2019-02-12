@@ -17,26 +17,6 @@ import Button from "@material-ui/core/Button";
 import { IObj } from "../../typeDefs";
 
 class ProfileEditModal extends React.Component<IObj, {}> {
-  state = {
-    profilePhotoName: "",
-    headerPhotoName: "",
-    profilePhotoError: "",
-    headerPhotoError: ""
-  };
-
-  // addFileHandler = (e: React.ChangeEvent<IObj>) => {
-  //   this.props.handleChange(e);
-  //   const id = e.target.id;
-  //   const file = e.target.files[0];
-
-  //   if (id === "profilephoto") {
-  //     this.setState({ profilePhotoName: file.name });
-  //   } else if (id === "headerphoto") {
-  //     this.setState({ headerPhotoName: file.name });
-  //   }
-  //   this.props.setFieldValue(id, file);
-  // };
-
   render() {
     const {
       values,
@@ -52,9 +32,11 @@ class ProfileEditModal extends React.Component<IObj, {}> {
       submitHandler,
       handleColorChange,
       handleOverlayChange,
-      addFileHandler
+      addFileHandler,
+      profilephoto,
+      headerphoto,
+      uploadErrors
     } = this.props;
-    const { profilePhotoError, headerPhotoError } = this.state;
 
     const EditDialogTopLineWrap = styled.div`
       display: flex;
@@ -140,7 +122,7 @@ class ProfileEditModal extends React.Component<IObj, {}> {
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
               <MyFormControl
                 aria-describedby="profilephoto-error-text"
-                error={touched.profilephoto && errors.profilephoto}
+                error={uploadErrors.profilephoto}
               >
                 <div>
                   <FileAddLabel htmlFor="profilephoto">
@@ -153,9 +135,9 @@ class ProfileEditModal extends React.Component<IObj, {}> {
                     Profile Photo
                   </FileAddLabel>
 
-                  {profilePhotoError && (
+                  {uploadErrors.profilephoto && (
                     <FormHelperText id="profile-photo-error-text" error>
-                      {profilePhotoError}
+                      {uploadErrors.profilephoto}
                     </FormHelperText>
                   )}
 
@@ -168,20 +150,14 @@ class ProfileEditModal extends React.Component<IObj, {}> {
                   />
                   <FileName>
                     <Typography color="primary" variant="body2">
-                      {this.state.profilePhotoName}
+                      {profilephoto.name}
                     </Typography>
                   </FileName>
                 </div>
-
-                {touched.profilephoto && errors.profilephoto && (
-                  <FormHelperText id="headerphoto-error-text">
-                    {errors.profilephoto}
-                  </FormHelperText>
-                )}
               </MyFormControl>
               <MyFormControl
                 aria-describedby="headerphoto-error-text"
-                error={touched.headerphoto && errors.headerphoto}
+                error={uploadErrors.profilephoto}
               >
                 <div>
                   <FileAddLabel htmlFor="headerphoto">
@@ -194,9 +170,9 @@ class ProfileEditModal extends React.Component<IObj, {}> {
                     Header Photo
                   </FileAddLabel>
 
-                  {headerPhotoError && (
+                  {uploadErrors.headerphoto && (
                     <FormHelperText id="header-photo-error-text" error>
-                      {headerPhotoError}
+                      {uploadErrors.headerphoto}
                     </FormHelperText>
                   )}
 
@@ -209,15 +185,10 @@ class ProfileEditModal extends React.Component<IObj, {}> {
                   />
                   <FileName>
                     <Typography color="primary" variant="body2">
-                      {this.state.headerPhotoName}
+                      {headerphoto.name}
                     </Typography>
                   </FileName>
                 </div>
-                <FormHelperText id="headerphoto-error-text">
-                  {touched.headerphoto && errors.headerphoto && (
-                    <span>{errors.headerphoto}</span>
-                  )}
-                </FormHelperText>
               </MyFormControl>
             </div>
             <MyFormControl horizontalcenter="true" fullWidth>
@@ -261,7 +232,13 @@ class ProfileEditModal extends React.Component<IObj, {}> {
             <Button onClick={handleEditClose} color="primary">
               Cancel
             </Button>
-            <Button type="submit" color="primary">
+            <Button
+              type="submit"
+              color="primary"
+              disabled={
+                !!uploadErrors.profilephoto || !!uploadErrors.headerphoto
+              }
+            >
               Submit
             </Button>
           </DialogActions>

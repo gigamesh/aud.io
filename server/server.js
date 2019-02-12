@@ -47,17 +47,6 @@ app.use(cookieParser());
 app.use(compression());
 app.use(express.static("client/build"));
 
-// IMAGE UPLOADER
-
-app.post("/api/upload", auth, (req, res) => {
-  const values = Object.values(req.files);
-  const promises = values.map(image => cloudinary.uploader.upload(image.path));
-
-  Promise.all(promises)
-    .then(results => res.json(results))
-    .catch(err => res.status(400).json(err));
-});
-
 // GET //
 
 app.get("/api/auth", auth, (req, res) => {
@@ -260,47 +249,74 @@ app.post("/api/usergearitem", (req, res) => {
   );
 });
 
-// UPDATE USER
+// UPDATE USER ACCOUNT SETTINGS
 
 app.post("/api/update_user", auth, (req, res) => {
-  let updateObj;
-  /* req.body will only contain partial data depending on origin 
-  so these if statements ensure nothing in the database gets overwritten 
-  with undefined values  */
-
-  if (req.body.origin === "ProfileHeaderCard") {
-    updateObj = {
-      profilename: req.body.profilename,
-      profilenameColor: req.body.profilenameColor,
-      photos: {
-        primary: req.body.primary,
-        header: req.body.headerphoto,
-        headerOverlay: req.body.headerOverlay
-      }
-    };
-  }
-
-  if (req.body.origin === "AccountSettings") {
-    updateObj = {
-      profilename: req.body.profilename,
-      email: req.body.email,
-      role: req.body.role,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      address: {
-        street: req.body.street,
-        city: req.body.city,
-        state: req.body.state,
-        postalCode: req.body.postalCode
-      }
-    };
-  }
+  let updateObj = {
+    profilename: req.body.profilename,
+    email: req.body.email,
+    role: req.body.role,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    address: {
+      street: req.body.street,
+      city: req.body.city,
+      state: req.body.state,
+      postalCode: req.body.postalCode
+    }
+  };
 
   User.findByIdAndUpdate(req.user._id, updateObj, { new: true }, (err, doc) => {
     if (err) return res.status(400).send(err);
     if (!doc) return res.status(400).send({ success: false });
     res.json(doc);
   });
+});
+
+// UPDATE USER PROFILE
+
+app.post("/api/update_profile", auth, (req, res) => {
+  let imageFiles = Object.values(req.files);
+
+  const promises = imageFiles.map(image => {
+    return cloudinary.v2.uploader.upload(image.path, {
+      folder: `aud-io/users/${req.user._id}/`,
+      public_id: image.fieldName
+    });
+  });
+
+  Promise.all(promises)
+    .then(results => {
+      const headerObj = results.find(obj => {
+        return /headerphoto/.test(obj.public_id);
+      });
+      const profileObj = results.find(obj => {
+        return /profilephoto/.test(obj.public_id);
+      });
+
+      let updateObj = {
+        profilename: req.body.profilename,
+        headerOverlay: req.body.headerOverlay,
+        profilenameColor: req.body.profilenameColor,
+        photos: {
+          headerOverlay: req.body.headerOverlay,
+          primary: profileObj,
+          header: headerObj
+        }
+      };
+
+      User.findByIdAndUpdate(
+        req.user._id,
+        updateObj,
+        { new: true },
+        (err, doc) => {
+          if (err) return res.status(400).send(err);
+          if (!doc) return res.status(400).send({ success: false });
+          res.json(doc);
+        }
+      );
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // DELETE //

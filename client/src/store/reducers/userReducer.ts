@@ -99,6 +99,18 @@ const user = (state = initialState, action: IActionType) => {
         },
         loading: false
       };
+    case actionTypes.PROFILE_UPDATE_INIT:
+      return {
+        ...state
+        // loading: true
+      };
+    case actionTypes.PROFILE_UPDATE_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        ...action.payload,
+        loading: false
+      };
     case actionTypes.USER_SIGNUP_INIT:
       return {
         ...state,

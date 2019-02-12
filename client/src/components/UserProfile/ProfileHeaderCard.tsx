@@ -14,7 +14,7 @@ import { withFormik, InjectedFormikProps } from "formik";
 import * as yup from "yup";
 import { IUser, IObj } from "../../typeDefs";
 
-import { updateUser } from "../../store/actions";
+import { updateProfile } from "../../store/actions";
 
 type IProfileHeaderProps = {
   pathId: string;
@@ -38,14 +38,19 @@ type FormVals = {
 };
 
 type Props = InjectedFormikProps<
-  ReturnType<typeof mapDispatchToProps> & IProfileHeaderProps,
+  ReturnType<typeof mapDispatchToProps> &
+    ReturnType<typeof mapStateToProps> &
+    IProfileHeaderProps,
   any
 >;
 
-const initialState = {
+const initialState: { [index: string]: any } = {
   editOpen: false,
   profilenameColor: "#ffffff",
-  headerOverlay: "rgba(3,3,3,0)"
+  headerOverlay: "rgba(3,3,3,0)",
+  profilephoto: {},
+  headerphoto: {},
+  uploadErrors: { profilephoto: "", headerphoto: "" }
 };
 
 class ProfileHeaderCard extends React.Component<
@@ -56,7 +61,7 @@ class ProfileHeaderCard extends React.Component<
 
   componentDidMount() {
     this.setState({
-      profilenameColor: this.props.user.profilenameColor,
+      profilenameColor: this.props.profilenameColor,
       headerOverlay: this.props.user.photos.headerOverlay
     });
   }
@@ -66,7 +71,11 @@ class ProfileHeaderCard extends React.Component<
   };
 
   handleEditClose = () => {
-    this.setState({ editOpen: false });
+    this.setState({
+      editOpen: false,
+      profilephoto: initialState.profilephoto,
+      headerphoto: initialState.headerphoto
+    });
   };
 
   handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,40 +98,66 @@ class ProfileHeaderCard extends React.Component<
     this.props.handleChange(e);
     const id = e.target.id;
     const file = e.target.files[0];
+    let isValid = true;
 
-    // if (id === "profilephoto") {
-    //   this.setState({ profilePhotoName: file.name });
-    // } else if (id === "headerphoto") {
-    //   this.setState({ headerPhotoName: file.name });
-    // }
+    //validate image
+
+    isValid = this.validateFile(file, id);
+    if (!isValid) return;
+
+    if (id === "profilephoto") {
+      this.setState({
+        profilephoto: file
+      });
+    } else if (id === "headerphoto") {
+      this.setState({
+        headerphoto: file
+      });
+    }
+
     this.props.setFieldValue(id, file);
+  };
+
+  validateFile = (file: IObj, photoCategory: string) => {
+    let error = "";
+    if (file.size > 10000000) {
+      error = "File must be less than 10mb";
+    }
+    if (!/(jpeg|jpg|png|gif)/.test(file.type)) {
+      error = "File must be JPG, PNG, or GIF";
+    }
+    const errorObject = {
+      ...this.state.uploadErrors,
+      [photoCategory]: error
+    };
+
+    this.setState({ uploadErrors: errorObject });
+    if (error) return false;
+    else return true;
   };
 
   submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     let values = this.props.values;
-    values.profilenameColor = this.state.profilenameColor;
-    values.headerOverlay = this.state.headerOverlay;
 
-    //validate image
-    if (values.profilephoto || values.headerphoto) {
-      const photos = [values.profilephoto, values.headerphoto];
-      photos.forEach(photo => {
-        console.log(
-          JSON.stringify(
-            {
-              fileName: photo.name,
-              type: photo.type,
-              size: `${photo.size} bytes`
-            },
-            null,
-            2
-          )
-        );
-      });
-    }
+    const formData = new FormData();
+    formData.append("profilenameColor", this.state.profilenameColor);
+    formData.append("profilename", values.profilename);
+    formData.append("headerOverlay", this.state.headerOverlay);
+    formData.append(
+      "profilephoto",
+      this.state.profilephoto,
+      this.state.profilephoto.name
+    );
+    formData.append(
+      "headerphoto",
+      this.state.headerphoto,
+      this.state.headerphoto.name
+    );
 
-    this.props.onFormSubmit(values);
+    this.props.onFormSubmit(formData);
+
     this.handleEditClose();
   };
 
@@ -134,11 +169,12 @@ class ProfileHeaderCard extends React.Component<
       touched,
       errors,
       user,
-      pathId
+      pathId,
+      headerphoto,
+      profilephoto
     } = this.props;
 
-    const headerBackground =
-      user.photos.header || `/img/profile/default-header.jpg`;
+    const headerBackground = headerphoto || `/img/profile/default-header.jpg`;
 
     const OuterWrap = styled.div`
       position: relative;
@@ -159,7 +195,7 @@ class ProfileHeaderCard extends React.Component<
     `;
 
     const ProfileImgDiv = styled.div`
-      background: url(${user.photos.primary || "/img/avatar.jpg"});
+      background: url(${profilephoto || "/img/avatar.jpg"});
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
@@ -290,6 +326,9 @@ class ProfileHeaderCard extends React.Component<
           profilenameColor={this.state.profilenameColor}
           setFieldValue={this.props.setFieldValue}
           addFileHandler={this.addFileHandler}
+          profilephoto={this.state.profilephoto}
+          headerphoto={this.state.headerphoto}
+          uploadErrors={this.state.uploadErrors}
         />
       </React.Fragment>
     );
@@ -313,18 +352,29 @@ const FormikForm = withFormik<Props, FormikVals>({
   handleSubmit: () => {}
 })(ProfileHeaderCard) as any;
 
+const linkBuilder = (photoObj: IObj, width: string) => {
+  const root = "https://res.cloudinary.com/masurka/image/upload/";
+  const { format, public_id } = photoObj;
+  const transforms = `w_${width},dpr_auto/`;
+  const link = root + transforms + public_id + "." + format;
+  return link;
+};
+
 const mapStateToProps = (state: RootState) => {
   return {
     profilename: state.user.profilename || "",
     profilenameColor: state.user.profilenameColor || "#ffffff",
-    headerOverlay: state.user.photos.headerOverlay || "rgba(3,3,3,0)"
+    headerOverlay: state.user.photos.headerOverlay || "rgba(3,3,3,0)",
+    user: state.user,
+    headerphoto: linkBuilder(state.user.photos.header, "1200"),
+    profilephoto: linkBuilder(state.user.photos.primary, "500")
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    onFormSubmit: (vals: FormVals) => {
-      dispatch(updateUser(vals, "ProfileHeaderCard"));
+    onFormSubmit: (formData: IObj) => {
+      dispatch(updateProfile(formData));
     }
   };
 };

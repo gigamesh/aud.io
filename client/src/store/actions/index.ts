@@ -12,6 +12,8 @@ import {
   logoutUserSuccess,
   updateUser,
   userUpdateSuccess,
+  updateProfile,
+  updateProfileSuccess,
   userSignup,
   userSignupFail,
   userSignupSuccess,
@@ -41,6 +43,8 @@ export {
   logoutUser,
   logoutUserSuccess,
   updateUser,
+  updateProfile,
+  updateProfileSuccess,
   userUpdateSuccess,
   userSignup,
   userSignupFail,
@@ -68,6 +72,7 @@ export type RootAction =
   | ActionType<typeof logoutUser>
   | ActionType<typeof logoutUserSuccess>
   | ActionType<typeof updateUser>
+  | ActionType<typeof updateProfile>
   | ActionType<typeof userUpdateSuccess>
   | ActionType<typeof userSignup>
   | ActionType<typeof userSignupFail>
