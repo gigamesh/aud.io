@@ -37,9 +37,7 @@ class UserProfile extends React.Component<any, any> {
     if (this.props.user.errorMsg) {
       return <div>{this.props.user.errorMsg}</div>;
     }
-    return this.props.loading ? (
-      <WaveformLoader />
-    ) : (
+    return (
       <React.Fragment>
         <ProfileHeaderCard pathId={this.pathId} />
         <ProfileTabs />

@@ -5,6 +5,7 @@ import Card from "@material-ui/core/Card";
 import withWidth from "@material-ui/core/withWidth";
 import Typography from "@material-ui/core/Typography";
 import WaveformLoader from "../UI/WaveformLoader";
+import { linkBuilder } from "../../util";
 import { IUser, IObj } from "../../typeDefs";
 
 interface Props {
@@ -13,16 +14,17 @@ interface Props {
 
 class UserCard extends React.Component<Props> {
   state = {
-    loaded: false
+    loaded: false,
+    src: ""
   };
 
   componentDidMount() {
     const loaderImg = new Image();
 
-    loaderImg.src = this.props.user.photos.header;
+    loaderImg.src = linkBuilder(this.props.user.photos.header, 500);
 
     loaderImg.onload = () => {
-      this.setState({ loaded: true });
+      this.setState({ loaded: true, src: loaderImg.src });
     };
   }
 
@@ -41,7 +43,7 @@ class UserCard extends React.Component<Props> {
     const defHeader = "/img/profile/default-header.jpg";
 
     const InnerWrap = styled.div`
-      background: url(${user.photos.header || defHeader});
+      background: url(${this.state.src || defHeader});
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;

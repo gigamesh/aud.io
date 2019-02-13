@@ -83,13 +83,6 @@ type ProfileUpdateAction = {
 };
 
 export function* profileUpdateSaga(action: ProfileUpdateAction) {
-  // const response = yield axios
-  //   .post(`/api/update_profile`, action.formData)
-  //   .then(res => res.data)
-  //   .catch(error => {
-  //     console.log(error);
-  //   });
-
   const response = yield axios
     .post(`/api/update_profile`, action.formData)
     .then(res => res.data)

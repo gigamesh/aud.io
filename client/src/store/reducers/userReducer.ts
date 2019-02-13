@@ -2,6 +2,7 @@ import actionTypes from "../actions/actionTypes";
 
 const initialState = {
   loading: false,
+  profileUpdateLoading: false,
   errorMsg: "",
   isAuth: false,
   _id: "",
@@ -101,15 +102,14 @@ const user = (state = initialState, action: IActionType) => {
       };
     case actionTypes.PROFILE_UPDATE_INIT:
       return {
-        ...state
-        // loading: true
+        ...state,
+        profileUpdateLoading: true
       };
     case actionTypes.PROFILE_UPDATE_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         ...action.payload,
-        loading: false
+        profileUpdateLoading: false
       };
     case actionTypes.USER_SIGNUP_INIT:
       return {
@@ -131,7 +131,6 @@ const user = (state = initialState, action: IActionType) => {
         ...action.userData
       };
     case actionTypes.PROFILE_DATA_INIT:
-      // console.log('_id:' + state._id, 'currentProfileId:' + state.currentProfileId);
       return {
         ...initialState,
         loading: true,

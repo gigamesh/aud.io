@@ -294,27 +294,35 @@ app.post("/api/update_profile", auth, (req, res) => {
         return /profilephoto/.test(obj.public_id);
       });
 
-      let updateObj = {
-        profilename: req.body.profilename,
-        headerOverlay: req.body.headerOverlay,
-        profilenameColor: req.body.profilenameColor,
-        photos: {
-          headerOverlay: req.body.headerOverlay,
-          primary: profileObj,
-          header: headerObj
-        }
-      };
+      // const updateObj = {
+      //   profilename: req.body.profilename,
+      //   headerOverlay: req.body.headerOverlay,
+      //   profilenameColor: req.body.profilenameColor,
+      //   photos: photosObj
+      // };
 
-      User.findByIdAndUpdate(
-        req.user._id,
-        updateObj,
-        { new: true },
-        (err, doc) => {
-          if (err) return res.status(400).send(err);
-          if (!doc) return res.status(400).send({ success: false });
-          res.json(doc);
+      User.findOne({ _id: req.user._id }, (err, user) => {
+        if (err) return res.status(400).send(err);
+        if (!user) return res.status(400).send({ success: false });
+
+        if (headerObj) {
+          user.photos.header = headerObj;
         }
-      );
+        if (profileObj) {
+          user.photos.primary = profileObj;
+        }
+        user.photos.headerOverlay = req.body.headerOverlay;
+        user.profilename = req.body.profilename;
+        user.profilenameColor = req.body.profilenameColor;
+
+        user.save((err, newUser) => {
+          if (err) {
+            console.log(err);
+            return res.json({ success: false, msg: err.errmsg });
+          }
+          res.json(newUser);
+        });
+      });
     })
     .catch(err => res.status(400).json(err));
 });

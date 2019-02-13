@@ -21,12 +21,6 @@ const MyGrid = styled(Grid)<IObj>`
   margin-top: -7px;
 `;
 
-const Text = styled.p<IObj>`
-  color: #444;
-  opacity: ${({ loaded }) => (loaded ? 1 : 0)};
-  transition: opacity 1s ease 500ms;
-`;
-
 class UsersGridLayout extends React.Component<Props> {
   state = {
     loaded: false
@@ -57,17 +51,11 @@ class UsersGridLayout extends React.Component<Props> {
       </Grid>
     ));
 
-    const loadingMessage = () => (
-      <React.Fragment>
-        <Text loaded={this.state.loaded}>
-          Initial load may be delayed to due database interuptions. Thank you
-          for your patience. :)
-        </Text>
-      </React.Fragment>
-    );
+    const message =
+      "Initial load may be delayed to due database interuptions. Thank you for your patience. :)";
 
     return loading ? (
-      <WaveformLoader message={loadingMessage} />
+      <WaveformLoader message={message} loaded={this.state.loaded} />
     ) : (
       <div style={{ padding: "0 3px" }}>
         <MyGrid container spacing={16} justify="center">

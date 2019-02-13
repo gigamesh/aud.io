@@ -14,7 +14,47 @@ import Radio from "@material-ui/core/Radio";
 import Typography from "@material-ui/core/Typography";
 import PhotoAddButton from "../UI/PhotoAddButton";
 import Button from "@material-ui/core/Button";
+import WaveformLoader from "../UI/WaveformLoader";
 import { IObj } from "../../typeDefs";
+
+const EditDialogTopLineWrap = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  input {
+    display: inline-block;
+    cursor: pointer;
+  }
+`;
+
+const FileName = styled.div`
+  margin: 0 auto;
+  max-width: 200px;
+  p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+`;
+
+const FileAddLabel = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+const FullWhiteOut = styled.div`
+  position: fixed;
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+`;
 
 class ProfileEditModal extends React.Component<IObj, {}> {
   render() {
@@ -35,37 +75,15 @@ class ProfileEditModal extends React.Component<IObj, {}> {
       addFileHandler,
       profilephoto,
       headerphoto,
-      uploadErrors
+      uploadErrors,
+      loading
     } = this.props;
 
-    const EditDialogTopLineWrap = styled.div`
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      input {
-        display: inline-block;
-        cursor: pointer;
-      }
-    `;
-
-    const FileName = styled.div`
-      margin: 0 auto;
-      max-width: 200px;
-      p {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-    `;
-
-    const FileAddLabel = styled.label`
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    `;
-
-    return (
+    return loading ? (
+      <FullWhiteOut>
+        <WaveformLoader />
+      </FullWhiteOut>
+    ) : (
       <Dialog
         fullWidth
         maxWidth="md"
@@ -79,6 +97,7 @@ class ProfileEditModal extends React.Component<IObj, {}> {
           <DialogTitle id="form-dialog-title" style={{ textAlign: "center" }}>
             Edit Profile
           </DialogTitle>
+
           <DialogContent>
             <EditDialogTopLineWrap>
               <MyFormControl
@@ -228,6 +247,7 @@ class ProfileEditModal extends React.Component<IObj, {}> {
               </RadioGroup>
             </MyFormControl>
           </DialogContent>
+
           <DialogActions>
             <Button onClick={handleEditClose} color="primary">
               Cancel

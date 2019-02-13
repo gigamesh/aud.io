@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import withWidth from "@material-ui/core/withWidth";
 import Edit from "@material-ui/icons/Edit";
 import ProfileEditModal from "./ProfileEditModal";
+import { linkBuilder } from "../../util";
 
 import { withFormik, InjectedFormikProps } from "formik";
 import * as yup from "yup";
@@ -26,15 +27,6 @@ type SCProps = {
   headerOverlay: string;
   textcolor: string;
   width: string;
-};
-
-type FormVals = {
-  headerOverlay: string;
-  headerphoto: string;
-  origin: string;
-  profilename: string;
-  profilenameColor: string;
-  profilephoto: string;
 };
 
 type Props = InjectedFormikProps<
@@ -64,6 +56,12 @@ class ProfileHeaderCard extends React.Component<
       profilenameColor: this.props.profilenameColor,
       headerOverlay: this.props.user.photos.headerOverlay
     });
+  }
+
+  componentDidUpdate(prevProps: IObj) {
+    if (prevProps.profileUpdateLoading && !this.props.profileUpdateLoading) {
+      this.setState({ profilephoto: {}, headerphoto: {} });
+    }
   }
 
   handleEditOpen = () => {
@@ -157,8 +155,6 @@ class ProfileHeaderCard extends React.Component<
     );
 
     this.props.onFormSubmit(formData);
-
-    this.handleEditClose();
   };
 
   render() {
@@ -329,6 +325,7 @@ class ProfileHeaderCard extends React.Component<
           profilephoto={this.state.profilephoto}
           headerphoto={this.state.headerphoto}
           uploadErrors={this.state.uploadErrors}
+          loading={this.props.profileUpdateLoading}
         />
       </React.Fragment>
     );
@@ -352,22 +349,15 @@ const FormikForm = withFormik<Props, FormikVals>({
   handleSubmit: () => {}
 })(ProfileHeaderCard) as any;
 
-const linkBuilder = (photoObj: IObj, width: string) => {
-  const root = "https://res.cloudinary.com/masurka/image/upload/";
-  const { format, public_id } = photoObj;
-  const transforms = `w_${width},dpr_auto/`;
-  const link = root + transforms + public_id + "." + format;
-  return link;
-};
-
 const mapStateToProps = (state: RootState) => {
   return {
     profilename: state.user.profilename || "",
     profilenameColor: state.user.profilenameColor || "#ffffff",
     headerOverlay: state.user.photos.headerOverlay || "rgba(3,3,3,0)",
     user: state.user,
-    headerphoto: linkBuilder(state.user.photos.header, "1200"),
-    profilephoto: linkBuilder(state.user.photos.primary, "500")
+    headerphoto: linkBuilder(state.user.photos.header, 1200),
+    profilephoto: linkBuilder(state.user.photos.primary, 500),
+    profileUpdateLoading: state.user.profileUpdateLoading
   };
 };
 

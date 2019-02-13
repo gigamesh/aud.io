@@ -1,11 +1,13 @@
 import React from "react";
 import "./WaveformLoader.css";
 import styled from "styled-components";
+import { IObj } from "../../typeDefs";
 
 const WaveFormWrap = styled.div`
   height: 100%;
   width: 100%;
   position: absolute;
+  top: 0;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -35,11 +37,19 @@ const MessageWrap = styled.div`
   font-weight: 500;
 `;
 
-type WaveProps = {
-  message?: () => React.ReactNode;
-};
+const Text = styled.p<IObj>`
+  color: #444;
+  opacity: ${({ loaded }) => (loaded ? 1 : 0)};
+  transition: opacity 2s ease 1s;
+`;
 
-const WaveformLoader = (props: WaveProps) => (
+const loadingMessage = (msg: string, loaded: boolean) => (
+  <React.Fragment>
+    <Text loaded={loaded}>{msg}</Text>
+  </React.Fragment>
+);
+
+const WaveformLoader = (props: IObj) => (
   <WaveFormWrap>
     <WaveForm className="lds-equalizer">
       <div>
@@ -54,7 +64,9 @@ const WaveformLoader = (props: WaveProps) => (
         <div className="lds-equalizer-bar" />
       </div>
     </WaveForm>
-    {props.message && <MessageWrap>{props.message()}</MessageWrap>}
+    {props.message && (
+      <MessageWrap>{loadingMessage(props.message, props.loaded)}</MessageWrap>
+    )}
   </WaveFormWrap>
 );
 
