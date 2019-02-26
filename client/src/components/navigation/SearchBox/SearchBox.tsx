@@ -48,7 +48,6 @@ const styles = (theme: any) =>
 
 const initialState = {
   value: "",
-  suggestions: [],
   redirectID: ""
 };
 
@@ -148,9 +147,6 @@ class SearchBox extends React.Component<IObj, typeof initialState> {
 
   handleSuggestionsClearRequested = () => {
     this.props.clearSearchbox();
-    this.setState({
-      suggestions: []
-    });
   };
 
   handleSearchBoxChange = (

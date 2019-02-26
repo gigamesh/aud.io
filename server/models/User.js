@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("./../config/config").get(process.env.NODE_ENV);
 const SALT_I = 10;
-const { UserGearItem } = require("./UserGearItem");
 const { states, countries } = require("./geography");
 
 const userSchema = mongoose.Schema(
@@ -34,7 +33,7 @@ const userSchema = mongoose.Schema(
       enum: ["musician", "studio"]
     },
     profilename: {
-      type: String, // musician's stage name or recording studio's business name
+      type: String,
       maxlength: 50,
       unique: true
     },
@@ -174,10 +173,6 @@ userSchema.methods.deleteToken = function(token, cb) {
     cb(null, user);
   });
 };
-
-// userSchema.index({
-//   'profilename': 'text'
-//   });
 
 const User = mongoose.model("User", userSchema);
 

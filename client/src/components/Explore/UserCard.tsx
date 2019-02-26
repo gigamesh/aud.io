@@ -20,8 +20,13 @@ class UserCard extends React.Component<Props> {
 
   componentDidMount() {
     const loaderImg = new Image();
+    const headerPhotoObj = this.props.user.photos.header;
+    const fallbackImg =
+      "https://res.cloudinary.com/masurka/image/upload/w_500/v1551148768/aud-io/Sunset_Marina.jpg";
 
-    loaderImg.src = linkBuilder(this.props.user.photos.header, 500);
+    loaderImg.src = headerPhotoObj
+      ? linkBuilder(headerPhotoObj, 500)
+      : fallbackImg;
 
     loaderImg.onload = () => {
       this.setState({ loaded: true, src: loaderImg.src });
@@ -32,6 +37,7 @@ class UserCard extends React.Component<Props> {
     let user = this.props.user;
     let userId = this.props.user._id;
     let profilename = this.props.user.profilename;
+    // console.log(this.state.src);
 
     const OuterWrap = styled.div`
       position: relative;
@@ -40,10 +46,8 @@ class UserCard extends React.Component<Props> {
       padding-top: 50%;
     `;
 
-    const defHeader = "/img/profile/default-header.jpg";
-
     const InnerWrap = styled.div`
-      background: url(${this.state.src || defHeader});
+      background: url(${this.state.src});
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;

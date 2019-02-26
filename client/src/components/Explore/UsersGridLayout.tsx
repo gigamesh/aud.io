@@ -26,7 +26,7 @@ class UsersGridLayout extends React.Component<Props> {
     loaded: false
   };
 
-  public componentDidMount() {
+  componentDidMount() {
     setTimeout(() => this.setState({ loaded: true }), 0);
     let path = this.props.location.pathname;
     let role = path === "/musicians" ? "musician" : "/studios" ? "studio" : "";
@@ -35,7 +35,7 @@ class UsersGridLayout extends React.Component<Props> {
     }
   }
 
-  public shouldComponentUpdate() {
+  shouldComponentUpdate() {
     if (this.props.searchBoxTouched) {
       return false;
     } else {
@@ -43,7 +43,7 @@ class UsersGridLayout extends React.Component<Props> {
     }
   }
 
-  public render() {
+  render() {
     let { users, loading } = this.props;
     let cards = users.map((user, idx) => (
       <Grid item xs={12} md={6} lg={4} key={idx}>

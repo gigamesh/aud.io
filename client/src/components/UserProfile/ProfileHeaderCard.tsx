@@ -170,7 +170,7 @@ class ProfileHeaderCard extends React.Component<
       profilephoto
     } = this.props;
 
-    const headerBackground = headerphoto || `/img/profile/default-header.jpg`;
+    const headerBackground = headerphoto;
 
     const OuterWrap = styled.div`
       position: relative;
@@ -350,13 +350,22 @@ const FormikForm = withFormik<Props, FormikVals>({
 })(ProfileHeaderCard) as any;
 
 const mapStateToProps = (state: RootState) => {
+  const headerPhotoObj = state.user.photos.header;
+  const headerphoto = headerPhotoObj
+    ? linkBuilder(headerPhotoObj, 1200)
+    : "https://res.cloudinary.com/masurka/image/upload/w_1400/v1551148768/aud-io/Sunset_Marina.jpg";
+  const profilephotoObj = state.user.photos.primary;
+  const profilephoto = profilephotoObj
+    ? linkBuilder(profilephotoObj, 500)
+    : "https://res.cloudinary.com/masurka/image/upload/w_400/v1551148705/aud-io/avatar.jpg";
+
   return {
     profilename: state.user.profilename || "",
     profilenameColor: state.user.profilenameColor || "#ffffff",
     headerOverlay: state.user.photos.headerOverlay || "rgba(3,3,3,0)",
     user: state.user,
-    headerphoto: linkBuilder(state.user.photos.header, 1200),
-    profilephoto: linkBuilder(state.user.photos.primary, 500),
+    headerphoto: headerphoto,
+    profilephoto: profilephoto,
     profileUpdateLoading: state.user.profileUpdateLoading
   };
 };

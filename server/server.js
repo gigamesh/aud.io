@@ -7,8 +7,6 @@ const config = require("./config/config").get(process.env.NODE_ENV);
 const compression = require("compression");
 const app = express();
 const cors = require("cors");
-// const path = require("path");
-// const multer = require("multer");
 const cloudinary = require("cloudinary");
 const formData = require("express-form-data");
 
@@ -73,9 +71,9 @@ app.get("/api/usergearitem", (req, res) => {
 });
 
 app.get("/api/gearlist", (req, res) => {
-  let skip = req.query.skip ? parseInt(req.query.skip) : 0;
-  let limit = req.query.limit ? parseInt(req.query.limit) : 0;
-  let order = req.query.order ? req.query.order : "asc";
+  const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+  const order = req.query.order ? req.query.order : "asc";
 
   // ORDER = asc || desc
   UserGearItem.find()
@@ -97,14 +95,14 @@ app.get("/api/users", (req, res) => {
       res.send(user);
     });
   } else {
-    let role = req.query.role || "";
-    let query = req.query.query || "";
-    let genres = req.query.genres || "";
-    let skip = req.query.skip ? parseInt(req.query.skip) : 0;
-    let limit = req.query.limit ? parseInt(req.query.limit) : 0;
-    let order = req.query.order ? req.query.order : "asc";
+    const role = req.query.role || "";
+    const query = req.query.query || "";
+    const genres = req.query.genres || "";
+    const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 0;
+    const order = req.query.order ? req.query.order : "asc";
 
-    let findObj = {};
+    const findObj = {};
     if (role) {
       findObj["role"] = role;
     }
@@ -112,7 +110,7 @@ app.get("/api/users", (req, res) => {
       findObj["profilename"] = new RegExp(query, "gi");
     }
 
-    let dbQuery = User.find(findObj)
+    const dbQuery = User.find(findObj)
       .skip(skip)
       .sort({ _id: order });
 
@@ -146,7 +144,7 @@ app.post("/api/usergearitem", (req, res) => {
       make: req.body.make,
       model: req.body.model
     },
-    (err, result) => {
+    err => {
       if (err) throw err;
     }
   );
@@ -160,7 +158,6 @@ app.post("/api/usergearitem", (req, res) => {
       { new: true },
       (err, user) => {
         if (err) return res.status(400).send(err);
-        // console.log(user.gearList);
       }
     );
     res.status(200).json({
@@ -174,6 +171,16 @@ app.post("/api/mastergearitem", (req, res) => {
   const gearItem = new MasterGearItem(req.body);
 
   gearItem.save((err, item) => {
+    if (err) {
+      return res.json({ success: false });
+    }
+    res.status(200).json(doc);
+  });
+});
+
+app.post("/api/genre", (req, res) => {
+  const genre = new Genre(req.body);
+  genre.save((err, doc) => {
     if (err) {
       return res.json({ success: false });
     }
@@ -198,40 +205,28 @@ app.post("/api/signup", (req, res) => {
   });
 });
 
-app.post("/api/genre", (req, res) => {
-  const genre = new Genre(req.body);
-  genre.save((err, doc) => {
-    if (err) {
-      return res.json({ success: false });
-    }
-    res.status(200).json(doc);
-  });
-});
-
 app.post("/api/login", (req, res) => {
-  User.findOne({ email: req.body.email })
-    // .populate('gearList')
-    .exec((err, user) => {
-      if (!user) return res.json({ isAuth: false, message: "Email not found" });
+  User.findOne({ email: req.body.email }).exec((err, user) => {
+    if (!user) return res.json({ isAuth: false, message: "Email not found" });
 
-      user.comparePassword(req.body.password, (err, isMatch) => {
-        if (!isMatch)
-          return res.json({
-            isAuth: false,
-            message: "Wrong password"
-          });
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch)
+        return res.json({
+          isAuth: false,
+          message: "Wrong password"
+        });
 
-        user.populate("gearList");
+      user.populate("gearList");
 
-        user.generateToken((err, user) => {
-          if (err) return res.status(400).send(err);
-          res.cookie("auth", user.token).json({
-            isAuth: true,
-            userData: user
-          });
+      user.generateToken((err, user) => {
+        if (err) return res.status(400).send(err);
+        res.cookie("auth", user.token).json({
+          isAuth: true,
+          userData: user
         });
       });
     });
+  });
 });
 
 // UPDATE //
@@ -294,13 +289,6 @@ app.post("/api/update_profile", auth, (req, res) => {
         return /profilephoto/.test(obj.public_id);
       });
 
-      // const updateObj = {
-      //   profilename: req.body.profilename,
-      //   headerOverlay: req.body.headerOverlay,
-      //   profilenameColor: req.body.profilenameColor,
-      //   photos: photosObj
-      // };
-
       User.findOne({ _id: req.user._id }, (err, user) => {
         if (err) return res.status(400).send(err);
         if (!user) return res.status(400).send({ success: false });
@@ -346,7 +334,7 @@ app.delete("/api/update_usergearitem", (req, res) => {
   });
 });
 
-// PRODUCTOIN BUILD SET UP
+// PRODUCTION BUILD SET UP
 if (process.env.NODE_ENV === "production") {
   const path = require("path");
   app.get("/*", (req, res) => {

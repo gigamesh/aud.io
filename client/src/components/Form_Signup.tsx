@@ -222,7 +222,6 @@ const FormikForm = withFormik({
   handleSubmit: (values: IObj, bag) => {
     let data = {
       profilenameColor: "#ffffff",
-      photos: { header: "/img/profile/default-header.jpg" },
       email: values.email,
       role: values.role,
       profilename: values.profilename
