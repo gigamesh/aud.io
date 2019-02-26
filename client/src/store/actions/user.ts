@@ -1,7 +1,6 @@
 import actionTypes from "./actionTypes";
 import { UserSignupVals } from "../sagas/userSagas";
 import { IUser, IObj } from "../../typeDefs";
-import { type } from "os";
 
 export const clearErrorMsg = () => {
   return {
@@ -29,7 +28,6 @@ interface LoginUserSuccessObj {
 }
 
 export const loginUserSuccess = (response: LoginUserSuccessObj) => {
-  console.log(response.userData);
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
     userData: response.userData

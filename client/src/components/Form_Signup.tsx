@@ -224,7 +224,8 @@ const FormikForm = withFormik({
       profilenameColor: "#ffffff",
       email: values.email,
       role: values.role,
-      profilename: values.profilename
+      profilename: values.profilename,
+      password: values.password
     };
     values.onSignupSubmit(data);
     bag.resetForm();

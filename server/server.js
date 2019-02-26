@@ -210,6 +210,9 @@ app.post("/api/login", (req, res) => {
     if (!user) return res.json({ isAuth: false, message: "Email not found" });
 
     user.comparePassword(req.body.password, (err, isMatch) => {
+      if (err) {
+        console.log(err);
+      }
       if (!isMatch)
         return res.json({
           isAuth: false,
