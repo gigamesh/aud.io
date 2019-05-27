@@ -63,7 +63,7 @@
     "postcss-preset-env": "6.3.1",
     "postcss-safe-parser": "4.0.1",
     "prop-types": "^15.6.1",
-    "react": "^16.3.2",
+    "react": "^16.8.6",
     "react-anime": "^2.1.0",
     "react-app-polyfill": "^0.2.0",
     "react-autosuggest": "^9.4.3",
