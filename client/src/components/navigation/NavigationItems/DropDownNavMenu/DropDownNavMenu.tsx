@@ -29,7 +29,7 @@ const styles = createStyles({
 
 const DropDownNavBtn = (props: { [index: string]: any }) => {
   let menuTimeout: number;
-  let target1: any;
+  let targetNode = React.useRef(null);
   const [state, setState] = React.useState({ open: false });
   const { classes } = props;
   const { open } = state;
@@ -71,9 +71,7 @@ const DropDownNavBtn = (props: { [index: string]: any }) => {
         <Reference>
           {({ ref }) => (
             <div
-              ref={node => {
-                target1 = node;
-              }}
+              ref={targetNode}
               className="nav-btn--wrap"
               onMouseEnter={handleToggle}
               onMouseLeave={handleTimeoutClose}
@@ -92,13 +90,16 @@ const DropDownNavBtn = (props: { [index: string]: any }) => {
             </div>
           )}
         </Reference>
-        <Portal container={target1}>
+        <Portal container={targetNode.current}>
           <Popper placement="bottom" eventsEnabled={open}>
             {({ ref, style }) => (
               <div ref={ref} style={style}>
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
-                    <Collapse in={open} style={{ transformOrigin: "0 0 0" }}>
+                    <Collapse
+                      in={open}
+                      style={{ transformOrigin: "50% 50% 0" }}
+                    >
                       <div
                         className={classes.flexDiv}
                         onMouseEnter={handleOpenAndStayOpen}

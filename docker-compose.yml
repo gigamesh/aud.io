@@ -17,10 +17,9 @@ services:
     image: mongo
     volumes:
       - ./db_backup:/db_backup
+      - data-volume:/data/db
     ports:
       - "27017:27017"
-    command:
-      - "mongorestore --db aud_io db_backup/"
-
 volumes:
   node_modules:
+  data-volume:
