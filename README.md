@@ -5,9 +5,10 @@ Aud.io is a MVP of a social network for musicians and recording studios. I built
 ## Developer guide:
 
 - Clone this repo
-- In cloned directory, run `npm install`
-- To build locally, run `npm run dev`
-- Install MongoDB & create a database called aud_io
+- Install Docker
+- In a terminal while in the app directory, run `docker-compose build`
+- Then run `docker-compose up -d`
+- after a few seconds, it should be running at `localhost` in your browser
 
 ### Deployment:
 
