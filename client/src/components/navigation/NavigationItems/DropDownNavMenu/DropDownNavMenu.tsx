@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 // import classNames from "classnames";
 import NavigationItem from "../NavigationItem";
 import { Manager, Reference, Popper } from "react-popper";
@@ -27,110 +27,95 @@ const styles = createStyles({
   }
 });
 
-class DropDownNavBtn extends React.Component<any, any> {
-  menuTimeout: any;
-  target1: any;
-  state = {
-    open: false
+const DropDownNavBtn = (props: { [index: string]: any }) => {
+  let menuTimeout: number;
+  let target1: any;
+  const [state, setState] = React.useState({ open: false });
+  const { classes } = props;
+  const { open } = state;
+
+  const handleToggle = () => {
+    setState({ open: !state.open });
   };
 
-  handleToggle = () => {
-    this.setState({ open: !this.state.open });
+  const handleClose = () => {
+    setState({ open: false });
   };
 
-  handleClose = (event: any) => {
-    this.setState({ open: false });
+  const handleTimeoutClose = () => {
+    menuTimeout = window.setTimeout(() => setState({ open: false }), 100);
   };
 
-  handleTimeoutClose = (event: any) => {
-    this.menuTimeout = setTimeout(() => this.setState({ open: false }), 100);
+  const handleOpenAndStayOpen = () => {
+    setState({ open: true });
+    clearTimeout(menuTimeout);
   };
 
-  handleOpenAndStayOpen = (e: any) => {
-    this.setState({ open: true });
-    clearTimeout(this.menuTimeout);
-  };
+  let menuItems = props.menuItems.map((item: any) => (
+    <div onClick={handleToggle} key={item.link}>
+      <NavigationItem
+        navbuttontype={"secondary"}
+        active={false}
+        link={item.link}
+        handleClick={props.handleClick}
+        disableRipple
+      >
+        {item.displayText}
+      </NavigationItem>
+    </div>
+  ));
 
-  render() {
-    const { classes } = this.props;
-    const { open } = this.state;
-    const props = this.props;
-
-    let menuItems = props.menuItems.map((item: any) => (
-      <div onClick={this.handleToggle} key={item.link}>
-        <NavigationItem
-          navbuttontype={"secondary"}
-          active={false}
-          link={item.link}
-          handleClick={props.handleClick}
-          disableRipple
-        >
-          {item.displayText}
-        </NavigationItem>
-      </div>
-    ));
-
-    return (
-      <div className={classes.root}>
-        <Manager>
-          <Reference>
-            {({ ref }) => (
-              <div
-                ref={node => {
-                  this.target1 = node;
-                }}
-                className="nav-btn--wrap"
-                onMouseEnter={this.handleToggle}
-                onMouseLeave={this.handleTimeoutClose}
-                onClick={this.handleOpenAndStayOpen}
+  return (
+    <div className={classes.root}>
+      <Manager>
+        <Reference>
+          {({ ref }) => (
+            <div
+              ref={node => {
+                target1 = node;
+              }}
+              className="nav-btn--wrap"
+              onMouseEnter={handleToggle}
+              onMouseLeave={handleTimeoutClose}
+              onClick={handleOpenAndStayOpen}
+            >
+              <Button
+                disableRipple
+                className="nav-btn--dropdown"
+                buttonRef={ref}
+                size="large"
+                aria-owns={open ? "menu-list-collapse" : ""}
+                aria-haspopup="true"
               >
-                <Button
-                  disableRipple
-                  className="nav-btn--dropdown"
-                  buttonRef={ref}
-                  size="large"
-                  aria-owns={open ? "menu-list-collapse" : ""}
-                  aria-haspopup="true"
-                >
-                  {this.props.children}
-                </Button>
+                {props.children}
+              </Button>
+            </div>
+          )}
+        </Reference>
+        <Portal container={target1}>
+          <Popper placement="bottom" eventsEnabled={open}>
+            {({ ref, style }) => (
+              <div ref={ref} style={style}>
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <Collapse in={open} style={{ transformOrigin: "0 0 0" }}>
+                      <div
+                        className={classes.flexDiv}
+                        onMouseEnter={handleOpenAndStayOpen}
+                        onMouseLeave={handleClose}
+                      >
+                        {menuItems}
+                      </div>
+                    </Collapse>
+                  </ClickAwayListener>
+                </Paper>
               </div>
             )}
-          </Reference>
-          {/* <Portal> */}
-          <Portal container={this.target1}>
-            <Popper
-              placement="bottom"
-              eventsEnabled={open}
-              // className={classNames({ [classes.popperClose]: !open })}
-            >
-              {({ ref, style }) => (
-                <div ref={ref} style={style}>
-                  <Paper>
-                    <ClickAwayListener onClickAway={this.handleClose}>
-                      <Collapse
-                        in={open}
-                        // id="menu-list-collapse"
-                        style={{ transformOrigin: "0 0 0" }}
-                      >
-                        <div
-                          className={classes.flexDiv}
-                          onMouseEnter={this.handleOpenAndStayOpen}
-                          onMouseLeave={this.handleClose}
-                        >
-                          {menuItems}
-                        </div>
-                      </Collapse>
-                    </ClickAwayListener>
-                  </Paper>
-                </div>
-              )}
-            </Popper>
-          </Portal>
-        </Manager>
-      </div>
-    );
-  }
-}
+          </Popper>
+        </Portal>
+      </Manager>
+    </div>
+  );
+};
 
 export default withStyles(styles)(DropDownNavBtn);

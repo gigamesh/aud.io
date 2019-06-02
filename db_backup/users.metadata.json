@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"heroku_6g83mfvx.users"},{"v":2,"unique":true,"key":{"email":1},"name":"email_1","ns":"heroku_6g83mfvx.users","background":true},{"v":2,"unique":true,"key":{"profilename":1},"name":"profilename_1","ns":"heroku_6g83mfvx.users","background":true}],"uuid":"b2b68ab744444d1c83771e566e6b95df"}

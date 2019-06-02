@@ -70,7 +70,7 @@
     "react-color": "^2.14.1",
     "react-css-transition-replace": "^3.0.3",
     "react-dev-utils": "^7.0.1",
-    "react-dom": "^16.3.2",
+    "react-dom": "^16.8.6",
     "react-fontawesome": "^1.6.1",
     "react-jss": "^8.6.1",
     "react-measure": "^2.0.0",

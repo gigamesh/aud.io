@@ -76,70 +76,72 @@ type HeaderProps = {
   classes: IObj;
 };
 
-class Header extends React.Component<HeaderProps, {}> {
-  handleClick = (link: string) => {
-    this.props.history.push(link);
+const Header = (props: HeaderProps) => {
+  const {
+    classes,
+    profilename,
+    drawerToggleClicked,
+    path,
+    isAuth,
+    history
+  } = props;
+
+  const handleClick = (link: string) => {
+    props.history.push(link);
   };
 
-  render() {
-    const props = this.props;
-    const { classes } = props;
+  const fontSizeFunc = (size: number) => {
+    let exp = profilename.length > 7 ? profilename.length - 7 : 1;
+    let multiplier = Math.pow(0.99, exp);
+    return (multiplier * size)
+      .toFixed(1)
+      .toString()
+      .concat("vw");
+  };
 
-    const fontSizeFunc = (size: number) => {
-      let exp = props.profilename.length > 7 ? props.profilename.length - 7 : 1;
-      let multiplier = Math.pow(0.99, exp);
-      return (multiplier * size)
-        .toFixed(1)
-        .toString()
-        .concat("vw");
-    };
-
-    let accountNavMenu = props.isAuth ? (
-      <AccountNavMenu handleClick={this.handleClick}>Account</AccountNavMenu>
-    ) : null;
-    return (
-      <AppBarStyled position="fixed">
-        <ToolbarStyled className={classes.toolbar}>
-          <Hidden mdUp>
-            <IconButton
-              color="inherit"
-              aria-label="Menu"
-              onClick={props.drawerToggleClicked}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Hidden>
-          <Hidden smDown>
-            <nav className={classes.flex1}>
-              <NavigationItems
-                handleClick={this.handleClick}
-                path={props.path}
-                isAuth={props.isAuth}
-              />
-              {accountNavMenu}
-              <ExploreNavMenu handleClick={this.handleClick}>
-                Explore
-              </ExploreNavMenu>
-            </nav>
-            <TextFieldWrap>
-              <SearchBox history={props.history} />
-              <Search className={classes.searchIcon} />
-            </TextFieldWrap>
-          </Hidden>
-          <Hidden mdUp>
-            <div className={classes.flex1} />
-            <Typography
-              className={classes.hiddenProfileName}
-              style={{ fontSize: fontSizeFunc(6.6) }}
-            >
-              {props.path === "user" && props.profilename}
-            </Typography>
-          </Hidden>
-        </ToolbarStyled>
-      </AppBarStyled>
-    );
-  }
-}
+  let accountNavMenu = props.isAuth ? (
+    <AccountNavMenu handleClick={handleClick}>Account</AccountNavMenu>
+  ) : null;
+  return (
+    <AppBarStyled position="fixed">
+      <ToolbarStyled className={classes.toolbar}>
+        <Hidden mdUp>
+          <IconButton
+            color="inherit"
+            aria-label="Menu"
+            onClick={drawerToggleClicked}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
+        <Hidden smDown>
+          <nav className={classes.flex1}>
+            <NavigationItems
+              handleClick={handleClick}
+              path={path}
+              isAuth={isAuth}
+            />
+            {accountNavMenu}
+            <ExploreNavMenu handleClick={handleClick}>Explore</ExploreNavMenu>
+          </nav>
+          <TextFieldWrap>
+            <SearchBox history={history} />
+            <Search className={classes.searchIcon} />
+          </TextFieldWrap>
+        </Hidden>
+        <Hidden mdUp>
+          <div className={classes.flex1} />
+          <Typography
+            className={classes.hiddenProfileName}
+            style={{ fontSize: fontSizeFunc(6.6) }}
+          >
+            {path === "user" && profilename}
+          </Typography>
+        </Hidden>
+      </ToolbarStyled>
+    </AppBarStyled>
+  );
+};
 
 const mapStateToProps = (state: RootState) => {
   return {

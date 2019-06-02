@@ -1,13 +1,16 @@
 FROM node:10
 
-WORKDIR /user/src/app
+RUN mkdir -p /app
 
-COPY package*.json ./
+WORKDIR /app
+
+COPY package*.json /app/
+
+RUN npm install -g concurrently nodemon
 
 RUN npm install
 
-COPY . . 
-
 EXPOSE 4000
+EXPOSE 3000
 
 CMD npm run dev
