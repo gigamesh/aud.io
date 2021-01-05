@@ -22,7 +22,7 @@
     "@types/yup": "^0.26.4",
     "animated": "^0.2.2",
     "autosuggest-highlight": "^3.1.1",
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
